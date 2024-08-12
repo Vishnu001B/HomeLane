@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
-const crypto = require('crypto');
-const bcrypt = require('bcrypt');
-
+const crypto = require("crypto");
+const bcrypt = require("bcrypt");
 
 // Define the Address schema
 const addressSchema = new mongoose.Schema({
@@ -55,13 +54,17 @@ const userSchema = new mongoose.Schema({
 
   mobileNumber: {
     type: String,
- 
+
     unique: true,
   },
   name: {
     type: String,
   },
- 
+  lastName: {
+    type: String,
+  },
+  phone: { type: String, required: true },
+
   location: {
     type: String,
   },
@@ -77,36 +80,30 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-userSchema.pre("save" , async function(next)
-{
-  if(!this.isModified("password")) return next();
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
   next();
-})
+});
 
-userSchema.methods.generateOtp = function()
-{
+userSchema.methods.generateOtp = function () {
   this.otp = crypto.randomBytes(3).toString("hex");
   this.otpExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
-}
+};
 
-userSchema.pre("validate", function(next)
-{
-  if(!this.otp ||!this.otpExpires)
-  {
+userSchema.pre("validate", function (next) {
+  if (!this.otp || !this.otpExpires) {
     this.generateOtp();
   }
   next();
-})
+});
 
-userSchema.methods.comparePassword = async function(password)
-{
+userSchema.methods.comparePassword = async function (password) {
   return await bcrypt.compare(password, this.password);
-}
+};
 
-userSchema.methods.generateAuthToken = function()
-{
+userSchema.methods.generateAuthToken = function () {
   const token = jwt.sign(
     { _id: this._id, email: this.email },
     process.env.JWT_SECRET,
@@ -115,7 +112,7 @@ userSchema.methods.generateAuthToken = function()
     }
   );
   return token;
-}
+};
 
 // Create the User model
 const User = mongoose.model("User", userSchema);

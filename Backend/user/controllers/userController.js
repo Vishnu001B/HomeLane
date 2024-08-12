@@ -3,8 +3,7 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const mongoose = require("mongoose");
-const crypto = require('crypto');
-
+const crypto = require("crypto");
 
 // Nodemailer setup
 const transporter = nodemailer.createTransport({
@@ -20,14 +19,14 @@ const transporter = nodemailer.createTransport({
 
 // Registration function
 exports.register = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, lastName, phone, email, password } = req.body;
   try {
     let user = await User.findOne({ email });
     if (user) {
       return res.status(400).send("User already exists");
     }
 
-    user = new User({ name, email, password });
+    user = new User({ name, lastName, phone, email, password });
     user.generateOtp();
     await user.save();
 
@@ -54,7 +53,8 @@ exports.verifyOtp = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(400).send("User not found");
     if (user.otp !== otp) return res.status(400).send("Invalid OTP");
-    if (user.otpExpires < Date.now()) return res.status(400).send("OTP expired");
+    if (user.otpExpires < Date.now())
+      return res.status(400).send("OTP expired");
 
     user.isVerified = true;
     user.otp = undefined;

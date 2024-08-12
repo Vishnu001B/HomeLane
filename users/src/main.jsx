@@ -4,12 +4,14 @@ import App from "./App";
 import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
-
 import { ThemeProvider } from "@material-tailwind/react";
 import HomePage from "./components/HomePage";
 
 import CategoryDetails from "./components/category/CategoryDetails";
 import ProductDetails from "./components/productDetrils/ProductDetails";
+import Login from "./routes/Login";
+import Register from "./routes/Register";
+import OtpVerification from "./components/OtpVerification";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +22,7 @@ const router = createBrowserRouter([
         path: "/",
         element: <HomePage />,
       },
+
       {
         path: "/category/:name",
         element: <CategoryDetails />,
@@ -32,9 +35,19 @@ const router = createBrowserRouter([
       {
         path: "*",
         element: <h1>Page Not Found</h1>,
-      }
-
-    
+      },
+      {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/register",
+        element: <Register />,
+      },
+      {
+        path: "/verifyOtp",
+        element: <OtpVerification />,
+      },
     ],
   },
 ]);
@@ -42,9 +55,9 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <ThemeProvider>
-    <RouterProvider router={router}>
-          <App />
-        </RouterProvider>
+      <RouterProvider router={router}>
+        <App />
+      </RouterProvider>
     </ThemeProvider>
   </React.StrictMode>
 );
