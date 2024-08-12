@@ -25,7 +25,7 @@ const HomePage = () => (
       <CustomizedCurtains />
       <Blinds/>
       <WallPaper />
-      <DealsHeader />
+      {/* <DealsHeader /> */}
       <OfferSales />
       {/* <SalesAdOfferHomepage /> */}
       <Testimonials />

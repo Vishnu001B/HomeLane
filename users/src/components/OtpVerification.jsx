@@ -4,15 +4,13 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import { API_URL } from "../../src/constants";
 
-function OtpVerification({ mobileNumber, onClose }) {
+function OtpVerification({ mobileNumber, setIsLoginModalOpen }) {
   const [otp, setOtp] = useState("");
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
 
-  // Retrieve emailId from localStorage when the component mounts
   useEffect(() => {
     const storedEmail = localStorage.getItem("emailId");
     if (storedEmail) {
@@ -35,12 +33,13 @@ function OtpVerification({ mobileNumber, onClose }) {
       });
 
       toast.success("OTP verified successfully");
-      navigate("/");
-      // Close the modal or perform other actions if needed
-      // Navigate to the home page
+
+      // Close the OTP modal and open the login modal
+      setIsLoginModalOpen(true);
+
     } catch (error) {
       console.error("Error verifying OTP:", error);
-      toast.error("Failed to verify OTP. Please try again.");
+      toast.error("OTP mismatch. Please try again.");
     }
   };
 

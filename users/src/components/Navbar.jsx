@@ -7,7 +7,6 @@ import SearchIcon from "@mui/icons-material/Search";
 import footer from "../assets/image/logo-footer.png";
 import { Link } from "react-router-dom";
 import Login from "../routes/Login";
-import Register from "../routes/Register";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -62,7 +61,7 @@ const Navbar = () => {
         </div>
 
         {isMenuOpen && (
-          <div className="absolute top-16 right-0 bg-gray-100 shadow-md w-full sm:hidden z-30">
+          <div className="absolute right-0 shadow-md w-full sm:hidden z-30">
             <div className="flex flex-col items-center space-y-4 p-4">
               <div
                 className="flex items-center space-x-2 cursor-pointer"
@@ -81,21 +80,16 @@ const Navbar = () => {
       </nav>
 
       {isLoginModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div
-            className={`bg-white p-8 rounded-lg w-96 max-h-[90vh] relative transform transition-all duration-300 ease-out ${
-              isLoginModalOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"
-            }`}
-          >
+        <div className="fixed -top-40  inset-0 bg-black bg-opacity-65 flex items-center justify-center z-50">
+          <div className="relative bg-white p-0 h-[80vh] sm:h-[500px] rounded-lg shadow-lg w-full max-w-md mx-4 sm:mx-0">
             <button
               className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
               onClick={toggleLoginModal}
             >
-              <CloseIcon />
+              <CloseIcon className="text-3xl" />
             </button>
-            <h2 className="text-2xl mb-4">Login</h2>
-            <div className="overflow-auto max-h-[60vh]">
-              <Login />
+            <div className="overflow-auto">
+              <Login setIsLoginModalOpen={setIsLoginModalOpen} />
             </div>
           </div>
         </div>
