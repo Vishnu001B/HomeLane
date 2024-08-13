@@ -18,7 +18,6 @@ const metaSchema = new mongoose.Schema({
 const dimensionsSchema = new mongoose.Schema({
   width: { type: Number },
   height: { type: Number },
-  depth: { type: Number },
 });
 
 const productSchema = new mongoose.Schema({
@@ -28,21 +27,18 @@ const productSchema = new mongoose.Schema({
   price: { type: Number, required: true },
   discountPercentage: { type: Number },
   rating: { type: Number, required: true },
-  stock: { type: Number, required: true },
-  tags: { type: [String], required: true },
+
   brand: { type: String },
   sku: { type: String, required: true },
-  weight: { type: Number, required: true },
+
   dimensions: { type: dimensionsSchema },
-  warrantyInformation: { type: String },
-  shippingInformation: { type: String, required: true },
-  availabilityStatus: { type: String, required: true },
+
   reviews: { type: [reviewSchema] },
-  returnPolicy: { type: String, required: true },
-  minimumOrderQuantity: { type: Number, required: true },
+
   meta: { type: metaSchema, default: () => ({}) },
   images: { type: [String], required: true },
   thumbnail: { type: String, required: true },
+
   VendorUser: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "VendorUser",

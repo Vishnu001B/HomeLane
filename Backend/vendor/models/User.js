@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   mobile: { type: String, required: true },
-  name:{
+  name: {
     type: String,
     required: true,
     trim: true,
@@ -17,18 +17,17 @@ const userSchema = new mongoose.Schema({
   },
   address: {
     type: String,
-    required: true,
+    required: false,
     trim: true,
     minlength: 10,
     maxlength: 255,
   },
-  pincode:{
+  pincode: {
     type: String,
-    required: true,
+    required: false,
     minlength: 6,
     maxlength: 6,
   },
-
 
   isVerified: { type: Boolean, default: false },
   otp: { type: String, required: true },
@@ -54,7 +53,6 @@ userSchema.pre("validate", function (next) {
   next();
 });
 
-
 userSchema.methods.generateOtp = function () {
   this.otp = crypto.randomBytes(3).toString("hex");
   this.otpExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
@@ -75,5 +73,5 @@ userSchema.methods.generateAuthToken = function () {
   return token;
 };
 
-const VendorUser = mongoose.model("VendorUser", userSchema);
+const VendorUser = mongoose.model("Admin", userSchema);
 module.exports = VendorUser;
