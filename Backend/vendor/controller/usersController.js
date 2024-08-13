@@ -2,7 +2,7 @@
 const User = require("../models/User");
 const nodemailer = require("nodemailer");
 
-const Order = require('../../user/models/productOrderSchema');
+const Order = require("../../user/models/productOrderSchema");
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -18,8 +18,7 @@ const transporter = nodemailer.createTransport({
 exports.register = async (req, res) => {
   const { email, password, mobile, name, address, pincode } = req.body;
 
-
-  if (!email || !password || !mobile || !name || !address || !pincode) {
+  if (!email || !password || !mobile || !name) {
     return res.status(400).send("All fields are required");
   }
 
@@ -27,11 +26,12 @@ exports.register = async (req, res) => {
   if (user) return res.status(400).send("User already exists");
 
   user = new User({
-    email, password, mobile,
+    email,
+    password,
+    mobile,
     name,
     address,
     pincode,
-
   });
   user.generateOtp();
 
@@ -103,32 +103,31 @@ exports.login = async (req, res) => {
   }
 };
 
-
 exports.vendorUpdate = async (req, res) => {
   try {
     const { mobile, name, address, pincode } = req.body;
-    const user = await User.findByIdAndUpdate(req.params.id, { $set: { mobile, name, address, pincode } }, { new: true });
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      { $set: { mobile, name, address, pincode } },
+      { new: true }
+    );
 
     if (!user) return res.status(404).send("User not found");
     res.status(200).send(user);
-
-  }
-  catch (e) {
+  } catch (e) {
     res.status(500).send(e.message);
+  }
+};
 
-  }}
-
-
-  exports.deleteUser = async (req, res) => {
-    try {
-      const user = await User.findByIdAndDelete(req.params.id);
-      if (!user) return res.status(404).send("User not found");
-      res.status(200).send(user);
-    } catch (e) {
-      res.status(500).send(e.message);
-    }
-  };
-  
+exports.deleteUser = async (req, res) => {
+  try {
+    const user = await User.findByIdAndDelete(req.params.id);
+    if (!user) return res.status(404).send("User not found");
+    res.status(200).send(user);
+  } catch (e) {
+    res.status(500).send(e.message);
+  }
+};
 
 exports.getUserById = async (req, res) => {
   try {
@@ -161,9 +160,6 @@ exports.forgotPassword = async (req, res) => {
   });
 };
 
-
-
-
 exports.verifyOtpForPasswordReset = async (req, res) => {
   const { email, otp, newPassword } = req.body;
   const user = await User.findOne({ email });
@@ -179,32 +175,28 @@ exports.verifyOtpForPasswordReset = async (req, res) => {
   res.status(200).send("Password updated successfully");
 };
 
-
-
-
-
 exports.getAllVendorsWithTotalProducts = async (req, res) => {
   try {
     const result = await User.aggregate([
       {
         $lookup: {
-          from: 'productorders',
-          localField: '_id',
-          foreignField: 'VendorUser',
-          as: 'orders'
-        }
+          from: "productorders",
+          localField: "_id",
+          foreignField: "VendorUser",
+          as: "orders",
+        },
       },
       {
         $unwind: {
           path: "$orders",
-          preserveNullAndEmptyArrays: true
-        }
+          preserveNullAndEmptyArrays: true,
+        },
       },
       {
         $unwind: {
           path: "$orders.products",
-          preserveNullAndEmptyArrays: true
-        }
+          preserveNullAndEmptyArrays: true,
+        },
       },
       {
         $group: {
@@ -215,8 +207,8 @@ exports.getAllVendorsWithTotalProducts = async (req, res) => {
           address: { $first: "$address" },
           pincode: { $first: "$pincode" },
           isVerified: { $first: "$isVerified" },
-          totalProducts: { $sum: "$orders.products.quantity" }
-        }
+          totalProducts: { $sum: "$orders.products.quantity" },
+        },
       },
       {
         $project: {
@@ -227,9 +219,9 @@ exports.getAllVendorsWithTotalProducts = async (req, res) => {
           address: 1,
           pincode: 1,
           isVerified: 1,
-          totalProducts: 1
-        }
-      }
+          totalProducts: 1,
+        },
+      },
     ]);
 
     res.status(200).send(result);
