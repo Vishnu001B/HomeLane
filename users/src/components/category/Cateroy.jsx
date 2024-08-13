@@ -1,5 +1,5 @@
 import { Carousel } from "@material-tailwind/react";
-import banner from "../assets/banner.jpg"
+import banner from "../../assets/banner.jpg"
  
 export function Cateroy() {
   return (

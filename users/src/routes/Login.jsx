@@ -1,13 +1,20 @@
 import React, { useState } from "react";
+import axios from "axios";
+import Swal from "sweetalert2";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import GoogleIcon from "@mui/icons-material/Google";
 import Register from "./Register";
+import { API_URL } from "../constants";
 
 const Login = ({ setIsLoginModalOpen }) => {
   const [isRegister, setIsRegister] = useState(false);
   const [loginWithOTP, setLoginWithOTP] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [usernameOrEmail, setUsernameOrEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [otp, setOtp] = useState("");
 
   const toggleForm = () => {
     setIsRegister(!isRegister);
@@ -17,8 +24,106 @@ const Login = ({ setIsLoginModalOpen }) => {
     setLoginWithOTP(!loginWithOTP);
   };
 
+  const handleLoginWithPassword = async () => {
+    try {
+      const response = await axios.post(`${API_URL}/api/user/login`, {
+        email: usernameOrEmail,
+        password: password,
+      });
+
+    
+        // Store token in localStorage
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("userId", response.data.data._id);
+        localStorage.setItem("email", response.data.data.email);
+
+        // Show success alert
+        Swal.fire({
+          icon: "success",
+          title: "Login Successful",
+          text: "You have successfully logged in.",
+        });
+
+        setIsLoginModalOpen(false);
+  
+    } catch (error) {
+      console.error("Login failed", error);
+      Swal.fire({
+        icon: "error",
+        title: "Login Failed",
+        text: "An error occurred during login. Please try again.",
+      });
+    }
+  };
+
+  const handleSendOtp = async () => {
+    try {
+      const response = await axios.post("/api/send-otp", {
+        phoneNumber,
+      });
+
+      if (response.data.success) {
+        Swal.fire({
+          icon: "success",
+          title: "OTP Sent",
+          text: "OTP sent successfully. Please check your phone.",
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Failed to Send OTP",
+          text: response.data.message,
+        });
+      }
+    } catch (error) {
+      console.error("Failed to send OTP", error);
+      Swal.fire({
+        icon: "error",
+        title: "Failed to Send OTP",
+        text: "An error occurred while sending OTP. Please try again.",
+      });
+    }
+  };
+
+  const handleLoginWithOtp = async () => {
+    try {
+      const response = await axios.post("/api/verify-otp", {
+        phoneNumber,
+        otp,
+      });
+
+      if (response.data.success) {
+        // Store token in localStorage
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("userId", response.data.userId);
+
+        Swal.fire({
+          icon: "success",
+          title: "Login Successful",
+          text: "You have successfully logged in.",
+        });
+
+        // Close the login modal
+        setIsLoginModalOpen(false);
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "OTP Verification Failed",
+          text: response.data.message,
+        });
+      }
+    } catch (error) {
+      console.error("OTP verification failed", error);
+      Swal.fire({
+        icon: "error",
+        title: "OTP Verification Failed",
+        text: "An error occurred during OTP verification. Please try again.",
+      });
+    }
+  };
+
   return (
-    <div className="flex items-center justify-center min-h-screen ">
+    <div className="flex items-center justify-center min-h-screen">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         {isRegister ? (
           <Register
@@ -52,7 +157,6 @@ const Login = ({ setIsLoginModalOpen }) => {
             </div>
             {loginWithOTP ? (
               <>
-                {/* Login with OTP Form */}
                 <div className="space-y-4">
                   <div className="flex items-center border border-gray-300 rounded-md p-2">
                     <span className="text-gray-500">
@@ -62,16 +166,40 @@ const Login = ({ setIsLoginModalOpen }) => {
                       type="text"
                       placeholder="Phone Number"
                       className="ml-2 w-full focus:outline-none"
+                      value={phoneNumber}
+                      onChange={(e) => setPhoneNumber(e.target.value)}
                     />
                   </div>
-                  <button className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 w-full">
+                  <button
+                    className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 w-full"
+                    onClick={handleSendOtp}
+                  >
                     Send OTP
+                  </button>
+                </div>
+                <div className="space-y-4 mt-4">
+                  <div className="flex items-center border border-gray-300 rounded-md p-2">
+                    <span className="text-gray-500">
+                      <AccountCircleIcon />
+                    </span>
+                    <input
+                      type="text"
+                      placeholder="Enter OTP"
+                      className="ml-2 w-full focus:outline-none"
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value)}
+                    />
+                  </div>
+                  <button
+                    className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 w-full"
+                    onClick={handleLoginWithOtp}
+                  >
+                    Verify OTP
                   </button>
                 </div>
               </>
             ) : (
               <>
-                {/* Login with Password Form */}
                 <div className="space-y-4">
                   <div className="flex items-center border border-gray-300 rounded-md p-2">
                     <span className="text-gray-500">
@@ -81,6 +209,8 @@ const Login = ({ setIsLoginModalOpen }) => {
                       type="text"
                       placeholder="Username or Email"
                       className="ml-2 w-full focus:outline-none"
+                      value={usernameOrEmail}
+                      onChange={(e) => setUsernameOrEmail(e.target.value)}
                     />
                   </div>
                   <div className="flex items-center border border-gray-300 rounded-md p-2">
@@ -91,6 +221,8 @@ const Login = ({ setIsLoginModalOpen }) => {
                       type="password"
                       placeholder="***********"
                       className="ml-2 w-full focus:outline-none"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                     />
                   </div>
                 </div>
@@ -100,7 +232,10 @@ const Login = ({ setIsLoginModalOpen }) => {
                     <input type="checkbox" className="mr-2" />
                     <span>Remember me</span>
                   </div>
-                  <button className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">
+                  <button
+                    className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
+                    onClick={handleLoginWithPassword}
+                  >
                     Login
                   </button>
                 </div>
@@ -125,15 +260,11 @@ const Login = ({ setIsLoginModalOpen }) => {
 
             <div className="flex justify-between">
               <button className="flex items-center justify-center w-full border border-blue-500 text-blue-500 py-2 px-4 rounded-md hover:bg-blue-100 mr-2">
-                <span className="mr-2">
-                  <FacebookIcon />
-                </span>
+                <FacebookIcon className="mr-2" />
                 Facebook
               </button>
-              <button className="flex items-center justify-center w-full border border-red-500 text-red-500 py-2 px-4 rounded-md hover:bg-red-100 ml-2">
-                <span className="mr-2">
-                  <GoogleIcon />
-                </span>
+              <button className="flex items-center justify-center w-full border border-red-500 text-red-500 py-2 px-4 rounded-md hover:bg-red-100">
+                <GoogleIcon className="mr-2" />
                 Google
               </button>
             </div>

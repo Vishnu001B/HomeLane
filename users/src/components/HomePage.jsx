@@ -9,7 +9,7 @@ import ServiceCard from "./ServiceCard";
 import Testimonials from "./Testimonials";
 import OfferSales from "./OfferSales";
 import ProductDescription from "./ProductDescription";
-import { Cateroy } from "./Cateroy";
+import { Cateroy } from "./category/Cateroy";
 import CustomizedCurtains from "./CustomizedCurtains";
 import Blinds from "./Blinds";
 import WallPaper from "./WallPaper";

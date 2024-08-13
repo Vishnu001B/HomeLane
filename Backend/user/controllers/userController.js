@@ -92,3 +92,38 @@ exports.resendOtp = async (req, res) => {
     res.status(500).send(error.message);
   }
 };
+
+
+exports.login = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    // Find the user by email
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ success: false, message: "User not found" });
+
+    // Compare the provided password with the stored hashed password
+    const validPassword = await user.comparePassword(password);
+    if (!validPassword) return res.status(401).json({ success: false, message: "Invalid password" });
+
+    // Generate an authentication token
+    const token = user.generateAuthToken();
+
+    // Save user's last login date
+    user.lastLogin = new Date();
+    await user.save();
+
+    // Exclude the password field in the response
+    const { password: _, ...userWithoutPassword } = user.toObject();
+
+    // Send the token and user data in the response
+    res.json({ success: true, token, data: userWithoutPassword });
+
+  } catch (err) {
+    // Log the detailed error for debugging
+    console.error("Error during login:", err);
+    res.status(500).json({ success: false, message: `An error occurred during login: ${err.message}` });
+  }
+};
+
+

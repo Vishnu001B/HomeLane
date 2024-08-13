@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken"); // Import jsonwebtoken
 
 // Define the Address schema
 const addressSchema = new mongoose.Schema({
@@ -51,35 +52,18 @@ const userSchema = new mongoose.Schema({
   otpExpires: {
     type: Date,
   },
-
-  mobileNumber: {
-    type: String,
-
-    unique: true,
-  },
-  name: {
-    type: String,
-  },
-  lastName: {
-    type: String,
-  },
+  mobileNumber: { type: String, unique: true },
+  name: { type: String },
+  lastName: { type: String },
   phone: { type: String, required: true },
-
-  location: {
-    type: String,
-  },
+  location: { type: String },
   addresses: [addressSchema],
-  cart: [cartItemSchema], // Array of addresses
-  wallet: {
-    type: Number,
-    default: 0,
-  },
-  security: {
-    type: Boolean,
-    default: true,
-  },
+  cart: [cartItemSchema], // Array of cart items
+  wallet: { type: Number, default: 0 },
+  security: { type: Boolean, default: true },
 });
 
+// Password hashing middleware
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   const salt = await bcrypt.genSalt(10);
@@ -87,11 +71,13 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
+// OTP generation method
 userSchema.methods.generateOtp = function () {
   this.otp = crypto.randomBytes(3).toString("hex");
   this.otpExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
 };
 
+// Validate OTP before saving (if not provided)
 userSchema.pre("validate", function (next) {
   if (!this.otp || !this.otpExpires) {
     this.generateOtp();
@@ -99,10 +85,12 @@ userSchema.pre("validate", function (next) {
   next();
 });
 
+// Password comparison method
 userSchema.methods.comparePassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
+// JWT generation method
 userSchema.methods.generateAuthToken = function () {
   const token = jwt.sign(
     { _id: this._id, email: this.email },

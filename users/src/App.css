@@ -12,7 +12,7 @@
 }
 
 .card {
-  height: 400px;
+  height: 250px;
   width: 100%; /* Full width on mobile */
   max-width: 300px; /* Maximum width */
   box-shadow: var(--tw-shadow-sm);
