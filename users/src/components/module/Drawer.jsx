@@ -14,11 +14,13 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import CheckoutIcon from '@mui/icons-material/Payment';
 import { useSelector } from "react-redux";
 import Avatar from '@mui/material/Avatar';
+import { useNavigate } from 'react-router-dom';
 
 export default function Drawer() {
   const [state, setState] = React.useState({
     right: false,
   });
+  const navagate = useNavigate()
 
   // Fetching bag data from Redux store
   const bag = useSelector((store) => store.bag) || { totalQuantity: 0, data: [] };
@@ -91,8 +93,9 @@ export default function Drawer() {
   };
 
   const handleCheckout = () => {
-    // Logic to handle checkout
-    alert('Proceeding to checkout');
+    // Logic to checkout items
+    navagate('/CheckoutForm'); // Navigate to checkout page using react-router-dom
+   
   };
 
   return (

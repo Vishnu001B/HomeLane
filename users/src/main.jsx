@@ -11,6 +11,7 @@ import Register from "./routes/Register";
 import OtpVerification from "./components/OtpVerification";
 import { Provider } from "react-redux";
 import homeLine from "./store/index";
+import CheckoutForm from "./components/CheckoutForm";
 
 
 const router = createBrowserRouter([
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
         path: "/verifyOtp",
         element: <OtpVerification />,
       },
+      {
+        path: "/CheckoutForm",
+        element: <CheckoutForm/>,
+      }
     ],
   },
 ]);
