@@ -12,6 +12,7 @@ import OtpVerification from "./components/OtpVerification";
 import { Provider } from "react-redux";
 import homeLine from "./store/index";
 import CheckoutForm from "./components/CheckoutForm";
+import ViewCartAndUpdateCart from "./components/cart/ViewCartAndUpdateCart";
 
 
 const router = createBrowserRouter([
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
       {
         path: "/CheckoutForm",
         element: <CheckoutForm/>,
+      },
+      {
+        path: "/viewCartDeatils",
+        element: <ViewCartAndUpdateCart/>,
       }
     ],
   },

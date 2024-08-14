@@ -9,93 +9,123 @@ import ListItemText from '@mui/material/ListItemText';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import EditIcon from '@mui/icons-material/Edit';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import DeleteIcon from '@mui/icons-material/Delete';
 import CheckoutIcon from '@mui/icons-material/Payment';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from 'react-redux';
 import Avatar from '@mui/material/Avatar';
 import { useNavigate } from 'react-router-dom';
+import { bagActions } from '../../store/bagSlice';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 export default function Drawer() {
-  const [state, setState] = React.useState({
-    right: false,
-  });
-  const navagate = useNavigate()
-
-  // Fetching bag data from Redux store
+  const [state, setState] = React.useState({ right: false });
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const [itemToRemove, setItemToRemove] = React.useState(null);
+  
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const bag = useSelector((store) => store.bag) || { totalQuantity: 0, data: [] };
 
   const toggleDrawer = (anchor, open) => (event) => {
-    if (
-      event &&
-      event.type === 'keydown' &&
-      (event.key === 'Tab' || event.key === 'Shift')
-    ) {
+    if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
-
     setState({ ...state, [anchor]: open });
   };
 
   const list = (anchor) => (
-    <Box
-      sx={{ width: 300, padding: 2 }}
-      role="presentation"
-      onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
-    >
-      <Typography variant="h6" gutterBottom>
-        Your Cart
-      </Typography>
-      <List>
-        {bag.data.map((item, index) => (
-          <ListItem key={index} disablePadding>
-            <Avatar
-              alt={item.name}
-              src={item.img}
-              sx={{ width: 56, height: 56, marginRight: 2 }}
-            />
-            <ListItemText
-              primary={item.name}
-              secondary={`Quantity: ${item.quantity} | Price: ₹${item.price}`}
-            />
-            <IconButton aria-label="view" onClick={() => handleView(item)}>
-              <VisibilityIcon />
-            </IconButton>
-            <IconButton aria-label="edit" onClick={() => handleEdit(item)}>
-              <EditIcon />
-            </IconButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <Box sx={{ textAlign: 'center', marginTop: 2 }}>
+    <>
+      <Box
+        sx={{ width: 400 }}
+        role="presentation"
+        onClick={toggleDrawer(anchor, false)}
+        onKeyDown={toggleDrawer(anchor, false)}
+      >
+        <Typography variant="h6" gutterBottom className='px-5'>
+          Your Cart
+        </Typography>
+        {bag.data.length === 0 ? (
+          <Typography variant="body1" sx={{ textAlign: 'center', marginTop: 2 }}>
+            Your cart is empty
+          </Typography>
+        ) : (
+          <>
+            <List>
+              {bag.data.map((item, index) => (
+                <ListItem key={index} disablePadding className='px-5'>
+                  <Avatar
+                    alt={item.name}
+                    src={item.img}
+                    sx={{ width: 56, height: 56, marginRight: 2 }}
+                  />
+                  <ListItemText
+                    primary={item.name}
+                    secondary={`Quantity: ${item.quantity} | Price: ₹${item.price}`}
+                  />
+                  
+                  <IconButton
+                    aria-label="delete"
+                    onClick={() => confirmDelete(item)}
+                    sx={{ color: 'red' }} // Set the color to red
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </ListItem>
+              ))}
+            </List>
+            <Divider />
+          </>
+        )}
+      </Box>
+      <div className='flex justify-center content-center items-center fixed bottom-0 m-0 w-[400px]'>
         <Button
           variant="contained"
           color="primary"
-          startIcon={<CheckoutIcon />}
+          onClick={handleviewcart}
+          disabled={bag.data.length === 0} 
+          sx={{ borderRadius: 0, backgroundColor: 'primary.main',width:"70%",height:"50px", color: 'white', '&:hover': { backgroundColor: 'primary.dark' } }}
+        >
+          View Details and Edit Cart
+        </Button>
+        <Button
+          variant="contained"
           onClick={handleCheckout}
+          disabled={bag.data.length === 0}
+          sx={{ borderRadius: 0, backgroundColor: 'error.main', color: 'white', width:"40%",height:"50px", '&:hover': { backgroundColor: 'error.dark' } }}
         >
           Checkout
         </Button>
-      </Box>
-    </Box>
+      </div>
+    </>
   );
 
-  const handleView = (item) => {
-    // Logic to view item details
-    alert(`Viewing details for ${item.name}`);
+  const confirmDelete = (item) => {
+    setItemToRemove(item);
+    setOpenDialog(true);
   };
 
-  const handleEdit = (item) => {
-    // Logic to edit item
-    alert(`Editing ${item.name}`);
+  const handleDelete = () => {
+    // Dispatch action to remove item from the bag
+    dispatch(bagActions.removeFromBag({ productId: itemToRemove.productId }));
+    setOpenDialog(false); // Close the dialog
   };
 
   const handleCheckout = () => {
     // Logic to checkout items
-    navagate('/CheckoutForm'); // Navigate to checkout page using react-router-dom
-   
+    navigate('/CheckoutForm'); // Navigate to checkout page using react-router-dom
+  };
+
+  const handleviewcart = () => {
+    // Logic to view cart items
+    navigate('/viewCartDeatils'); // Navigate to cart page using react-router-dom
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
   };
 
   return (
@@ -114,6 +144,29 @@ export default function Drawer() {
       >
         {list('right')}
       </SwipeableDrawer>
+
+      {/* Confirmation Dialog */}
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        aria-labelledby="confirm-dialog-title"
+        aria-describedby="confirm-dialog-description"
+      >
+        <DialogTitle id="confirm-dialog-title">Confirm Delete</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="confirm-dialog-description">
+            Are you sure you want to remove {itemToRemove?.name} from the cart?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleDelete} color="error" autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

@@ -7,6 +7,7 @@ import Modal from 'react-modal';
 import CategoryDetails from '../../components/category/CategoryDetails';
 import { useDispatch, useSelector } from 'react-redux';
 import { bagActions } from '../../store/bagSlice';
+import { Snackbar, Alert } from "@mui/material";
 
 // Set up the app element for accessibility
 Modal.setAppElement('#root');
@@ -15,6 +16,7 @@ const ProductDetails = () => {
     const dispatch = useDispatch();
     const bagItem = useSelector((store) => store.bag);
     const location = useLocation();
+    const [openSnackbar, setOpenSnackbar] = useState(false);
     const { product } = location.state || {};
     console.log(product); // Destructure the product from state
 
@@ -94,11 +96,17 @@ const ProductDetails = () => {
         };
     
         dispatch(bagActions.addToBag(payload));
+        setOpenSnackbar(true);
     };
+
+    const handleCloseSnackbar = () => {
+        setOpenSnackbar(false);
+      };
     
 
     return (
         <div>
+
             <div className='flex flex-wrap md:flex-nowrap justify-evenly items-center gap-5 lg:px-[10%] my-4 px-5'>
                 <div className='w-full md:w-1/2'>
                     <Carousel
@@ -201,6 +209,16 @@ const ProductDetails = () => {
                 <h1 className='text-center font-serif text-2xl my-20'>Similar Products</h1>
                 <CategoryDetails category={product.category} />
             </div>
+            <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
+          Item added to bag successfully!
+        </Alert>
+      </Snackbar>
         </div>
     );
 };
