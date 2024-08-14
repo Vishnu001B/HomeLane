@@ -5,6 +5,7 @@ import { Outlet } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Navbar2 from "./components/Navbar2";
 import Footer from "./components/Footer";
+import CheckoutForm from "./components/CheckoutForm";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
     </div>
       <Outlet />
       <Footer/>
+      <CheckoutForm/>
     </div>
   );
 }
