@@ -5,11 +5,15 @@ import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import Modal from 'react-modal';
 import CategoryDetails from '../../components/category/CategoryDetails';
+import { useDispatch, useSelector } from 'react-redux';
+import { bagActions } from '../../store/bagSlice';
 
 // Set up the app element for accessibility
 Modal.setAppElement('#root');
 
 const ProductDetails = () => {
+    const dispatch = useDispatch();
+    const bagItem = useSelector((store) => store.bag);
     const location = useLocation();
     const { product } = location.state || {};
     console.log(product); // Destructure the product from state
@@ -79,6 +83,19 @@ const ProductDetails = () => {
 
     const originalPrice = product.price;
     const discountedPrice = calculateDiscountedPrice(originalPrice, discountPercentage);
+
+    const addIntobag = () => {
+        const payload = {
+            data: {
+                ...product, // Spread product details
+                quantity: 1 // Set initial quantity to 1
+            },
+            totalQuantity: 1 // Adding one product initially
+        };
+    
+        dispatch(bagActions.addToBag(payload));
+    };
+    
 
     return (
         <div>
@@ -161,7 +178,7 @@ const ProductDetails = () => {
                             </p>
                         )}
                     </div>
-                    <button className='w-full py-4 bg-[#E58377] rounded-sm text-white flex justify-center items-center gap-5'>
+                    <button className='w-full py-4 bg-[#E58377] rounded-sm text-white flex justify-center items-center gap-5' onClick={addIntobag}>
                         <FaShoppingCart className='text-2xl' /><p>Add To CART</p>
                     </button>
                 </div>
