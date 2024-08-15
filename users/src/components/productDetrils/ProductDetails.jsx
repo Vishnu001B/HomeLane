@@ -5,9 +5,10 @@ import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import Modal from 'react-modal';
 import CategoryDetails from '../../components/category/CategoryDetails';
+import PremiumCategory from '../../components/category/PremiumCategory';
 import { useDispatch, useSelector } from 'react-redux';
 import { bagActions } from '../../store/bagSlice';
-import { Snackbar, Alert } from "@mui/material";
+import { Snackbar, Alert, Button } from "@mui/material";
 
 // Set up the app element for accessibility
 Modal.setAppElement('#root');
@@ -17,8 +18,16 @@ const ProductDetails = () => {
     const bagItem = useSelector((store) => store.bag);
     const location = useLocation();
     const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [currentImage, setCurrentImage] = useState('');
+    const [width, setWidth] = useState('');
+    const [height, setHeight] = useState('');
+    const [calculatedPrice, setCalculatedPrice] = useState(null);
+    const [showPremiumModal, setShowPremiumModal] = useState(false);
+    const [showClassicModal, setShowClassicModal] = useState(false);
+    const [showEconomicModal, setShowEconomicModal] = useState(false);
+
     const { product } = location.state || {};
-    console.log(product); // Destructure the product from state
 
     // Hardcoded images
     const productImages = [
@@ -29,108 +38,86 @@ const ProductDetails = () => {
         'https://homelineteam.com/images/products/full-home-interior/image-5.jpg'
     ];
 
-    const [currentImage, setCurrentImage] = useState(product?.img || productImages[0]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
-    // State for width, height, and calculated price
-    const [width, setWidth] = useState('');
-    const [height, setHeight] = useState('');
-    const [calculatedPrice, setCalculatedPrice] = useState(null);
-
-    // Default price per square foot
-    const pricePerSquareFoot = parseFloat(product?.price) || 0; // Default to 0 if price is invalid
-    const discountPercentage = parseFloat(product?.discontpersentage) || 0; // Default to 0 if discount is invalid
-
     useEffect(() => {
         // Parse width and height as floats
         const widthNum = parseFloat(width);
         const heightNum = parseFloat(height);
 
-        // Debugging: Log the parsed values and price per square foot
-        console.log("Width:", widthNum, "Height:", heightNum, "Price Per Square Foot:", pricePerSquareFoot);
-
-        // Calculate price only if width and height are valid numbers and greater than 0
         if (!isNaN(widthNum) && !isNaN(heightNum) && widthNum > 0 && heightNum > 0) {
             const area = widthNum * heightNum;
-            const price = area * pricePerSquareFoot;
+            const price = area * parseFloat(product?.price);
             setCalculatedPrice(price);
         } else {
             setCalculatedPrice(null);
         }
-    }, [width, height, pricePerSquareFoot]);
+    }, [width, height, product?.price]);
 
-    if (!product) {
-        return <div>No product data available</div>;
-    }
-
-    const openModal = (img) => {
-        setCurrentImage(img);
-        setIsModalOpen(true);
-    };
-
-    const closeModal = () => {
-        setIsModalOpen(false);
-    };
-
-    const handleCarouselChange = (index) => {
-        setCurrentImage(productImages[index]);
-    };
-
-    // Calculate the discounted price
     const calculateDiscountedPrice = (price, discountPercentage) => {
-        const priceNumber = parseFloat(price.replace(/,/g, '')); // Remove commas for numeric operations
+        const priceNumber = parseFloat(price.replace(/,/g, ''));
         const discount = discountPercentage / 100;
         return (priceNumber - (priceNumber * discount)).toFixed(2);
     };
 
     const originalPrice = product.price;
-    const discountedPrice = calculateDiscountedPrice(originalPrice, discountPercentage);
+    const discountedPrice = calculateDiscountedPrice(originalPrice, parseFloat(product?.discontpersentage) || 0);
 
     const addIntobag = () => {
-        const payload = {
-            data: {
-                ...product, // Spread product details
-                quantity: 1 // Set initial quantity to 1
-            },
-            totalQuantity: 1 // Adding one product initially
-        };
-    
-        dispatch(bagActions.addToBag(payload));
+        dispatch(bagActions.addToBag({ data: { ...product, quantity: 1 }, totalQuantity: 1 }));
         setOpenSnackbar(true);
     };
 
     const handleCloseSnackbar = () => {
         setOpenSnackbar(false);
-      };
-    
+    };
+
+    const openImageModal = (img) => {
+        setCurrentImage(img);
+        setIsModalOpen(true);
+    };
+
+    const closeImageModal = () => {
+        setIsModalOpen(false);
+    };
+
+    const openCategoryModal = (category) => {
+        if (category === 'Premium') setShowPremiumModal(true);
+        if (category === 'Classic') setShowClassicModal(true);
+        if (category === 'Economic') setShowEconomicModal(true);
+    };
+
+    const closeCategoryModal = (category) => {
+        if (category === 'Premium') setShowPremiumModal(false);
+        if (category === 'Classic') setShowClassicModal(false);
+        if (category === 'Economic') setShowEconomicModal(false);
+    };
 
     return (
         <div>
-
             <div className='flex flex-wrap md:flex-nowrap justify-evenly items-center gap-5 lg:px-[10%] my-4 px-5'>
                 <div className='w-full md:w-1/2'>
                     <Carousel
                         showThumbs={false}
                         showStatus={false}
                         selectedItem={productImages.indexOf(currentImage)}
-                        onChange={handleCarouselChange}
+                        onChange={(index) => setCurrentImage(productImages[index])}
                         className='my-4'
                     >
                         {productImages.map((img, index) => (
-                            <div key={index} onClick={() => openModal(img)}>
-                                <img src={img} alt={`${product.name} ${index + 1}`} className='cursor-pointer' />
+                            <div key={index} className="zoom-container" onClick={() => openImageModal(img)}>
+                                <img src={img} alt={`${product.name} ${index + 1}`} className='zoom-image' />
                             </div>
                         ))}
                     </Carousel>
                     <div className='flex justify-center mt-4'>
                         {productImages.map((img, index) => (
-                            <img
-                                key={index}
-                                src={img}
-                                alt={`Thumbnail ${index + 1}`}
-                                className='w-20 h-20 cursor-pointer border-2 border-transparent'
-                                onClick={() => setCurrentImage(img)} // Click on thumbnails only updates the current image
-                            />
+                            <div key={index} className="zoom-container">
+                                <img
+                                    src={img}
+                                    alt={`Thumbnail ${index + 1}`}
+                                    className='w-20 h-20 cursor-pointer border-2 border-transparent zoom-image'
+                                    onClick={() => setCurrentImage(img)}
+                                />
+                            </div>
                         ))}
                     </div>
                 </div>
@@ -139,11 +126,11 @@ const ProductDetails = () => {
                         <h1 className='text-2xl font-thin my-4'>{product.name}</h1>
                         <p className='text-[#8E95B2] my-4'>SKU WL128-10001</p>
                         <p className='my-4 text-[#D4B080] text-2xl'>
-                            {discountPercentage > 0 ? (
+                            {parseFloat(product?.discontpersentage) > 0 ? (
                                 <>
                                     <span className='text-red-400 text-lg'>₹ {discountedPrice}</span>
                                     <span className='text-gray-500 line-through px-2'>₹ {originalPrice}</span>
-                                    <span className='text-green-500 text-sm'>({discountPercentage}% OFF)</span>
+                                    <span className='text-green-500 text-sm'>({parseFloat(product?.discontpersentage)}% OFF)</span>
                                 </>
                             ) : (
                                 <span className='text-red-400 text-lg'>₹ {originalPrice}</span>
@@ -186,39 +173,83 @@ const ProductDetails = () => {
                             </p>
                         )}
                     </div>
-                    <button className='w-full py-4 bg-[#E58377] rounded-sm text-white flex justify-center items-center gap-5' onClick={addIntobag}>
-                        <FaShoppingCart className='text-2xl' /><p>Add To CART</p>
-                    </button>
-                </div>
-
-                {/* Modal for Image Zoom */}
-                <Modal
-                    isOpen={isModalOpen}
-                    onRequestClose={closeModal}
-                    contentLabel="Zoomed Image"
-                    className='flex flex-col justify-center items-center max-w-screen-md mx-auto bg-white p-4 rounded'
-                    overlayClassName='fixed inset-0 z-40 bg-black bg-opacity-75 flex justify-center items-center'
-                >
-                    <div className='relative'>
-                        <img src={currentImage} alt="Zoomed" className='max-w-screen-md-full max-h-screen object-contain' />
-                        <button onClick={closeModal} className='absolute top-4 right-4 text-white text-2xl'>&times;</button>
+                    <div className='my-4 flex gap-4'>
+                       
+                        <button className='w-full py-4 bg-[#34b7f1] rounded-sm text-white flex justify-center items-center gap-5'>
+                            Call Now
+                        </button>
+                        <button className='w-full py-4 bg-[#25d366] rounded-sm text-white flex justify-center items-center gap-5'>
+                            WhatsApp
+                        </button>
                     </div>
-                </Modal>
+                    <div className='my-4'>
+                        <div className='bg-[#E9ECEF] p-4 rounded-md flex justify-around items-center'>
+                            <Button onClick={() => openCategoryModal('Premium')}>Premium</Button>
+                            <Button onClick={() => openCategoryModal('Classic')}>Classic</Button>
+                            <Button onClick={() => openCategoryModal('Economic')}>Economic</Button>
+                        </div>
+                    </div>
+                    <button className='w-full py-4 bg-[#E58377] rounded-sm text-white flex justify-center items-center gap-5' onClick={addIntobag}>
+                            <FaShoppingCart className='text-2xl' /><p>Add To CART</p>
+                        </button>
+                </div>
             </div>
+
+            {/* Image Modal */}
+            <Modal
+                isOpen={isModalOpen}
+                onRequestClose={closeImageModal}
+                className='modal'
+                overlayClassName='overlay'
+            >
+                <img src={currentImage} alt="Product" className='w-full h-full object-contain' />
+            </Modal>
+
+            {/* Premium Modal */}
+            <Modal
+                isOpen={showPremiumModal}
+                onRequestClose={() => closeCategoryModal('Premium')}
+                className='modal'
+                overlayClassName='overlay'
+            >
+                <PremiumCategory category={product} onClose={() => closeCategoryModal('Premium')} />
+            </Modal>
+
+            {/* Classic Modal */}
+            <Modal
+                isOpen={showClassicModal}
+                onRequestClose={() => closeCategoryModal('Classic')}
+                className='modal'
+                overlayClassName='overlay'
+            >
+                <PremiumCategory category={product} onClose={() => closeCategoryModal('Classic')} />
+            </Modal>
+
+            {/* Economic Modal */}
+            <Modal
+                isOpen={showEconomicModal}
+                onRequestClose={() => closeCategoryModal('Economic')}
+                className='modal'
+                overlayClassName='overlay'
+            >
+                <PremiumCategory category={product}  onClose={() => closeCategoryModal('Economic')} />
+            </Modal>
+
             <div>
                 <h1 className='text-center font-serif text-2xl my-20'>Similar Products</h1>
                 <CategoryDetails category={product.category} />
             </div>
+
+            {/* Snackbar for confirmation */}
             <Snackbar
-        open={openSnackbar}
-        autoHideDuration={3000}
-        onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
-          Item added to bag successfully!
-        </Alert>
-      </Snackbar>
+                open={openSnackbar}
+                autoHideDuration={6000}
+                onClose={handleCloseSnackbar}
+            >
+                <Alert onClose={handleCloseSnackbar} severity="success">
+                    Item added to cart!
+                </Alert>
+            </Snackbar>
         </div>
     );
 };
