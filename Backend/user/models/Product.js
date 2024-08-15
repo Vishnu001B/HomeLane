@@ -47,11 +47,11 @@ const productSchema = new mongoose.Schema({
 
   reviews: { type: [reviewSchema] },
 
-  // VendorUser: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: "VendorUser",
-  //   required: true,
-  // },
+  VendorUser: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "VendorUser",
+    required: true,
+  },
 });
 
 const Product = mongoose.model("Product", productSchema);
