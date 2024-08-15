@@ -8,6 +8,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import footer from "../assets/image/logo-footer.png";
 import { Link, useNavigate } from "react-router-dom";
 import Login from "../routes/Login";
+import Drawer from "./module/Drawer";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -118,8 +119,7 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center space-x-2 cursor-pointer">
-            <ShoppingCartIcon className="text-5xl" />
-            <span className="text-2xl">Cart</span>
+            <Drawer/>
           </div>
         </div>
 

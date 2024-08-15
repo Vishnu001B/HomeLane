@@ -3,15 +3,17 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-
-import { ThemeProvider } from "@material-tailwind/react";
 import HomePage from "./components/HomePage";
-
 import CategoryDetails from "./components/category/CategoryDetails";
 import ProductDetails from "./components/productDetrils/ProductDetails";
 import Login from "./routes/Login";
 import Register from "./routes/Register";
 import OtpVerification from "./components/OtpVerification";
+import { Provider } from "react-redux";
+import homeLine from "./store/index";
+import CheckoutForm from "./components/CheckoutForm";
+import ViewCartAndUpdateCart from "./components/cart/ViewCartAndUpdateCart";
+
 
 const router = createBrowserRouter([
   {
@@ -48,16 +50,24 @@ const router = createBrowserRouter([
         path: "/verifyOtp",
         element: <OtpVerification />,
       },
+      {
+        path: "/CheckoutForm",
+        element: <CheckoutForm/>,
+      },
+      {
+        path: "/viewCartDeatils",
+        element: <ViewCartAndUpdateCart/>,
+      }
     ],
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <ThemeProvider>
-      <RouterProvider router={router}>
-        <App />
-      </RouterProvider>
-    </ThemeProvider>
+     <Provider store={homeLine}>
+        <RouterProvider router={router}>
+          <App />
+        </RouterProvider>
+      </Provider>
   </React.StrictMode>
 );
