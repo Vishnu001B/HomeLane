@@ -12,18 +12,17 @@ const Product = require("../models/Product");
 //   }
 // };
 
-
 exports.createProduct = async (req, res) => {
   try {
     const product = new Product(req.body);
     await product.save();
     res.status(201).send({
       message: "Product added successfully!",
-      product
+      product,
     });
   } catch (error) {
     res.status(400).send({
-      message: "Product validation failed: " + error.message
+      message: "Product validation failed: " + error.message,
     });
   }
 };
@@ -243,19 +242,18 @@ exports.searchProductsByTitle = async (req, res) => {
 // Function to fetch distinct categories
 exports.getCategories = async (req, res) => {
   try {
-    const categories = await Product.distinct('category');
+    const categories = await Product.distinct("category");
     res.status(200).json(categories);
   } catch (error) {
-    res.status(500).json({ message: 'Failed to fetch categories', error });
+    res.status(500).json({ message: "Failed to fetch categories", error });
   }
 };
 
-
 exports.getBrand = async (req, res) => {
   try {
-    const brands = await Product.distinct('brand');
+    const brands = await Product.distinct("brand");
     res.status(200).json(brands);
   } catch (error) {
-    res.status(500).json({ message: 'Failed to fetch brands', error });
+    res.status(500).json({ message: "Failed to fetch brands", error });
   }
 };

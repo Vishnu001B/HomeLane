@@ -5,7 +5,7 @@ const validateToken = require("../../middleware/validateTokenHandler");
 const router = express.Router();
 
 // Define routes
-router.post("/products", validateToken, productController.createProduct);
+router.post("/products", productController.createProduct);
 router.get("/products/:id", productController.getProducts);
 router.get("/products/:id", productController.getProductById);
 router.put("/products/:id", validateToken, productController.updateProductById);
@@ -36,7 +36,5 @@ router.get("/categories", productController.getCategories);
 
 // Route to fetch brands
 router.get("/product/brands", productController.getBrand);
-
-
 
 module.exports = router;

@@ -2,19 +2,52 @@
 const Product = require("../../user/models/Product"); // Adjust the path as necessary
 
 // Create a new product
+const upload = require("../../modules/fileModule");
+const multer = require("multer");
+
 exports.createProduct = async (req, res) => {
-  try {
-    const product = new Product(req.body);
-    await product.save();
-    res.status(201).send({
-      message: "Product added successfully!",
-      product,
+  upload.single("file")(req, res, async (err) => {
+    if (err instanceof multer.MulterError) {
+      return res.status(400).send(err.message);
+    } else if (err) {
+      return res.status(500).send("An unknown error occurred.");
+    }
+
+    // Extracting more information from the request body
+    let { title, description, category, price, discountPercentage } = req.body;
+
+    // Constructing file metadata
+    const fileData = new Product({
+      filename: req.file.filename,
+      path: req.file.path,
+      mimetype: req.file.mimetype,
+      size: req.file.size,
+      title,
+      description,
+      category,
+      price,
+      discountPercentage,
+      rating,
+      brand,
     });
-  } catch (error) {
-    res.status(400).send({
-      message: "Product validation failed: " + error.message,
-    });
-  }
+
+    try {
+      await fileData.save();
+      const fileUrl = `${req.protocol}://${req.get("host")}/uploads/${
+        req.file.filename
+      }`;
+      res.json({ message: "Upload successful", file: req.file, url: fileUrl });
+    } catch (error) {
+      // Log the detailed error
+      console.error("Database save error:", error);
+
+      // Send back a detailed error message to the client
+      res.status(500).send({
+        message: "Error saving file data to the database.",
+        error: error.message,
+      });
+    }
+  });
 };
 
 // Get all products or filter by query parameters
@@ -147,6 +180,3 @@ exports.getBrand = async (req, res) => {
 };
 
 // Ensure luxon is installed: npm install luxon
-
-
-
