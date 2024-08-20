@@ -13,6 +13,7 @@ import { Provider } from "react-redux";
 import homeLine from "./store/index";
 import CheckoutForm from "./components/CheckoutForm";
 import ViewCartAndUpdateCart from "./components/cart/ViewCartAndUpdateCart";
+import ProductDetail from "./components/ProductDetail";
 
 
 const router = createBrowserRouter([
@@ -57,7 +58,12 @@ const router = createBrowserRouter([
       {
         path: "/viewCartDeatils",
         element: <ViewCartAndUpdateCart/>,
-      }
+      },
+
+      // {
+      //   path: "/produ",
+      //   element: <ProductDetail/>,
+      // }
     ],
   },
 ]);

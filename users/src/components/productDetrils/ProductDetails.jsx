@@ -94,7 +94,7 @@ const ProductDetails = () => {
     return (
         <div>
             <div className='flex flex-wrap md:flex-nowrap justify-evenly items-center gap-5 lg:px-[10%] my-4 px-5'>
-                <div className='w-full md:w-1/2'>
+                <div className='w-full md:w-1/2 '>
                     <Carousel
                         showThumbs={false}
                         showStatus={false}
@@ -104,7 +104,7 @@ const ProductDetails = () => {
                     >
                         {productImages.map((img, index) => (
                             <div key={index} className="zoom-container" onClick={() => openImageModal(img)}>
-                                <img src={img} alt={`${product.name} ${index + 1}`} className='zoom-image' />
+                                <img src={img} alt={`${product.name} ${index + 1}`} className='zoom-image h-96' />
                             </div>
                         ))}
                     </Carousel>
@@ -126,6 +126,7 @@ const ProductDetails = () => {
                         <h1 className='text-2xl font-thin my-4'>{product.name}</h1>
                         <p className='text-[#8E95B2] my-4'>SKU WL128-10001</p>
                         <p className='text-lg'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque voluptas architecto, ipsam eius enim quae reiciendis, dolorum doloribus deserunt dicta maxime nam blanditiis eos. Magnam sint eius quasi deserunt numquam?</p>
+          
                         <p className='my-4 text-[#D4B080] text-2xl'>
                             {parseFloat(product?.discontpersentage) > 0 ? (
                                 <>
@@ -139,6 +140,57 @@ const ProductDetails = () => {
                             <span className='text-black px-4'>(Price Inclusive Of All Taxes)</span>
                         </p>
                     </div>
+                    <div className="mb-4">
+          <p><strong>Collection:</strong> Chevron</p>
+          <p><strong>Pattern Number:</strong> 12345</p>
+          <p><strong>Plank Size:</strong> 1215mm X 300mm x 8mm</p>
+          <p><strong>MRP/ Box:</strong> ₹ 6276/Box</p>
+          <p><strong>MRP/ Sq. Ft.:</strong> ₹ 200.0</p>
+        </div>
+        {/* Flooring Quantity Calculator */}
+        <div className="mb-4">
+          <p className="mb-2"><strong>Flooring Quantity Calculator</strong></p>
+          <div className="flex space-x-2">
+            <input
+              type="number"
+              placeholder="W(ft)"
+              className="w-1/3 p-2 border rounded-md"
+            />
+            <input
+              type="number"
+              placeholder="H(ft)"
+              className="w-1/3 p-2 border rounded-md"
+            />
+            <button className="w-1/3 p-2 bg-yellow-500 text-white rounded-md">
+              Calculate
+            </button>
+          </div>
+        </div>
+
+        {/* Quantity Selector */}
+        <div className="mb-4 flex items-center space-x-4">
+          <p className="font-bold">Quantity</p>
+          <div className="flex items-center">
+            <button className="px-4 py-2 border border-gray-300 rounded-l-md">-</button>
+            <input type="number" value="1" readOnly className="w-16 p-2 text-center border-t border-b border-gray-300" />
+            <button className="px-4 py-2 border border-gray-300 rounded-r-md">+</button>
+          </div>
+        </div>
+
+        {/* Delivery Options */}
+        <div className="mb-4">
+          <p className="font-bold mb-2">Delivery Options</p>
+          <div className="flex space-x-2">
+            <input
+              type="text"
+              placeholder="Pincode"
+              className="flex-grow p-2 border rounded-md"
+            />
+            <button className="p-2 bg-yellow-500 text-white rounded-md">
+              Check
+            </button>
+          </div>
+        </div>
                     <div className='my-4 flex flex-col justify-center'>
                     {product?.category != 'InteriorDesgin' && (
                         <div className='my-4'>
