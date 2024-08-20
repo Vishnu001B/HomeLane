@@ -140,7 +140,7 @@ const ProductDetails = () => {
                         </p>
                     </div>
                     <div className='my-4 flex flex-col justify-center'>
-                    {product?.category === 'Full Interior Desging' && (
+                    {product?.category != 'InteriorDesgin' && (
                         <div className='my-4'>
                             <p>Enter Dimensions:</p>
                             <div className='flex gap-4'>
