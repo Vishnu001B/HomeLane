@@ -16,10 +16,13 @@ const vendor = require("./admin/routes/vendorDetailsRouter");
 const order = require("./admin/routes/orderRouters");
 const deliveryRoutes = require("./deliveryBoy/routes/usersRoutes");
 const banner = require("./admin/routes/bannerRouters");
+const path = require("path");
+
 connectDB();
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Home route for admin routes
 app.get("/", (req, res) => {
   res.send("API is running successfully");

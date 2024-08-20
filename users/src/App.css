@@ -12,9 +12,9 @@
 }
 
 .card {
-  height: 250px;
-  width: 100%; /* Full width on mobile */
-  max-width: 300px; /* Maximum width */
+  height: 280px;
+  /* Full width on mobile */
+  
   box-shadow: var(--tw-shadow-sm);
   transition: transform 0.3s, box-shadow 0.3s;
 }
@@ -174,4 +174,24 @@
 .zoom-image-container {
   overflow: hidden;
 }
+
+
+
+/* Add margin to TestimonialCard for spacing */
+.mx-4 {
+  margin-left: 1rem; /* Adjust as needed */
+  margin-right: 1rem; /* Adjust as needed */
+}
+
+/* Ensure the slider container is responsive */
+.slick-slider {
+  width: 100%;
+}
+
+.slick-slide {
+  display: flex !important;
+  justify-content: center;
+}
+
+
 

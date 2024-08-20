@@ -32,10 +32,10 @@ const CardHome = () => {
 
   return (
     <div className='lg:py-5 my-4'>
-      <h1 className='lg:text-4xl text-xl text-center mb-8'>Shop Decorative Lighting, Home Decor & Designer Fans</h1>
-      <div className="flex flex-wrap items-center content-center justify-center lg:gap-2 xl:px-[5%] px-5 my-2">
+      <h1 className='lg:text-4xl text-xl text-center mb-20'>Shop Decorative Lighting, Home Decor & Designer Fans</h1>
+      <div className="flex flex-wrap  items-center content-center justify-center lg:gap-2 xl:px-[2%] px-5 ">
         {cardData.map((data, index) => (
-          <Link to={`/category/${data.title}`} key={index} className="card flex flex-col items-center">
+          <Link to={`/category/${data.title}`} key={index} className="card flex flex-col items-center w-[280px] ">
             <img src={data.img} alt={data.title} className="w-40 h-40 mb-2 rounded-full " />
             <h3 className="text-lg font-medium">{data.title}</h3>
           </Link>

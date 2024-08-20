@@ -1,54 +1,34 @@
-const fs = require('fs');
-const Banner = require('../models/banner'); // Assuming you have a Banner model
-// Assuming you have a Cloudinary upload utility
-
-exports.createBanner = async (req, res) => {
-  try {
-    let imageUrl = null;
-
-    if (req.file) {
-      const imageLocalPath = req.file.path;
-
-      if (fs.existsSync(imageLocalPath)) {
-        const imageUploadResult = await uploadOnCloudinary(imageLocalPath);
-
-        if (imageUploadResult?.url) {
-          imageUrl = imageUploadResult.url;
-        } else {
-          return res.status(400).json({
-            error: "Image upload failed. Please try again.",
-          });
-        }
-
-        // Optionally, delete the image from local after uploading
-        fs.unlinkSync(imageLocalPath);
-      } else {
-        return res.status(400).json({
-          error: `Image file not found at path: ${imageLocalPath}`,
-        });
-      }
+const Banner = require("../models/banner");
+const upload = require("../../modules/fileModule");
+const multer = require("multer");
+// Create a new banner
+exports.createBanner = async (req, res,next) => {
+  upload.single("file")(req, res, async (err) => {
+    if (err instanceof multer.MulterError) {
+      return res.status(400).send(err.message);
+    } else if (err) {
+      return res.status(500).send("An unknown error occurred.");
     }
 
-    // Create a new banner instance
-    const newBanner = new Banner({
-      images: imageUrl || req.body.images,
+    // Save file metadata to the database
+    const fileData = new Banner({
+      filename: req.file.filename,
+      path: req.file.path,
+      mimetype: req.file.mimetype,
+      size: req.file.size,
     });
 
-    // Save the banner to the database
-    const savedBanner = await newBanner.save();
-
-    res.status(201).json({
-      message: 'Banner created successfully',
-      banner: savedBanner,
-    });
-  } catch (error) {
-    res.status(500).json({
-      message: 'Error creating banner',
-      error: error.message,
-    });
-  }
-};
-
+    try {
+      await fileData.save();
+      const fileUrl = `${req.protocol}://${req.get("host")}/uploads/${
+        req.file.filename
+      }`;
+      res.json({ message: "Upload successful", file: req.file, url: fileUrl });
+    } catch (error) {
+      res.status(500).send("Error saving file data to the database.");
+    }
+  });
+  };
   
   // Get all banners
   exports.getBanners = async (req, res) => {

@@ -125,6 +125,7 @@ const ProductDetails = () => {
                     <div className='flex flex-col justify-center h-full'>
                         <h1 className='text-2xl font-thin my-4'>{product.name}</h1>
                         <p className='text-[#8E95B2] my-4'>SKU WL128-10001</p>
+                        <p className='text-lg'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque voluptas architecto, ipsam eius enim quae reiciendis, dolorum doloribus deserunt dicta maxime nam blanditiis eos. Magnam sint eius quasi deserunt numquam?</p>
                         <p className='my-4 text-[#D4B080] text-2xl'>
                             {parseFloat(product?.discontpersentage) > 0 ? (
                                 <>
@@ -139,48 +140,52 @@ const ProductDetails = () => {
                         </p>
                     </div>
                     <div className='my-4 flex flex-col justify-center'>
-                        <p>CHECK DELIVERY To Your Pincode:</p>
-                        <div className='flex justify-start items-center gap-5'>
-                            <input
-                                type="number"
-                                placeholder='Enter Pincode'
-                                className='px-10 w-52 py-2 rounded-sm border border-black'
-                            />
-                            <button className='bg-[#6e6d6c] w-20 h-10 text-white shadow-sm'>CHECK</button>
+                    {product?.category === 'Full Interior Desging' && (
+                        <div className='my-4'>
+                            <p>Enter Dimensions:</p>
+                            <div className='flex gap-4'>
+                                <input
+                                    type="number"
+                                    placeholder='Width (ft)'
+                                    value={width}
+                                    onChange={(e) => setWidth(e.target.value)}
+                                    className='px-4 w-24 py-2 rounded-sm border border-black'
+                                />
+                                <input
+                                    type="number"
+                                    placeholder='Height (ft)'
+                                    value={height}
+                                    onChange={(e) => setHeight(e.target.value)}
+                                    className='px-4 w-24 py-2 rounded-sm border border-black'
+                                />
+                            </div>
+                            {calculatedPrice !== null && (
+                                <p className='mt-4 text-[#D4B080] text-xl'>
+                                    Total Price: ₹ {calculatedPrice.toFixed(2)}
+                                </p>
+                            )}
                         </div>
+                    )}
                     </div>
-                    <div className='my-4'>
-                        <p>Enter Dimensions:</p>
-                        <div className='flex gap-4'>
-                            <input
-                                type="number"
-                                placeholder='Width (ft)'
-                                value={width}
-                                onChange={(e) => setWidth(e.target.value)}
-                                className='px-4 w-24 py-2 rounded-sm border border-black'
-                            />
-                            <input
-                                type="number"
-                                placeholder='Height (ft)'
-                                value={height}
-                                onChange={(e) => setHeight(e.target.value)}
-                                className='px-4 w-24 py-2 rounded-sm border border-black'
-                            />
-                        </div>
-                        {calculatedPrice !== null && (
-                            <p className='mt-4 text-[#D4B080] text-xl'>
-                                Total Price: ₹ {calculatedPrice.toFixed(2)}
-                            </p>
-                        )}
-                    </div>
+                   
                     <div className='my-4 flex gap-4'>
                        
-                        <button className='w-full py-4 bg-[#34b7f1] rounded-sm text-white flex justify-center items-center gap-5'>
+                  
+                        <a
+                            href="tel:6352396301"
+                            className='w-full py-4 bg-[#34b7f1] rounded-sm text-white flex justify-center items-center gap-5'
+                        >
                             Call Now
-                        </button>
-                        <button className='w-full py-4 bg-[#25d366] rounded-sm text-white flex justify-center items-center gap-5'>
+                        </a>
+                        <a
+                            href="https://wa.me/6352396301?text=Hello,%20I'm%20interested%20in%20your%20product!"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className='w-full py-4 bg-[#25d366] rounded-sm text-white flex justify-center items-center gap-5'
+                        >
                             WhatsApp
-                        </button>
+                        </a>
+                   
                     </div>
                     <div className='my-4'>
                         <div className='bg-[#E9ECEF] p-4 rounded-md flex justify-around items-center'>

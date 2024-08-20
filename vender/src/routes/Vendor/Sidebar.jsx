@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { Button } from "@material-tailwind/react";
-import { FaTachometerAlt, FaBoxOpen, FaProductHunt, FaPlus, FaTruck, FaCalendar, FaMoneyBillWave, FaInbox, FaTags, FaUndoAlt, FaSignOutAlt } from "react-icons/fa";
+import { FaTachometerAlt, FaBoxOpen, FaProductHunt, FaPlus, FaTruck, FaImage, FaSignOutAlt } from "react-icons/fa";
 
 const Sidebar = () => {
   const handleLogout = () => {
@@ -14,13 +14,7 @@ const Sidebar = () => {
     { to: "/orders", label: "All Orders", icon: <FaBoxOpen /> },
     { to: "/products", label: "All Products", icon: <FaProductHunt /> },
     { to: "/createProduct", label: "Create Product", icon: <FaPlus /> },
-    { to: "/DeliveryDetails", label: "Delivery Boy", icon: <FaTruck /> },
-    { to: "/allEvents", label: "All Events", icon: <FaCalendar /> },
-    { to: "/createEvent", label: "Create Event", icon: <FaPlus /> },
-    { to: "/withdrawMoney", label: "Withdraw Money", icon: <FaMoneyBillWave /> },
-    { to: "/shopInbox", label: "Shop Inbox", icon: <FaInbox /> },
-    { to: "/discountCodes", label: "Discount Codes", icon: <FaTags /> },
-    { to: "/refund", label: "Refund", icon: <FaUndoAlt /> },
+    { to: "/postBanner", label: "Post Banner", icon: <FaImage /> }, // Updated line
   ];
 
   return (

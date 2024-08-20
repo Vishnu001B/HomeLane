@@ -16,6 +16,8 @@ import  Register  from "../src/Component/Register";
 import OtpVerification from "./Component/OtpVerification";
 import VendorDashBoard from "./routes/Vendor/VendorDashBoard";
 import DeliveryBoyDetils from "./routes/deliveryBoy/DeliveryBoyDetils";
+import Banner from "./routes/Banner";
+
 
 
 const router = createBrowserRouter([
@@ -55,6 +57,15 @@ const router = createBrowserRouter([
       },{
         path: "/DeliveryDetails",
         element: <DeliveryBoyDetils/>,
+      },
+      {
+        path: "/postBanner",
+        element: <Banner/>,
+      },
+
+      {
+        path: "*",
+        element: <h1>Page Not Found</h1>,
       }
 
     ],
