@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { FaChevronDown } from "react-icons/fa"; // Importing a chevron icon
+import { FaChevronDown } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Navbar2 = () => {
   const [hoveredCategory, setHoveredCategory] = useState(null);
+  const [activeCategory, setActiveCategory] = useState(null);
 
   const categories = [
     {
@@ -18,7 +20,7 @@ const Navbar2 = () => {
       ],
     },
     {
-      name: "Interior Design",
+      name: "InteriorDesgin",
       subcategories: [
         "Full Home Interior",
         "Wardrobe",
@@ -41,7 +43,7 @@ const Navbar2 = () => {
       subcategories: ["Peps Mattress"],
     },
     {
-      name: "Store Locator",
+      name: "StoreLocator",
       subcategories: ["Dining Tables", "Dining Chairs", "Buffets"],
     },
     {
@@ -58,35 +60,52 @@ const Navbar2 = () => {
     },
   ];
 
+  const handleCategoryClick = (index) => {
+    setActiveCategory(index === activeCategory ? null : index);
+  };
+
+  const handleSubcategoryClick = () => {
+    setActiveCategory(null);
+  };
+
   return (
-    <div className="relative z-20 bg-gray-800">
-      <div className='flex flex-col'>
+    <div className="relative z-20 bg-gray-800 border border-gray-600" style={{ height: '60px' }}>
+      <div className="flex h-full">
         {/* Top Row: Home, Gallery, Vertical Garden */}
-        <div className='flex justify-center space-x-4 bg-gray-700 p-2'>
-          <a href="#" className="text-white px-3 py-2 rounded hover:bg-gray-600 transition duration-200">Home</a>
-          <a href="#" className="text-white px-3 py-2 rounded hover:bg-gray-600 transition duration-200">Gallery</a>
-          <a href="#" className="text-white px-3 py-2 rounded hover:bg-gray-600 transition duration-200">Vertical Garden</a>
+        <div className="flex-grow flex justify-center space-x-4 bg-gray-800 p-3">
+          <a href="/" className="text-white px-2 py-1 rounded hover:bg-gray-600 transition duration-200">Home</a>
+          <a href="/" className="text-white px-2 py-1 rounded hover:bg-gray-600 transition duration-200">Gallery</a>
+          <a href="/" className="text-white px-2 py-1 rounded hover:bg-gray-600 transition duration-200">Vertical Garden</a>
         </div>
 
         {/* Bottom Row: Dropdown Categories */}
-        <div className='flex flex-wrap justify-center items-center p-4 bg-gray-800'>
+        <div className="flex flex-wrap justify-center items-center p-1 h-full">
           {categories.map((category, index) => (
             <div
               key={index}
-              className="relative p-2"
-              onMouseEnter={() => setHoveredCategory(index)}
-              onMouseLeave={() => setHoveredCategory(null)}
+              className="relative p-1"
             >
-              <button className="flex items-center p-3 bg-gray-700 text-white rounded hover:bg-gray-600 transition duration-200">
+              <button
+                className="flex items-center p-2 text-white rounded hover:bg-gray-600 transition duration-200"
+                onClick={() => handleCategoryClick(index)}
+              >
                 {category.name}
                 <FaChevronDown className="ml-2" />
               </button>
-              {hoveredCategory === index && (
+              {activeCategory === index && (
                 <div className="absolute top-full left-0 mt-2 w-48 bg-white border border-gray-300 rounded shadow-lg z-30">
                   <ul>
                     {category.subcategories.map((subcategory, subIndex) => (
-                      <li key={subIndex} className="p-3 hover:bg-gray-100 cursor-pointer transition duration-200">
-                        {subcategory}
+                      <li
+                        key={subIndex}
+                        className="p-2 hover:bg-gray-100 cursor-pointer transition duration-200"
+                      >
+                        <Link
+                          to={`/category/${category.name}`}
+                          onClick={handleSubcategoryClick}
+                        >
+                          {subcategory}
+                        </Link>
                       </li>
                     ))}
                   </ul>
