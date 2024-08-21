@@ -1,28 +1,21 @@
-import React, { useState, useEffect, useRef } from "react";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import MenuIcon from "@mui/icons-material/Menu";
-import CloseIcon from "@mui/icons-material/Close";
-import SearchIcon from "@mui/icons-material/Search";
-import LogoutIcon from "@mui/icons-material/Logout";
-import footer from "../assets/image/logo-footer.png";
-import { Link, useNavigate } from "react-router-dom";
-import Login from "../routes/Login";
-import Drawer from "./module/Drawer";
+// src/components/Navbar.js
+import React, { useState } from 'react';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
+import SearchIcon from '@mui/icons-material/Search';
+import LogoutIcon from '@mui/icons-material/Logout';
+import footer from '../assets/image/logo-footer.png';
+import { Link, useNavigate } from 'react-router-dom';
+import Login from '../routes/Login';
+import MiniDrawer from './MiniDrawer'; // Import the MiniDrawer component
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const dropdownRef = useRef(null); // Ref for the dropdown
-
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false); // State for the mini drawer
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    setIsLoggedIn(!!token);
-  }, []);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -33,33 +26,21 @@ const Navbar = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userId");
-    localStorage.removeItem("email");
-    setIsLoggedIn(false);
-    navigate("/");
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('email');
+    navigate('/');
   };
 
-  const handleClickOutside = (event) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      setIsDropdownOpen(false);
-    }
+  const toggleDrawer = () => {
+    setIsDrawerOpen(!isDrawerOpen);
   };
-
-  useEffect(() => {
-    if (isDropdownOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isDropdownOpen]);
 
   return (
     <>
       <nav className="bg-gray-100 p-4 lg:p-8 shadow-md w-full flex items-center justify-between gap-5 lg:px-32">
+       
+
         <Link to="/" className="lg:text-2xl md:text-xl text-sm font-bold w-1/5">
           <img src={footer} alt="Logo" className="w-16 h-16 mr-2" />
         </Link>
@@ -74,31 +55,11 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center space-x-4 w-1/4 justify-end hidden sm:flex">
-          <div
-            className="relative flex items-center space-x-2 cursor-pointer"
-            onClick={() => setIsDropdownOpen(!isDropdownOpen)} // Toggle dropdown on click
-            ref={dropdownRef} // Attach the ref to the dropdown container
-          >
-            {isLoggedIn ? (
+          <div className="relative flex items-center space-x-2 cursor-pointer">
+            {localStorage.getItem('token') ? (
               <>
                 <LogoutIcon className="text-5xl" onClick={handleLogout} />
                 <span className="text-2xl">Account</span>
-                {isDropdownOpen && (
-                  <div className="absolute z-30 top-full mt-2 w-48 bg-white shadow-lg rounded-md p-2">
-                    <Link
-                      to="/profile"
-                      className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                    >
-                      Account
-                    </Link>
-                    <button
-                      className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
-                      onClick={handleLogout}
-                    >
-                      Sign Out
-                    </button>
-                  </div>
-                )}
               </>
             ) : (
               <>
@@ -107,28 +68,8 @@ const Navbar = () => {
                   onClick={toggleLoginModal}
                 />
                 <span className="text-2xl">Sign In</span>
-                {isDropdownOpen && (
-                  <div className="absolute z-30 top-full mt-2 w-48 bg-white shadow-lg rounded-md p-2">
-                    <button
-                      className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
-                      onClick={toggleLoginModal}
-                    >
-                      Sign In
-                    </button>
-                    <Link
-                      to="/register"
-                      className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                    >
-                      Create Account
-                    </Link>
-                  </div>
-                )}
               </>
             )}
-          </div>
-
-          <div className="flex items-center space-x-2 cursor-pointer">
-            <Drawer />
           </div>
         </div>
 
@@ -137,31 +78,13 @@ const Navbar = () => {
             {isMenuOpen ? (
               <CloseIcon className="text-3xl" />
             ) : (
-              <MenuIcon className="text-3xl" />
+              <MenuIcon className="text-3xl"   onClick={toggleDrawer}/>
             )}
           </button>
         </div>
-
-        {isMenuOpen && (
-          <div className="absolute right-0 shadow-md w-full sm:hidden z-30">
-            <div className="flex flex-col items-center space-y-4 p-4">
-              {!isLoggedIn && (
-                <div
-                  className="flex items-center space-x-2 cursor-pointer"
-                  onClick={toggleLoginModal}
-                >
-                  <AccountCircleIcon className="text-4xl" />
-                  <span className="text-xl">Sign In</span>
-                </div>
-              )}
-              <div className="flex items-center space-x-2 cursor-pointer">
-                <ShoppingCartIcon className="text-4xl" />
-                <span className="text-xl">Cart</span>
-              </div>
-            </div>
-          </div>
-        )}
       </nav>
+
+      <MiniDrawer isOpen={isDrawerOpen} onClose={toggleDrawer} />
 
       {isLoginModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-65 flex items-center justify-center z-50">

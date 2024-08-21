@@ -1,12 +1,21 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import CustomizedSteppers from './CustomizedSteppers';
+import { useLocation } from 'react-router-dom';
 
 const CheckoutForm = () => {
   const { totalQuantity, data } = useSelector((store) => store.bag) || { totalQuantity: 0, data: [] };
+  const location = useLocation();
+  const product = location.state?.product;
+
+  // If `data` is empty, use `product` from `location.state`
+  const newData = data.length > 0 ? data : product ? [product] : [];
 
   // Calculate cart subtotal
-  const cartSubtotal = data.reduce((total, item) => total + (parseFloat(item.price.replace(/,/g, '')) * item.quantity), 0);
+  const cartSubtotal = newData.reduce(
+    (total, item) => total + (parseFloat(item.price.replace(/,/g, '')) * (item.quantity || 1)), 
+    0
+  );
   const shippingCost = 0; // Assuming free shipping for this example
   const orderTotal = cartSubtotal + shippingCost;
 
@@ -83,17 +92,17 @@ const CheckoutForm = () => {
 
         {/* Product Details & Order Summary */}
         <div className="w-full lg:w-1/3">
-          {data.length > 0 && (
+          {newData.length > 0 && (
             <>
               <div className="bg-gray-100 p-4 rounded-md mb-4">
                 <h3 className="text-lg font-semibold">Product Details</h3>
-                {data.map((item, index) => (
+                {newData.map((item, index) => (
                   <div key={index} className="flex items-center mt-2">
                     <img src={item.img} alt={item.name} className="w-20 h-20 rounded-md" />
                     <div className="ml-4">
                       <p className="text-sm">{item.name}</p>
                       <p className="text-sm font-semibold">Rs. {item.price}</p>
-                      <p className="text-sm">Qty: {item.quantity}</p>
+                      <p className="text-sm">Qty: {item.quantity || 1}</p>
                     </div>
                   </div>
                 ))}

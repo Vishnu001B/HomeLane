@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { FaShoppingCart } from 'react-icons/fa';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
@@ -9,6 +9,7 @@ import PremiumCategory from '../../components/category/PremiumCategory';
 import { useDispatch, useSelector } from 'react-redux';
 import { bagActions } from '../../store/bagSlice';
 import { Snackbar, Alert, Button } from "@mui/material";
+import ProductDescription from './ProductDecription';
 
 // Set up the app element for accessibility
 Modal.setAppElement('#root');
@@ -29,6 +30,8 @@ const ProductDetails = () => {
 
     const { product } = location.state || {};
 
+    const navigate = useNavigate()
+
     // Hardcoded images
     const productImages = [
         'https://homelineteam.com/images/products/full-home-interior/image-1.jpg',
@@ -39,7 +42,6 @@ const ProductDetails = () => {
     ];
 
     useEffect(() => {
-        // Parse width and height as floats
         const widthNum = parseFloat(width);
         const heightNum = parseFloat(height);
 
@@ -91,10 +93,21 @@ const ProductDetails = () => {
         if (category === 'Economic') setShowEconomicModal(false);
     };
 
+
+    const handleBookNow = () => {
+        navigate("/CheckoutForm", {
+            state: {
+                product: product
+            }
+        });
+    }
+
+
+
     return (
         <div>
             <div className='flex flex-wrap md:flex-nowrap justify-evenly items-center gap-5 lg:px-[10%] my-4 px-5'>
-                <div className='w-full md:w-1/2 '>
+                <div className='w-full md:w-1/2'>
                     <Carousel
                         showThumbs={false}
                         showStatus={false}
@@ -104,7 +117,7 @@ const ProductDetails = () => {
                     >
                         {productImages.map((img, index) => (
                             <div key={index} className="zoom-container" onClick={() => openImageModal(img)}>
-                                <img src={img} alt={`${product.name} ${index + 1}`} className='zoom-image h-96' />
+                                <img src={img} alt={`${product.name} ${index + 1}`} className='zoom-image' />
                             </div>
                         ))}
                     </Carousel>
@@ -125,8 +138,6 @@ const ProductDetails = () => {
                     <div className='flex flex-col justify-center h-full'>
                         <h1 className='text-2xl font-thin my-4'>{product.name}</h1>
                         <p className='text-[#8E95B2] my-4'>SKU WL128-10001</p>
-                        <p className='text-lg'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque voluptas architecto, ipsam eius enim quae reiciendis, dolorum doloribus deserunt dicta maxime nam blanditiis eos. Magnam sint eius quasi deserunt numquam?</p>
-          
                         <p className='my-4 text-[#D4B080] text-2xl'>
                             {parseFloat(product?.discontpersentage) > 0 ? (
                                 <>
@@ -140,58 +151,17 @@ const ProductDetails = () => {
                             <span className='text-black px-4'>(Price Inclusive Of All Taxes)</span>
                         </p>
                     </div>
-                    <div className="mb-4">
-          <p><strong>Collection:</strong> Chevron</p>
-          <p><strong>Pattern Number:</strong> 12345</p>
-          <p><strong>Plank Size:</strong> 1215mm X 300mm x 8mm</p>
-          <p><strong>MRP/ Box:</strong> ₹ 6276/Box</p>
-          <p><strong>MRP/ Sq. Ft.:</strong> ₹ 200.0</p>
-        </div>
-        {/* Flooring Quantity Calculator */}
-        <div className="mb-4">
-          <p className="mb-2"><strong>Flooring Quantity Calculator</strong></p>
-          <div className="flex space-x-2">
-            <input
-              type="number"
-              placeholder="W(ft)"
-              className="w-1/3 p-2 border rounded-md"
-            />
-            <input
-              type="number"
-              placeholder="H(ft)"
-              className="w-1/3 p-2 border rounded-md"
-            />
-            <button className="w-1/3 p-2 bg-yellow-500 text-white rounded-md">
-              Calculate
-            </button>
-          </div>
-        </div>
-
-        {/* Quantity Selector */}
-        <div className="mb-4 flex items-center space-x-4">
-          <p className="font-bold">Quantity</p>
-          <div className="flex items-center">
-            <button className="px-4 py-2 border border-gray-300 rounded-l-md">-</button>
-            <input type="number" value="1" readOnly className="w-16 p-2 text-center border-t border-b border-gray-300" />
-            <button className="px-4 py-2 border border-gray-300 rounded-r-md">+</button>
-          </div>
-        </div>
-
-        {/* Delivery Options */}
-        <div className="mb-4">
-          <p className="font-bold mb-2">Delivery Options</p>
-          <div className="flex space-x-2">
-            <input
-              type="text"
-              placeholder="Pincode"
-              className="flex-grow p-2 border rounded-md"
-            />
-            <button className="p-2 bg-yellow-500 text-white rounded-md">
-              Check
-            </button>
-          </div>
-        </div>
                     <div className='my-4 flex flex-col justify-center'>
+                        <p>CHECK DELIVERY To Your Pincode:</p>
+                        <div className='flex justify-start items-center gap-5'>
+                            <input
+                                type="number"
+                                placeholder='Enter Pincode'
+                                className='px-10 w-52 py-2 rounded-sm border border-black'
+                            />
+                            <button className='bg-[#6e6d6c] w-20 h-10 text-white shadow-sm'>CHECK</button>
+                        </div>
+                    </div>
                     {product?.category != 'InteriorDesgin' && (
                         <div className='my-4'>
                             <p>Enter Dimensions:</p>
@@ -218,11 +188,7 @@ const ProductDetails = () => {
                             )}
                         </div>
                     )}
-                    </div>
-                   
                     <div className='my-4 flex gap-4'>
-                       
-                  
                         <a
                             href="tel:6352396301"
                             className='w-full py-4 bg-[#34b7f1] rounded-sm text-white flex justify-center items-center gap-5'
@@ -237,21 +203,70 @@ const ProductDetails = () => {
                         >
                             WhatsApp
                         </a>
-                   
                     </div>
                     <div className='my-4'>
-                        <div className='bg-[#E9ECEF] p-4 rounded-md flex justify-around items-center'>
-                            <Button onClick={() => openCategoryModal('Premium')}>Premium</Button>
-                            <Button onClick={() => openCategoryModal('Classic')}>Classic</Button>
-                            <Button onClick={() => openCategoryModal('Economic')}>Economic</Button>
+
+                        <div className='bg-[#F8F9FA] p-4 rounded-md flex justify-around items-center'>
+                            <Button
+                                onClick={() => openCategoryModal('Premium')}
+                                className='text-white bg-[#6C63FF] hover:bg-[#5A55D6]'
+                            >
+                                Premium
+                            </Button>
+                            <Button
+                                onClick={() => openCategoryModal('Classic')}
+                                className='text-white bg-[#FF6F61] hover:bg-[#E66056]'
+                            >
+                                Classic
+                            </Button>
+                            <Button
+                                onClick={() => openCategoryModal('Economic')}
+                                className='text-white bg-[#28B6F6] hover:bg-[#239CCE]'
+                            >
+                                Economic
+                            </Button>
                         </div>
                     </div>
-                    <button className='w-full py-4 bg-[#E58377] rounded-sm text-white flex justify-center items-center gap-5' onClick={addIntobag}>
-                            <FaShoppingCart className='text-2xl' /><p>Add To CART</p>
-                        </button>
+
+
+                    <div>
+                        {product?.category === 'InteriorDesgin' && (
+                            <button className='w-full py-4 bg-[#615ef3] rounded-sm text-white flex justify-center items-center gap-5' onClick={handleBookNow}>
+                                Book Now
+                            </button>
+                        )}
+                    </div>
+                    <div className='my-4'>
+                        {product?.category !== 'InteriorDesgin' && (
+                            <>
+                                <button
+                                    onClick={addIntobag}
+                                    className='w-full py-4 bg-[#f89e1b] rounded-sm text-white flex justify-center items-center gap-5'
+                                >
+                                    <FaShoppingCart />
+                                    ADD TO CART
+                                </button>
+                            </>
+                        )}
+                        <Snackbar
+                            open={openSnackbar}
+                            autoHideDuration={3000}
+                            onClose={handleCloseSnackbar}
+                        >
+                            <Alert onClose={handleCloseSnackbar} severity="success">
+                                Product added to cart successfully!
+                            </Alert>
+                        </Snackbar>
+                    </div>
+
                 </div>
             </div>
-
+           <div className='lg:px-40 px-5 my-4 mt-10'>
+           <ProductDescription/>
+           </div>
+            <div className='lg:px-[10%] md:px-5 my-4 px-5'>
+                <p>{product?.description}</p>
+            </div>
             {/* Image Modal */}
             <Modal
                 isOpen={isModalOpen}
@@ -289,7 +304,7 @@ const ProductDetails = () => {
                 className='modal'
                 overlayClassName='overlay'
             >
-                <PremiumCategory category={product}  onClose={() => closeCategoryModal('Economic')} />
+                <PremiumCategory category={product} onClose={() => closeCategoryModal('Economic')} />
             </Modal>
 
             <div>
