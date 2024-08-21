@@ -166,27 +166,27 @@ const ProductDetails = () => {
                     </div>
                     <div className='flex items-center my-4'>
 
-                            </div><div className='bg-yellow-400 w-16 text-white px-2 py-1 rounded-md'>
-                                4.3 ★
-                            </div>
+                    </div><div className='bg-yellow-400 w-16 text-white px-2 py-1 rounded-md'>
+                        4.3 ★
+                    </div>
 
                     {product?.category != 'InteriorDesgin' && (
                         <>
-                            
+
                             <span className='text-sm text-gray-600 ml-2'>
                                 (10,253 ratings & 1,200 reviews)
                             </span>
 
                             <div className='my-6'>
                                 <h2 className='text-xl font-semibold text-gray-700'>
-                                    Specifications
+                                    Product details
                                 </h2>
                                 <ul className='list-disc list-inside text-gray-600 mt-2'>
-                                    <li>Brand: DummyBrand</li>
-                                    <li>Model: XYZ123</li>
-                                    <li>Color: Black</li>
-                                    <li>Battery Life: Up to 12 hours</li>
-                                    <li>Warranty: 1 Year</li>
+                                    <li>Collection:Hera 6</li>
+                                    <li>Pattern Number :6086-1</li>
+                                    <li>Roll Size: 1.06mtr x 5.2mtr = 59sq.ft</li>
+                                    <li>Mrp/Roll:Rs 4000/Roll </li>
+                                    <li>MRP/Sq.ft:Rs 68</li>
                                 </ul>
                             </div>
 

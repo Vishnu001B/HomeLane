@@ -35,18 +35,7 @@ const ProductDescription = () => {
                 
 
                 {/* Product Specifications */}
-                <div className='my-6'>
-                    <h2 className='text-xl font-semibold text-gray-700'>
-                        Specifications
-                    </h2>
-                    <ul className='list-disc list-inside text-gray-600 mt-2'>
-                        <li>Brand: DummyBrand</li>
-                        <li>Model: XYZ123</li>
-                        <li>Color: Black</li>
-                        <li>Battery Life: Up to 12 hours</li>
-                        <li>Warranty: 1 Year</li>
-                    </ul>
-                </div>
+                
 
                 {/* Product Description */}
                 <div className='my-6'>
