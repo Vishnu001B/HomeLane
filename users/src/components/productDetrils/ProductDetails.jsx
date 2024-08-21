@@ -12,80 +12,93 @@ import { Snackbar, Alert, Button } from "@mui/material";
 import ProductDescription from './ProductDecription';
 
 // Set up the app element for accessibility
-Modal.setAppElement('#root');
+Modal.setAppElement("#root");
 
 const ProductDetails = () => {
-    const dispatch = useDispatch();
-    const bagItem = useSelector((store) => store.bag);
-    const location = useLocation();
-    const [openSnackbar, setOpenSnackbar] = useState(false);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [currentImage, setCurrentImage] = useState('');
-    const [width, setWidth] = useState('');
-    const [height, setHeight] = useState('');
-    const [calculatedPrice, setCalculatedPrice] = useState(null);
-    const [showPremiumModal, setShowPremiumModal] = useState(false);
-    const [showClassicModal, setShowClassicModal] = useState(false);
-    const [showEconomicModal, setShowEconomicModal] = useState(false);
+  const dispatch = useDispatch();
+  const bagItem = useSelector((store) => store.bag);
+  const location = useLocation();
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentImage, setCurrentImage] = useState("");
+  const [width, setWidth] = useState("");
+  const [height, setHeight] = useState("");
+  const [calculatedPrice, setCalculatedPrice] = useState(null);
+  const [showPremiumModal, setShowPremiumModal] = useState(false);
+  const [showClassicModal, setShowClassicModal] = useState(false);
+  const [showEconomicModal, setShowEconomicModal] = useState(false);
 
     const { product } = location.state || {};
 
     const navigate = useNavigate()
 
-    // Hardcoded images
-    const productImages = [
-        'https://homelineteam.com/images/products/full-home-interior/image-1.jpg',
-        'https://homelineteam.com/images/products/full-home-interior/image-2.jpg',
-        'https://homelineteam.com/images/products/full-home-interior/image-3.jpg',
-        'https://homelineteam.com/images/products/full-home-interior/image-4.jpg',
-        'https://homelineteam.com/images/products/full-home-interior/image-5.jpg'
-    ];
+  // Hardcoded images
+  const productImages = [
+    "https://homelineteam.com/images/products/full-home-interior/image-1.jpg",
+    "https://homelineteam.com/images/products/full-home-interior/image-2.jpg",
+    "https://homelineteam.com/images/products/full-home-interior/image-3.jpg",
+    "https://homelineteam.com/images/products/full-home-interior/image-4.jpg",
+    "https://homelineteam.com/images/products/full-home-interior/image-5.jpg",
+  ];
 
     useEffect(() => {
         const widthNum = parseFloat(width);
         const heightNum = parseFloat(height);
 
-        if (!isNaN(widthNum) && !isNaN(heightNum) && widthNum > 0 && heightNum > 0) {
-            const area = widthNum * heightNum;
-            const price = area * parseFloat(product?.price);
-            setCalculatedPrice(price);
-        } else {
-            setCalculatedPrice(null);
-        }
-    }, [width, height, product?.price]);
+    if (
+      !isNaN(widthNum) &&
+      !isNaN(heightNum) &&
+      widthNum > 0 &&
+      heightNum > 0
+    ) {
+      const area = widthNum * heightNum;
+      const price = area * parseFloat(product?.price);
+      setCalculatedPrice(price);
+    } else {
+      setCalculatedPrice(null);
+    }
+  }, [width, height, product?.price]);
 
-    const calculateDiscountedPrice = (price, discountPercentage) => {
-        const priceNumber = parseFloat(price.replace(/,/g, ''));
-        const discount = discountPercentage / 100;
-        return (priceNumber - (priceNumber * discount)).toFixed(2);
-    };
+  const calculateDiscountedPrice = (price, discountPercentage) => {
+    const priceNumber = parseFloat(price.replace(/,/g, ""));
+    const discount = discountPercentage / 100;
+    return (priceNumber - priceNumber * discount).toFixed(2);
+  };
 
-    const originalPrice = product.price;
-    const discountedPrice = calculateDiscountedPrice(originalPrice, parseFloat(product?.discontpersentage) || 0);
+  const originalPrice = product.price;
+  const discountedPrice = calculateDiscountedPrice(
+    originalPrice,
+    parseFloat(product?.discontpersentage) || 0
+  );
 
-    const addIntobag = () => {
-        dispatch(bagActions.addToBag({ data: { ...product, quantity: 1 }, totalQuantity: 1 }));
-        setOpenSnackbar(true);
-    };
+  const addIntobag = () => {
+    dispatch(
+      bagActions.addToBag({
+        data: { ...product, quantity: 1 },
+        totalQuantity: 1,
+      })
+    );
+    setOpenSnackbar(true);
+  };
 
-    const handleCloseSnackbar = () => {
-        setOpenSnackbar(false);
-    };
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
 
-    const openImageModal = (img) => {
-        setCurrentImage(img);
-        setIsModalOpen(true);
-    };
+  const openImageModal = (img) => {
+    setCurrentImage(img);
+    setIsModalOpen(true);
+  };
 
-    const closeImageModal = () => {
-        setIsModalOpen(false);
-    };
+  const closeImageModal = () => {
+    setIsModalOpen(false);
+  };
 
-    const openCategoryModal = (category) => {
-        if (category === 'Premium') setShowPremiumModal(true);
-        if (category === 'Classic') setShowClassicModal(true);
-        if (category === 'Economic') setShowEconomicModal(true);
-    };
+  const openCategoryModal = (category) => {
+    if (category === "Premium") setShowPremiumModal(true);
+    if (category === "Classic") setShowClassicModal(true);
+    if (category === "Economic") setShowEconomicModal(true);
+  };
 
     const closeCategoryModal = (category) => {
         if (category === 'Premium') setShowPremiumModal(false);
@@ -151,18 +164,21 @@ const ProductDetails = () => {
                             <span className='text-black px-4'>(Price Inclusive Of All Taxes)</span>
                         </p>
                     </div>
-                    <div className='my-4 flex flex-col justify-center'>
-                        <p>CHECK DELIVERY To Your Pincode:</p>
-                        <div className='flex justify-start items-center gap-5'>
-                            <input
-                                type="number"
-                                placeholder='Enter Pincode'
-                                className='px-10 w-52 py-2 rounded-sm border border-black'
-                            />
-                            <button className='bg-[#6e6d6c] w-20 h-10 text-white shadow-sm'>CHECK</button>
-                        </div>
-                    </div>
+                   
                     {product?.category != 'InteriorDesgin' && (
+                        <>
+                             <div className='my-4 flex flex-col justify-center'>
+                             <p>CHECK DELIVERY To Your Pincode:</p>
+                             <div className='flex justify-start items-center gap-5'>
+                                 <input
+                                     type="number"
+                                     placeholder='Enter Pincode'
+                                     className='px-10 w-52 py-2 rounded-sm border border-black'
+                                 />
+                                 <button className='bg-[#6e6d6c] w-20 h-10 text-white shadow-sm'>CHECK</button>
+                             </div>
+                         </div>
+
                         <div className='my-4'>
                             <p>Enter Dimensions:</p>
                             <div className='flex gap-4'>
@@ -187,6 +203,7 @@ const ProductDetails = () => {
                                 </p>
                             )}
                         </div>
+                        </>
                     )}
                     <div className='my-4 flex gap-4'>
                         <a
@@ -277,25 +294,31 @@ const ProductDetails = () => {
                 <img src={currentImage} alt="Product" className='w-full h-full object-contain' />
             </Modal>
 
-            {/* Premium Modal */}
-            <Modal
-                isOpen={showPremiumModal}
-                onRequestClose={() => closeCategoryModal('Premium')}
-                className='modal'
-                overlayClassName='overlay'
-            >
-                <PremiumCategory category={product} onClose={() => closeCategoryModal('Premium')} />
-            </Modal>
+      {/* Premium Modal */}
+      <Modal
+        isOpen={showPremiumModal}
+        onRequestClose={() => closeCategoryModal("Premium")}
+        className="modal"
+        overlayClassName="overlay"
+      >
+        <PremiumCategory
+          category={product}
+          onClose={() => closeCategoryModal("Premium")}
+        />
+      </Modal>
 
-            {/* Classic Modal */}
-            <Modal
-                isOpen={showClassicModal}
-                onRequestClose={() => closeCategoryModal('Classic')}
-                className='modal'
-                overlayClassName='overlay'
-            >
-                <PremiumCategory category={product} onClose={() => closeCategoryModal('Classic')} />
-            </Modal>
+      {/* Classic Modal */}
+      <Modal
+        isOpen={showClassicModal}
+        onRequestClose={() => closeCategoryModal("Classic")}
+        className="modal"
+        overlayClassName="overlay"
+      >
+        <PremiumCategory
+          category={product}
+          onClose={() => closeCategoryModal("Classic")}
+        />
+      </Modal>
 
             {/* Economic Modal */}
             <Modal
@@ -307,23 +330,25 @@ const ProductDetails = () => {
                 <PremiumCategory category={product} onClose={() => closeCategoryModal('Economic')} />
             </Modal>
 
-            <div>
-                <h1 className='text-center font-serif text-2xl my-20'>Similar Products</h1>
-                <CategoryDetails category={product.category} />
-            </div>
+      <div>
+        <h1 className="text-center font-serif text-2xl my-20">
+          Similar Products
+        </h1>
+        <CategoryDetails category={product.category} />
+      </div>
 
-            {/* Snackbar for confirmation */}
-            <Snackbar
-                open={openSnackbar}
-                autoHideDuration={6000}
-                onClose={handleCloseSnackbar}
-            >
-                <Alert onClose={handleCloseSnackbar} severity="success">
-                    Item added to cart!
-                </Alert>
-            </Snackbar>
-        </div>
-    );
+      {/* Snackbar for confirmation */}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert onClose={handleCloseSnackbar} severity="success">
+          Item added to cart!
+        </Alert>
+      </Snackbar>
+    </div>
+  );
 };
 
 export default ProductDetails;

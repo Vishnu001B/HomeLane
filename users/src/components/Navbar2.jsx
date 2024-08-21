@@ -36,27 +36,48 @@ const Navbar2 = () => {
     },
     {
       name: "Blinds",
-      subcategories: ["Roman Blinds", "Zebra Blinds", "Wooden Blinds", "PVC Blinds", "Roller Blinds"],
+      subcategories: [
+        "Roman Blinds",
+        "Zebra Blinds",
+        "Wooden Blinds",
+        "PVC Blinds",
+        "Roller Blinds",
+      ],
     },
     {
       name: "Mattress",
       subcategories: ["Peps Mattress"],
     },
-    {
-      name: "StoreLocator",
-      subcategories: ["Dining Tables", "Dining Chairs", "Buffets"],
-    },
+
     {
       name: "Wallpapers",
-      subcategories: ["Customized Wallpapers", "Imported Wallpapers", "Foam Panels", "Kitchen Wallpapers", "Bathroom Wallpapers"],
+      subcategories: [
+        "Customized Wallpapers",
+        "Imported Wallpapers",
+        "Foam Panels",
+        "Kitchen Wallpapers",
+        "Bathroom Wallpapers",
+      ],
     },
     {
       name: "Furniture",
-      subcategories: ["Customized Sofa Set", "Customized Bed", "Customized Dining Table & Chair"],
+      subcategories: [
+        "Customized Sofa Set",
+        "Customized Bed",
+        "Customized Dining Table & Chair",
+      ],
     },
     {
       name: "Flooring",
-      subcategories: ["Wooden Flooring", "Vinyl Flooring", "Artificial Grass", "Wall-to-wall Carpet", "Carpet Tiles", "Handmade Carpets", "Gym Tiles"],
+      subcategories: [
+        "Wooden Flooring",
+        "Vinyl Flooring",
+        "Artificial Grass",
+        "Wall-to-wall Carpet",
+        "Carpet Tiles",
+        "Handmade Carpets",
+        "Gym Tiles",
+      ],
     },
   ];
 
@@ -82,10 +103,7 @@ const Navbar2 = () => {
         </div>
 
           {categories.map((category, index) => (
-            <div
-              key={index}
-              className="relative p-1"
-            >
+            <div key={index} className="relative p-1">
               <button
                 className="flex items-center p-2 text-white rounded hover:bg-gray-600 transition duration-200"
                 onClick={() => handleCategoryClick(index)}
