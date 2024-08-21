@@ -9,7 +9,8 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import footer from '../assets/image/logo-footer.png';
 import { Link, useNavigate } from 'react-router-dom';
 import Login from '../routes/Login';
-import MiniDrawer from './MiniDrawer'; // Import the MiniDrawer component
+import MiniDrawer from './MiniDrawer'; 
+import Drawer from "./module/Drawer";// Import the MiniDrawer component
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -70,7 +71,11 @@ const Navbar = () => {
                 <span className="text-2xl">Sign In</span>
               </>
             )}
+            <div className="flex items-center space-x-2 cursor-pointer">
+            <Drawer/>
           </div>
+          </div>
+
         </div>
 
         <div className="flex sm:hidden">
@@ -83,7 +88,7 @@ const Navbar = () => {
           </button>
         </div>
       </nav>
-
+      
       <MiniDrawer isOpen={isDrawerOpen} onClose={toggleDrawer} />
 
       {isLoginModalOpen && (

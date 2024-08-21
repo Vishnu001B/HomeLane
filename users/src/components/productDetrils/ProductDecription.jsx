@@ -32,14 +32,7 @@ const ProductDescription = () => {
 
 
                 {/* Product Ratings */}
-                <div className='flex items-center my-4'>
-                    <div className='bg-yellow-400 text-white px-2 py-1 rounded-md'>
-                        4.3 ★
-                    </div>
-                    <span className='text-sm text-gray-600 ml-2'>
-                        (10,253 ratings & 1,200 reviews)
-                    </span>
-                </div>
+                
 
                 {/* Product Specifications */}
                 <div className='my-6'>
