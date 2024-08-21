@@ -726,6 +726,7 @@ const products = [
     category: "Blinds",
     img: "https://m.media-amazon.com/images/I/91ODp98rl+L._AC_UL320_.jpg",
   },
+  
 ];
 
 const categoryDetails = ({ category }) => {
