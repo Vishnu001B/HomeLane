@@ -102,7 +102,7 @@ const MiniDrawer = ({ isOpen, onClose }) => {
                   {category.subcategories.map(subcategory => (
                     <li key={subcategory}>
                       <Link
-                        to={`/${subcategory.replace(/\s+/g, '-').toLowerCase()}`} // Example URL transformation
+                        to={`category/${subcategory.replace(/\s+/g, '-').toLowerCase()}`} // Example URL transformation
                         className="block p-2 rounded hover:bg-gray-600 transition duration-200"
                       >
                         {subcategory}

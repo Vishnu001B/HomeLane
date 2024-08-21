@@ -14,10 +14,12 @@ import CustomizedCurtains from "./CustomizedCurtains";
 import Blinds from "./Blinds";
 import WallPaper from "./WallPaper";
 import Footer from "./Footer";
+import Video from "./Video";
 
 const HomePage = () => (
   <div className="w-full">
     <BannerSlider />
+    <Video/>
       <CardHome />
       <ProductDescription />
       <Cateroy />
