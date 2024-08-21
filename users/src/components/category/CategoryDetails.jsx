@@ -1227,7 +1227,7 @@ const products = [
     category: "Wooden Blinds",
     img: "https://m.media-amazon.com/images/I/81c8PDxBGoL._AC_UL320_.jpg",
   },
-
+  // llllllllllllllllllllllllllllll
   {
     discontpersentage: "5",
     name: "",

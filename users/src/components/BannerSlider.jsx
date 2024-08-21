@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import Slider from 'react-slick';
+import React, { useEffect, useState } from "react";
+import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import axios from 'axios';
-import { API_URL } from '../constants';
+import axios from "axios";
+import { API_URL } from "../constants";
 
 const BannerSlider = () => {
   const [banners, setBanners] = useState([]);
@@ -28,23 +28,22 @@ const BannerSlider = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 3000
+    autoplaySpeed: 3000,
   };
 
   return (
     <>
-      <div className='my-8'>
-        <Slider {...settings} className='my-8'>
+      <div className="my-8">
+        <Slider {...settings} className="">
           {banners.length > 0 ? (
             banners.map((banner) => (
               <div key={banner._id}>
                 <img
-                  src={`${API_URL}/${banner.path.replace(/\\/g, '/')}`} // Replace backslashes with forward slashes
+                  src={`${API_URL}/${banner.path.replace(/\\/g, "/")}`} // Replace backslashes with forward slashes
                   alt={banner.filename}
-                  className="w-screen h-[800px]"
-                  style={{ border: 'none', outline: 'none' }} // Remove border and outline
+                  className="w-screen lg:h-[800px] h-42" // Responsive height
+                  style={{ border: "none", outline: "none" }} // Remove border and outline
                 />
-
               </div>
             ))
           ) : (
