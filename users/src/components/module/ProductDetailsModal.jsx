@@ -9,14 +9,13 @@ const ProductDetailsModal = ({ product, onClose }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Trigger the animation for showing the modal
     setIsVisible(true);
   }, []);
 
   const handleSubmit = () => {
     if (name && phone) {
       navigate("/productDetails", { state: { product } });
-      onClose(); // Close the modal when the form is submitted
+      onClose();
     } else {
       Swal.fire({
         title: "Submission Failed",
@@ -29,7 +28,7 @@ const ProductDetailsModal = ({ product, onClose }) => {
 
   const handleClose = () => {
     setIsVisible(false);
-    setTimeout(onClose, 300); // Delay the close to allow the animation to finish
+    setTimeout(onClose, 300);
   };
 
   return (
@@ -43,35 +42,37 @@ const ProductDetailsModal = ({ product, onClose }) => {
           isVisible ? "scale-100" : "scale-75"
         }`}
       >
-        <div className="flex flex-col sm:flex-row">
+        <div className="flex flex-col md:flex-row max-h-[90vh] overflow-y-auto">
           {/* Image Section */}
-          <div className="w-full sm:w-1/2 bg-gray-50 flex justify-center items-center p-6">
+          <div className="w-full md:w-1/2 bg-gray-50 flex justify-center items-center p-4 sm:p-6">
             <img
               src={product.img}
               alt={product.name}
-              className="w-full h-auto object-cover rounded-md shadow-md"
+              className="w-full h-auto object-cover rounded-md shadow-md max-h-64 md:max-h-full"
             />
           </div>
 
           {/* Product Details Section */}
           <div
-            className="w-full sm:w-1/2 p-4"
+            className="w-full md:w-1/2 p-4 sm:p-6 overflow-y-auto"
             style={{ backgroundColor: "#eaedf0" }}
           >
-            <h3 className="text-3xl font-semibold text-gray-800 mb-8">
+            <h3 className="text-2xl sm:text-3xl font-semibold text-gray-800 mb-4 sm:mb-8">
               {product.name}
             </h3>
-            <div className="flex justify-between items-center mb-1">
+            <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
               <p className="text-red-600 text-xl font-bold">
                 ₹ {product.discountedPrice}
               </p>
-              <p className="text-gray-400 line-through ">₹ {product.price}</p>
-              <p className="text-green-600">
+              <p className="text-gray-400 line-through sm:ml-2">
+                ₹ {product.price}
+              </p>
+              <p className="text-green-600 sm:ml-2">
                 ({product.discountPercentage}%) OFF
               </p>
             </div>
-            <p className="text-gray-500 mb-12">{product.delivery}</p>
-            <p className="text-gray-700 mb-8 leading-relaxed">
+            <p className="text-gray-500 mb-4 sm:mb-12">{product.delivery}</p>
+            <p className="text-gray-700 mb-4 sm:mb-8 leading-relaxed">
               This product is perfect for those looking to enhance their space
               with something stylish and functional. Made with high-quality
               materials, it offers both durability and a modern look. Whether
