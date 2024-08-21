@@ -90,17 +90,35 @@ const Navbar2 = () => {
   };
 
   return (
-    <div className="relative z-20 bg-gray-800 border border-gray-600" style={{ height: '60px' }}>
+    <div
+      className="relative z-20 bg-gray-800 border border-gray-600"
+      style={{ height: "60px" }}
+    >
       <div className="flex justify-center items-center content-center">
         {/* Top Row: Home, Gallery, Vertical Garden */}
-       
+
         {/* Bottom Row: Dropdown Categories */}
         <div className="flex flex-wrap justify-center items-center p-1 h-full">
-        <div className="flex-grow flex justify-center space-x-4 bg-gray-800 p-3">
-          <a href="/" className="text-white px-2 py-1 rounded hover:bg-gray-600 transition duration-200">Home</a>
-          <a href="/" className="text-white px-2 py-1 rounded hover:bg-gray-600 transition duration-200">Gallery</a>
-          <a href="/" className="text-white px-2 py-1 rounded hover:bg-gray-600 transition duration-200">Vertical Garden</a>
-        </div>
+          <div className="flex-grow flex justify-center space-x-4 bg-gray-800 p-3">
+            <a
+              href="/"
+              className="text-white px-2 py-1 rounded hover:bg-gray-600 transition duration-200"
+            >
+              Home
+            </a>
+            <a
+              href="/"
+              className="text-white px-2 py-1 rounded hover:bg-gray-600 transition duration-200"
+            >
+              Gallery
+            </a>
+            <a
+              href="/"
+              className="text-white px-2 py-1 rounded hover:bg-gray-600 transition duration-200"
+            >
+              Vertical Garden
+            </a>
+          </div>
 
           {categories.map((category, index) => (
             <div key={index} className="relative p-1">
@@ -120,7 +138,7 @@ const Navbar2 = () => {
                         className="p-2 hover:bg-gray-100 cursor-pointer transition duration-200"
                       >
                         <Link
-                          to={`/category/${category.name}`}
+                          to={`/category/${encodeURIComponent(subcategory)}`}
                           onClick={handleSubcategoryClick}
                         >
                           {subcategory}
