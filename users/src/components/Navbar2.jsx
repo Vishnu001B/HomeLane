@@ -91,7 +91,7 @@ const Navbar2 = () => {
 
   return (
     <div
-      className="relative z-20 bg-gray-800 border border-gray-600"
+      className="relative z-20 bg-[#EEE0D0] font-serif"
       style={{ height: "60px" }}
     >
       <div className="flex justify-center items-center content-center">
@@ -99,22 +99,22 @@ const Navbar2 = () => {
 
         {/* Bottom Row: Dropdown Categories */}
         <div className="flex flex-wrap justify-center items-center p-1 h-full">
-          <div className="flex-grow flex justify-center space-x-4 bg-gray-800 p-3">
+          <div className="flex-grow flex justify-center space-x-4 ">
             <a
               href="/"
-              className="text-white px-2 py-1 rounded hover:bg-gray-600 transition duration-200"
+              className="text-black px-2 py-1 rounded hover:text-light-green-700 transition duration-200 font-semibold "
             >
               Home
             </a>
             <a
               href="/"
-              className="text-white px-2 py-1 rounded hover:bg-gray-600 transition duration-200"
+              className="text-black px-2 py-1 rounded hover:text-light-green-700 transition duration-200"
             >
               Gallery
             </a>
             <a
-              href="/"
-              className="text-white px-2 py-1 rounded hover:bg-gray-600 transition duration-200"
+              href="/verticalGarden"
+              className="text-black px-2 py-1 rounded hover:text-light-green-700 transition duration-200"
             >
               Vertical Garden
             </a>
@@ -123,14 +123,14 @@ const Navbar2 = () => {
           {categories.map((category, index) => (
             <div key={index} className="relative p-1">
               <button
-                className="flex items-center p-2 text-white rounded hover:bg-gray-600 transition duration-200"
+                className="flex items-center p-2 text-black rounded hover:text-light-green-700 transition duration-200"
                 onClick={() => handleCategoryClick(index)}
               >
                 {category.name}
-                <FaChevronDown className="ml-2" />
+                {/* <FaChevronDown className="ml-2" /> */}
               </button>
               {activeCategory === index && (
-                <div className="absolute top-full left-0 mt-2 w-48 bg-white border border-gray-300 rounded shadow-lg z-30">
+                <div className="absolute top-full left-0 mt-2 w-48 bg-gray-200  border border-gray-300 rounded shadow-lg z-30">
                   <ul>
                     {category.subcategories.map((subcategory, subIndex) => (
                       <li

@@ -3,8 +3,8 @@ import banner from "../../assets/banner.jpg"
  
 export function Cateroy() {
   return (
-    <div className="flex justify-center content-center items-center h-[60vh] px-[10%] my-32">
-      <Carousel className="rounded-xl h-[600px] ">
+    <div className="flex justify-center content-center items-center h-auto px-[5%] bg-[#EEEEEE]">
+      <Carousel className="rounded-xl h-auto lg:py-20 py-10 ">
       <div className="flex justify-start content-center">
       <img
         src="https://www.whiteteak.com/media/customimages/Homepage/Desktop/pendant_Decorative_Lighting_category_images.jpg"

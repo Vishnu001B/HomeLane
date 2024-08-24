@@ -1,1 +1,1 @@
-export const API_URL = "https://homelane-website-7d3g.onrender.com";
+export const API_URL = "http://localhost:5001";

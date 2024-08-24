@@ -39,11 +39,11 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="bg-gray-100 p-4 lg:p-8 shadow-md w-full flex items-center justify-between gap-5 lg:px-32">
+      <nav className="bg-[#FFFFFF] p-4 lg:p-8 shadow-md w-full flex items-center justify-between gap-5 lg:px-32">
        
 
         <Link to="/" className="lg:text-2xl md:text-xl text-sm font-bold w-1/5">
-          <img src={footer} alt="Logo" className="w-16 h-16 mr-2" />
+          <img src={footer} alt="Logo" className="w-14 h-16 mr-2" />
         </Link>
 
         <div className="relative lg:w-1/2 w-full flex items-center">
@@ -59,16 +59,16 @@ const Navbar = () => {
           <div className="relative flex items-center space-x-2 cursor-pointer">
             {localStorage.getItem('token') ? (
               <>
-                <LogoutIcon className="text-5xl" onClick={handleLogout} />
-                <span className="text-2xl">Account</span>
+                <LogoutIcon className="text-6xl" onClick={handleLogout} />
+                <span className="text-xl">Account</span>
               </>
             ) : (
               <>
                 <AccountCircleIcon
-                  className="text-5xl"
+                  className="text-6xl"
                   onClick={toggleLoginModal}
                 />
-                <span className="text-2xl">Sign In</span>
+                <span className="text-xl">Sign In</span>
               </>
             )}
             <div className="flex items-center space-x-2 cursor-pointer">

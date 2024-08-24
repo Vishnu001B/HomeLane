@@ -14,6 +14,7 @@ import homeLine from "./store/index";
 import CheckoutForm from "./components/CheckoutForm";
 import ViewCartAndUpdateCart from "./components/cart/ViewCartAndUpdateCart";
 import ProductDetail from "./components/ProductDetail";
+import VerticalGarden from "./components/verticalGarden/VerticalGarden";
 
 
 const router = createBrowserRouter([
@@ -59,11 +60,17 @@ const router = createBrowserRouter([
         path: "/viewCartDeatils",
         element: <ViewCartAndUpdateCart/>,
       },
+      { 
 
-      // {
-      //   path: "/produ",
-      //   element: <ProductDetail/>,
-      // }
+             path:"/verticalGarden",
+             element:<VerticalGarden/>
+
+
+    
+
+      }
+
+    
     ],
   },
 ]);

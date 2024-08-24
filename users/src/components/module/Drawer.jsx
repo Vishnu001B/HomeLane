@@ -10,7 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import DeleteIcon from '@mui/icons-material/Delete';
-import CheckoutIcon from '@mui/icons-material/Payment';
+import { IoCartSharp } from "react-icons/io5";
 import { useSelector, useDispatch } from 'react-redux';
 import Avatar from '@mui/material/Avatar';
 import { useNavigate } from 'react-router-dom';
@@ -25,7 +25,7 @@ export default function Drawer() {
   const [state, setState] = React.useState({ right: false });
   const [openDialog, setOpenDialog] = React.useState(false);
   const [itemToRemove, setItemToRemove] = React.useState(null);
-  
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const bag = useSelector((store) => store.bag) || { totalQuantity: 0, data: [] };
@@ -66,13 +66,13 @@ export default function Drawer() {
                     primary={item.name}
                     secondary={`Quantity: ${item.quantity} | Price: ₹${item.price}`}
                   />
-                  
+
                   <IconButton
                     aria-label="delete"
                     onClick={() => confirmDelete(item)}
-                    sx={{ color: 'red' }} // Set the color to red
+                    sx={{ color: 'red' }} // Set the color to green
                   >
-                    <DeleteIcon />
+                    <DeleteIcon sx={{ fontSize: '2rem' }} /> {/* Increase the icon size */}
                   </IconButton>
                 </ListItem>
               ))}
@@ -84,10 +84,9 @@ export default function Drawer() {
       <div className='flex justify-center content-center items-center fixed bottom-0 m-0 w-[400px]'>
         <Button
           variant="contained"
-          color="primary"
           onClick={handleviewcart}
-          disabled={bag.data.length === 0} 
-          sx={{ borderRadius: 0, backgroundColor: 'primary.main',width:"70%",height:"50px", color: 'white', '&:hover': { backgroundColor: 'primary.dark' } }}
+          disabled={bag.data.length === 0}
+          sx={{ borderRadius: 0, backgroundColor: 'primary.main', width: "70%", height: "50px", color: 'white', '&:hover': { backgroundColor: 'primary.dark' } }}
         >
           View Details and Edit Cart
         </Button>
@@ -95,7 +94,7 @@ export default function Drawer() {
           variant="contained"
           onClick={handleCheckout}
           disabled={bag.data.length === 0}
-          sx={{ borderRadius: 0, backgroundColor: 'error.main', color: 'white', width:"40%",height:"50px", '&:hover': { backgroundColor: 'error.dark' } }}
+          sx={{ borderRadius: 0, backgroundColor: 'error.main', color: 'white', width: "40%", height: "50px", '&:hover': { backgroundColor: 'error.dark' } }}
         >
           Checkout
         </Button>
@@ -130,12 +129,22 @@ export default function Drawer() {
 
   return (
     <div>
-      <Button onClick={toggleDrawer('right', true)}>
-        <ShoppingCartIcon />
-        <Typography variant="body2" sx={{ ml: 1 }}>
-          ({bag.totalQuantity})
-        </Typography>
+      <Button
+        onClick={toggleDrawer('right', true)}
+        className='relative  '
+       
+      >
+        {/* Cart icon always visible */}
+        <IoCartSharp  className='text-black  text-3xl'/>
+
+        {/* Conditionally show the item count */}
+        {bag.totalQuantity > 0 && (
+          <p className='absolute h-7 w-7 -right-0 -top-5 bg-deep-purple-400 rounded-full text-white'>
+            {bag.totalQuantity}
+          </p>
+        )}
       </Button>
+
       <SwipeableDrawer
         anchor="right"
         open={state.right}
