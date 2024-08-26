@@ -62,7 +62,7 @@ const router = createBrowserRouter([
       },
       { 
 
-             path:"/verticalGarden",
+             path:"/verticalGarden/:name",
              element:<VerticalGarden/>
 
 

@@ -113,7 +113,7 @@ const Navbar2 = () => {
               Gallery
             </a>
             <a
-              href="/verticalGarden"
+              href="/verticalGarden/vertical Garden"
               className="text-black px-2 py-1 rounded hover:text-light-green-700 transition duration-200"
             >
               Vertical Garden

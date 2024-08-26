@@ -1,7 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import vg from '../../assets/image/vg2.jpg';
+import CollectionOfImage from './CollectionOfImage';
+import VerticalDescription from './VerticalDescription';
+import { useParams } from 'react-router-dom';
+import {products} from '../../data'
+
 
 const VerticalGarden = () => {
+    const { name } = useParams();
+    const [filteredProducts, setFilteredProducts] = useState([]);
+
+    useEffect(() => {
+        // Assuming 'category' might be a variable in your component or you can get it from URL params
+        const selectname = name;
+
+        // Filter products based on the category or name from URL params
+        const filtered = products.filter(
+            (product) => product.category.toLowerCase() === selectname.toLowerCase()
+        );
+
+        setFilteredProducts(filtered);
+    }, [name]);
+    console.log(filteredProducts);
     return (
         <>
             <div className="relative w-screen h-[70vh]">
@@ -21,6 +41,12 @@ const VerticalGarden = () => {
                <div></div>
                <div></div>
                </div>
+            </div>
+            <div className='mt-20'>
+                <CollectionOfImage/>
+            </div>
+            <div className='mt-20'>
+                <VerticalDescription/>
             </div>
         </>
     );
