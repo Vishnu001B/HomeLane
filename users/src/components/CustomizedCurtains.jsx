@@ -28,7 +28,7 @@ const CustomizedCurtains = () => {
             <div className="absolute inset-0 bg-black opacity-50 rounded-md shadow-md shadow-black"></div>
             <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
               <h2 className="text-2xl font-bold font-serif">{title}</h2>
-              <button className="mt-4 px-4 py-2 bg-red-500 text-white rounded font-serif" onClick={()=>navagite("/verticalGarden")}>Read more</button>
+              <button className="mt-4 px-4 py-2 bg-red-500 text-white rounded font-serif" onClick={()=>navagite(`/verticalGarden/:${title}`)}>Read more</button>
             </div>
           </div>
         );

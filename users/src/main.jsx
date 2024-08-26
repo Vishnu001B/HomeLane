@@ -15,6 +15,7 @@ import CheckoutForm from "./components/CheckoutForm";
 import ViewCartAndUpdateCart from "./components/cart/ViewCartAndUpdateCart";
 import ProductDetail from "./components/ProductDetail";
 import VerticalGarden from "./components/verticalGarden/VerticalGarden";
+import AboutUs from "./components/about/AboutUs";
 
 
 const router = createBrowserRouter([
@@ -65,9 +66,10 @@ const router = createBrowserRouter([
              path:"/verticalGarden/:name",
              element:<VerticalGarden/>
 
-
-    
-
+      },
+      {
+        path:"/AboutUs",
+        element:<AboutUs/>
       }
 
     

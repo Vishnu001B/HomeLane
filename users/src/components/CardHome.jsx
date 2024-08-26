@@ -32,7 +32,7 @@ const CardHome = () => {
     { img: interior3, title: "Blinds" },
     { img: interior4, title: "Mattresses" },
     { img: interior5, title: "Wallpapers" },
-    { img: interior6, title: "Customised Sofa" },
+    // { img: interior6, title: "Customised Sofa" },
     { img: interior7, title: "Furniture" },
     { img: interior8, title: "Carpets" },
     { img: interior10, title: "Vertical Garden" },

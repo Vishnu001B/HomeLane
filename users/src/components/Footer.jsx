@@ -19,7 +19,7 @@ const Footer = () => {
           <div className="mb-6 md:mb-0 md:w-1/4">
             <h1 className="text-xl font-semibold mb-2">Our Company</h1>
             <ul>
-              <li className="mb-1"><a href="#about" className="hover:underline">About us</a></li>
+              <li className="mb-1"><a href="/AboutUs" className="hover:underline">About us</a></li>
               <li className="mb-1"><a href="#testimonials" className="hover:underline">Testimonials</a></li>
               <li className="mb-1"><a href="#gallery" className="hover:underline">Gallery</a></li>
               <li className="mb-1"><a href="#privacy" className="hover:underline">Privacy policy</a></li>

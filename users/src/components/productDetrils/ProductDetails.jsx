@@ -27,6 +27,7 @@ const ProductDetails = () => {
     const [showPremiumModal, setShowPremiumModal] = useState(false);
     const [showClassicModal, setShowClassicModal] = useState(false);
     const [showEconomicModal, setShowEconomicModal] = useState(false);
+    const [quantity, setQuantity] = useState(1); // Added state for quantity
 
     const { product } = location.state || {};
 
@@ -115,6 +116,11 @@ const ProductDetails = () => {
         });
     }
 
+    const handleQuantityChange = (event) => {
+        const value = Math.max(1, parseInt(event.target.value, 10)); // Ensure quantity is at least 1
+        setQuantity(value);
+    };
+
 
 
     return (
@@ -189,7 +195,17 @@ const ProductDetails = () => {
                                     <li>MRP/Sq.ft:Rs 68</li>
                                 </ul>
                             </div>
-
+                            <div className="flex items-center gap-4">
+                                <label htmlFor={`quantity-${product.id}`} className="text-lg ">Quantity:</label>
+                                <input
+                                    id={`quantity-${product.id}`}
+                                    type="number"
+                                    name="quantity"
+                                    value={quantity}
+                                    onChange={handleQuantityChange}
+                                    className="w-16  rounded p-1 text-center border-black border-[0.5px]"
+                                />
+                            </div>
                             <div className='my-4'>
                                 <p>Enter Dimensions:</p>
                                 <div className='flex gap-4'>
