@@ -3,11 +3,11 @@ import React, { useEffect, useState } from 'react';
 
 
 
-const VerticalDescription = () => {
+const VerticalDescription = ({name}) => {
   
     return (
         <div className="p-8 bg-gray-50 rounded-lg shadow-md px-[10%]">
-            <h1 className="lg:text-4xl text-3xl font-serif font-bold text-center mb-8 text-gray-800">Vertical Garden</h1>
+            <h1 className="lg:text-4xl text-3xl font-serif font-bold text-center mb-8 text-gray-800">{name }</h1>
             <div className="flex flex-col lg:flex-row justify-center items-center lg:items-start lg:space-x-12">
                 {/* Text Section */}
                 <div className="lg:w-1/2 mb-8 lg:mb-0 text-center lg:text-left  p-6  ">

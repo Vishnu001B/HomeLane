@@ -20,7 +20,7 @@ const Footer = () => {
             <h1 className="text-xl font-semibold mb-2">Our Company</h1>
             <ul>
               <li className="mb-1"><a href="/AboutUs" className="hover:underline">About us</a></li>
-              <li className="mb-1"><a href="#testimonials" className="hover:underline">Testimonials</a></li>
+              <li className="mb-1"><a href="/Testimonials" className="hover:underline">Testimonials</a></li>
               <li className="mb-1"><a href="#gallery" className="hover:underline">Gallery</a></li>
               <li className="mb-1"><a href="#privacy" className="hover:underline">Privacy policy</a></li>
             </ul>
@@ -29,7 +29,7 @@ const Footer = () => {
             <h1 className="text-xl font-semibold mb-2">Customer Service</h1>
             <ul>
               <li className="mb-1"><a href="#services" className="hover:underline">Services</a></li>
-              <li className="mb-1"><a href="#contact" className="hover:underline">Contact us</a></li>
+              <li className="mb-1"><a href="/ContactUs" className="hover:underline">Contact us</a></li>
               <li className="mb-1"><a href="#faqs" className="hover:underline">Faqs</a></li>
             </ul>
           </div>
