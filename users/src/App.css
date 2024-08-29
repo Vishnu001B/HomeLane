@@ -8,13 +8,12 @@
   text-decoration: none;
   background-color: var(--tw-bg-white);
   box-sizing: border-box;
-  
 }
 
 .card {
   height: 280px;
   /* Full width on mobile */
-  
+
   box-shadow: var(--tw-shadow-sm);
   transition: transform 0.3s, box-shadow 0.3s;
 }
@@ -75,7 +74,6 @@
 
 /* .................................. */
 
-
 .card1:hover {
   transform: scale(0.8);
   box-shadow: var(--tw-shadow-lg);
@@ -85,7 +83,6 @@
   transform: scale(0.5);
   box-shadow: var(--tw-shadow-sm);
 }
-
 
 .card1-img {
   width: 100%;
@@ -124,9 +121,7 @@
   }
 }
 
-
 /* .................. */
-
 
 /* Overlay to cover the whole screen */
 /* Overlay to cover the whole screen */
@@ -154,8 +149,6 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-
-
 /* Add these styles to your CSS file */
 .zoom-container {
   position: relative;
@@ -175,8 +168,6 @@
   overflow: hidden;
 }
 
-
-
 /* Add margin to TestimonialCard for spacing */
 .mx-4 {
   margin-left: 1rem; /* Adjust as needed */
@@ -193,5 +184,23 @@
   justify-content: center;
 }
 
+* {
+  /* font-family: "Montserrat", sans-serif; */
+  font-family: "Wix Madefor Text", sans-serif;
+  font-weight: 500;
+  font-size: 16px; /* Default font size for large screens */
+}
 
+@media (max-width: 1024px) {
+  /* Medium screens (e.g., tablets) */
+  * {
+    font-size: 13px;
+  }
+}
 
+@media (max-width: 768px) {
+  /* Small screens (e.g., smartphones) */
+  * {
+    font-size: 15px;
+  }
+}

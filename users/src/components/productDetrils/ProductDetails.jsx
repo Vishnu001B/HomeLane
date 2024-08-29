@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { FaShoppingCart } from 'react-icons/fa';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
@@ -9,9 +9,10 @@ import PremiumCategory from '../../components/category/PremiumCategory';
 import { useDispatch, useSelector } from 'react-redux';
 import { bagActions } from '../../store/bagSlice';
 import { Snackbar, Alert, Button } from "@mui/material";
+import ProductDescription from './ProductDecription';
 
 // Set up the app element for accessibility
-Modal.setAppElement('#root');
+Modal.setAppElement("#root");
 
 const ProductDetails = () => {
     const dispatch = useDispatch();
@@ -19,31 +20,38 @@ const ProductDetails = () => {
     const location = useLocation();
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [currentImage, setCurrentImage] = useState('');
-    const [width, setWidth] = useState('');
-    const [height, setHeight] = useState('');
+    const [currentImage, setCurrentImage] = useState("");
+    const [width, setWidth] = useState("");
+    const [height, setHeight] = useState("");
     const [calculatedPrice, setCalculatedPrice] = useState(null);
     const [showPremiumModal, setShowPremiumModal] = useState(false);
     const [showClassicModal, setShowClassicModal] = useState(false);
     const [showEconomicModal, setShowEconomicModal] = useState(false);
+    const [quantity, setQuantity] = useState(1); // Added state for quantity
 
     const { product } = location.state || {};
 
+    const navigate = useNavigate()
+
     // Hardcoded images
     const productImages = [
-        'https://homelineteam.com/images/products/full-home-interior/image-1.jpg',
-        'https://homelineteam.com/images/products/full-home-interior/image-2.jpg',
-        'https://homelineteam.com/images/products/full-home-interior/image-3.jpg',
-        'https://homelineteam.com/images/products/full-home-interior/image-4.jpg',
-        'https://homelineteam.com/images/products/full-home-interior/image-5.jpg'
+        "https://homelineteam.com/images/products/full-home-interior/image-1.jpg",
+        "https://homelineteam.com/images/products/full-home-interior/image-2.jpg",
+        "https://homelineteam.com/images/products/full-home-interior/image-3.jpg",
+        "https://homelineteam.com/images/products/full-home-interior/image-4.jpg",
+        "https://homelineteam.com/images/products/full-home-interior/image-5.jpg",
     ];
 
     useEffect(() => {
-        // Parse width and height as floats
         const widthNum = parseFloat(width);
         const heightNum = parseFloat(height);
 
-        if (!isNaN(widthNum) && !isNaN(heightNum) && widthNum > 0 && heightNum > 0) {
+        if (
+            !isNaN(widthNum) &&
+            !isNaN(heightNum) &&
+            widthNum > 0 &&
+            heightNum > 0
+        ) {
             const area = widthNum * heightNum;
             const price = area * parseFloat(product?.price);
             setCalculatedPrice(price);
@@ -53,16 +61,24 @@ const ProductDetails = () => {
     }, [width, height, product?.price]);
 
     const calculateDiscountedPrice = (price, discountPercentage) => {
-        const priceNumber = parseFloat(price.replace(/,/g, ''));
+        const priceNumber = parseFloat(price.replace(/,/g, ""));
         const discount = discountPercentage / 100;
-        return (priceNumber - (priceNumber * discount)).toFixed(2);
+        return (priceNumber - priceNumber * discount).toFixed(2);
     };
 
     const originalPrice = product.price;
-    const discountedPrice = calculateDiscountedPrice(originalPrice, parseFloat(product?.discontpersentage) || 0);
+    const discountedPrice = calculateDiscountedPrice(
+        originalPrice,
+        parseFloat(product?.discontpersentage) || 0
+    );
 
     const addIntobag = () => {
-        dispatch(bagActions.addToBag({ data: { ...product, quantity: 1 }, totalQuantity: 1 }));
+        dispatch(
+            bagActions.addToBag({
+                data: { ...product, quantity: 1 },
+                totalQuantity: 1,
+            })
+        );
         setOpenSnackbar(true);
     };
 
@@ -80,9 +96,9 @@ const ProductDetails = () => {
     };
 
     const openCategoryModal = (category) => {
-        if (category === 'Premium') setShowPremiumModal(true);
-        if (category === 'Classic') setShowClassicModal(true);
-        if (category === 'Economic') setShowEconomicModal(true);
+        if (category === "Premium") setShowPremiumModal(true);
+        if (category === "Classic") setShowClassicModal(true);
+        if (category === "Economic") setShowEconomicModal(true);
     };
 
     const closeCategoryModal = (category) => {
@@ -91,10 +107,26 @@ const ProductDetails = () => {
         if (category === 'Economic') setShowEconomicModal(false);
     };
 
+
+    const handleBookNow = () => {
+        navigate("/CheckoutForm", {
+            state: {
+                product: product
+            }
+        });
+    }
+
+    const handleQuantityChange = (event) => {
+        const value = Math.max(1, parseInt(event.target.value, 10)); // Ensure quantity is at least 1
+        setQuantity(value);
+    };
+
+
+
     return (
         <div>
             <div className='flex flex-wrap md:flex-nowrap justify-evenly items-center gap-5 lg:px-[10%] my-4 px-5'>
-                <div className='w-full md:w-1/2 '>
+                <div className='w-full md:w-1/2'>
                     <Carousel
                         showThumbs={false}
                         showStatus={false}
@@ -104,7 +136,7 @@ const ProductDetails = () => {
                     >
                         {productImages.map((img, index) => (
                             <div key={index} className="zoom-container" onClick={() => openImageModal(img)}>
-                                <img src={img} alt={`${product.name} ${index + 1}`} className='zoom-image h-96' />
+                                <img src={img} alt={`${product.name} ${index + 1}`} className='zoom-image' />
                             </div>
                         ))}
                     </Carousel>
@@ -125,8 +157,6 @@ const ProductDetails = () => {
                     <div className='flex flex-col justify-center h-full'>
                         <h1 className='text-2xl font-thin my-4'>{product.name}</h1>
                         <p className='text-[#8E95B2] my-4'>SKU WL128-10001</p>
-                        <p className='text-lg'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque voluptas architecto, ipsam eius enim quae reiciendis, dolorum doloribus deserunt dicta maxime nam blanditiis eos. Magnam sint eius quasi deserunt numquam?</p>
-          
                         <p className='my-4 text-[#D4B080] text-2xl'>
                             {parseFloat(product?.discontpersentage) > 0 ? (
                                 <>
@@ -140,89 +170,69 @@ const ProductDetails = () => {
                             <span className='text-black px-4'>(Price Inclusive Of All Taxes)</span>
                         </p>
                     </div>
-                    <div className="mb-4">
-          <p><strong>Collection:</strong> Chevron</p>
-          <p><strong>Pattern Number:</strong> 12345</p>
-          <p><strong>Plank Size:</strong> 1215mm X 300mm x 8mm</p>
-          <p><strong>MRP/ Box:</strong> ₹ 6276/Box</p>
-          <p><strong>MRP/ Sq. Ft.:</strong> ₹ 200.0</p>
-        </div>
-        {/* Flooring Quantity Calculator */}
-        <div className="mb-4">
-          <p className="mb-2"><strong>Flooring Quantity Calculator</strong></p>
-          <div className="flex space-x-2">
-            <input
-              type="number"
-              placeholder="W(ft)"
-              className="w-1/3 p-2 border rounded-md"
-            />
-            <input
-              type="number"
-              placeholder="H(ft)"
-              className="w-1/3 p-2 border rounded-md"
-            />
-            <button className="w-1/3 p-2 bg-yellow-500 text-white rounded-md">
-              Calculate
-            </button>
-          </div>
-        </div>
+                    <div className='flex items-center my-4'>
 
-        {/* Quantity Selector */}
-        <div className="mb-4 flex items-center space-x-4">
-          <p className="font-bold">Quantity</p>
-          <div className="flex items-center">
-            <button className="px-4 py-2 border border-gray-300 rounded-l-md">-</button>
-            <input type="number" value="1" readOnly className="w-16 p-2 text-center border-t border-b border-gray-300" />
-            <button className="px-4 py-2 border border-gray-300 rounded-r-md">+</button>
-          </div>
-        </div>
+                    </div><div className='bg-yellow-400 w-16 text-white px-2 py-1 rounded-md'>
+                        4.3 ★
+                    </div>
 
-        {/* Delivery Options */}
-        <div className="mb-4">
-          <p className="font-bold mb-2">Delivery Options</p>
-          <div className="flex space-x-2">
-            <input
-              type="text"
-              placeholder="Pincode"
-              className="flex-grow p-2 border rounded-md"
-            />
-            <button className="p-2 bg-yellow-500 text-white rounded-md">
-              Check
-            </button>
-          </div>
-        </div>
-                    <div className='my-4 flex flex-col justify-center'>
                     {product?.category != 'InteriorDesgin' && (
-                        <div className='my-4'>
-                            <p>Enter Dimensions:</p>
-                            <div className='flex gap-4'>
+                        <>
+
+                            <span className='text-sm text-gray-600 ml-2'>
+                                (10,253 ratings & 1,200 reviews)
+                            </span>
+
+                            <div className='my-6'>
+                                <h2 className='text-xl font-semibold text-gray-700'>
+                                    Product details
+                                </h2>
+                                <ul className='list-disc list-inside text-gray-600 mt-2'>
+                                    <li>Collection:Hera 6</li>
+                                    <li>Pattern Number :6086-1</li>
+                                    <li>Roll Size: 1.06mtr x 5.2mtr = 59sq.ft</li>
+                                    <li>Mrp/Roll:Rs 4000/Roll </li>
+                                    <li>MRP/Sq.ft:Rs 68</li>
+                                </ul>
+                            </div>
+                            <div className="flex items-center gap-4">
+                                <label htmlFor={`quantity-${product.id}`} className="text-lg ">Quantity:</label>
                                 <input
+                                    id={`quantity-${product.id}`}
                                     type="number"
-                                    placeholder='Width (ft)'
-                                    value={width}
-                                    onChange={(e) => setWidth(e.target.value)}
-                                    className='px-4 w-24 py-2 rounded-sm border border-black'
-                                />
-                                <input
-                                    type="number"
-                                    placeholder='Height (ft)'
-                                    value={height}
-                                    onChange={(e) => setHeight(e.target.value)}
-                                    className='px-4 w-24 py-2 rounded-sm border border-black'
+                                    name="quantity"
+                                    value={quantity}
+                                    onChange={handleQuantityChange}
+                                    className="w-16  rounded p-1 text-center border-black border-[0.5px]"
                                 />
                             </div>
-                            {calculatedPrice !== null && (
-                                <p className='mt-4 text-[#D4B080] text-xl'>
-                                    Total Price: ₹ {calculatedPrice.toFixed(2)}
-                                </p>
-                            )}
-                        </div>
+                            <div className='my-4'>
+                                <p>Enter Dimensions:</p>
+                                <div className='flex gap-4'>
+                                    <input
+                                        type="number"
+                                        placeholder='Width (ft)'
+                                        value={width}
+                                        onChange={(e) => setWidth(e.target.value)}
+                                        className='px-4 w-24 py-2 rounded-sm border border-black'
+                                    />
+                                    <input
+                                        type="number"
+                                        placeholder='Height (ft)'
+                                        value={height}
+                                        onChange={(e) => setHeight(e.target.value)}
+                                        className='px-4 w-24 py-2 rounded-sm border border-black'
+                                    />
+                                </div>
+                                {calculatedPrice !== null && (
+                                    <p className='mt-4 text-[#D4B080] text-xl'>
+                                        Total Price: ₹ {calculatedPrice.toFixed(2)}
+                                    </p>
+                                )}
+                            </div>
+                        </>
                     )}
-                    </div>
-                   
                     <div className='my-4 flex gap-4'>
-                       
-                  
                         <a
                             href="tel:6352396301"
                             className='w-full py-4 bg-[#34b7f1] rounded-sm text-white flex justify-center items-center gap-5'
@@ -237,21 +247,70 @@ const ProductDetails = () => {
                         >
                             WhatsApp
                         </a>
-                   
                     </div>
                     <div className='my-4'>
-                        <div className='bg-[#E9ECEF] p-4 rounded-md flex justify-around items-center'>
-                            <Button onClick={() => openCategoryModal('Premium')}>Premium</Button>
-                            <Button onClick={() => openCategoryModal('Classic')}>Classic</Button>
-                            <Button onClick={() => openCategoryModal('Economic')}>Economic</Button>
+
+                        <div className='bg-[#F8F9FA] p-4 rounded-md flex justify-around items-center'>
+                            <Button
+                                onClick={() => openCategoryModal('Premium')}
+                                className='text-white bg-[#6C63FF] hover:bg-[#5A55D6]'
+                            >
+                                Premium
+                            </Button>
+                            <Button
+                                onClick={() => openCategoryModal('Classic')}
+                                className='text-white bg-[#FF6F61] hover:bg-[#E66056]'
+                            >
+                                Classic
+                            </Button>
+                            <Button
+                                onClick={() => openCategoryModal('Economic')}
+                                className='text-white bg-[#28B6F6] hover:bg-[#239CCE]'
+                            >
+                                Economic
+                            </Button>
                         </div>
                     </div>
-                    <button className='w-full py-4 bg-[#E58377] rounded-sm text-white flex justify-center items-center gap-5' onClick={addIntobag}>
-                            <FaShoppingCart className='text-2xl' /><p>Add To CART</p>
-                        </button>
+
+
+                    <div>
+                        {product?.category === 'InteriorDesgin' && (
+                            <button className='w-full py-4 bg-[#615ef3] rounded-sm text-white flex justify-center items-center gap-5' onClick={handleBookNow}>
+                                Book Now
+                            </button>
+                        )}
+                    </div>
+                    <div className='my-4'>
+                        {product?.category !== 'InteriorDesgin' && (
+                            <>
+                                <button
+                                    onClick={addIntobag}
+                                    className='w-full py-4 bg-[#f89e1b] rounded-sm text-white flex justify-center items-center gap-5'
+                                >
+                                    <FaShoppingCart />
+                                    ADD TO CART
+                                </button>
+                            </>
+                        )}
+                        <Snackbar
+                            open={openSnackbar}
+                            autoHideDuration={3000}
+                            onClose={handleCloseSnackbar}
+                        >
+                            <Alert onClose={handleCloseSnackbar} severity="success">
+                                Product added to cart successfully!
+                            </Alert>
+                        </Snackbar>
+                    </div>
+
                 </div>
             </div>
-
+            <div className='lg:px-40 px-5 my-4 mt-10'>
+                <ProductDescription />
+            </div>
+            <div className='lg:px-[10%] md:px-5 my-4 px-5'>
+                <p>{product?.description}</p>
+            </div>
             {/* Image Modal */}
             <Modal
                 isOpen={isModalOpen}
@@ -265,21 +324,27 @@ const ProductDetails = () => {
             {/* Premium Modal */}
             <Modal
                 isOpen={showPremiumModal}
-                onRequestClose={() => closeCategoryModal('Premium')}
-                className='modal'
-                overlayClassName='overlay'
+                onRequestClose={() => closeCategoryModal("Premium")}
+                className="modal"
+                overlayClassName="overlay"
             >
-                <PremiumCategory category={product} onClose={() => closeCategoryModal('Premium')} />
+                <PremiumCategory
+                    category={product}
+                    onClose={() => closeCategoryModal("Premium")}
+                />
             </Modal>
 
             {/* Classic Modal */}
             <Modal
                 isOpen={showClassicModal}
-                onRequestClose={() => closeCategoryModal('Classic')}
-                className='modal'
-                overlayClassName='overlay'
+                onRequestClose={() => closeCategoryModal("Classic")}
+                className="modal"
+                overlayClassName="overlay"
             >
-                <PremiumCategory category={product} onClose={() => closeCategoryModal('Classic')} />
+                <PremiumCategory
+                    category={product}
+                    onClose={() => closeCategoryModal("Classic")}
+                />
             </Modal>
 
             {/* Economic Modal */}
@@ -289,11 +354,13 @@ const ProductDetails = () => {
                 className='modal'
                 overlayClassName='overlay'
             >
-                <PremiumCategory category={product}  onClose={() => closeCategoryModal('Economic')} />
+                <PremiumCategory category={product} onClose={() => closeCategoryModal('Economic')} />
             </Modal>
 
             <div>
-                <h1 className='text-center font-serif text-2xl my-20'>Similar Products</h1>
+                <h1 className="text-center font-serif text-2xl my-20">
+                    Similar Products
+                </h1>
                 <CategoryDetails category={product.category} />
             </div>
 

@@ -10,6 +10,8 @@ export default defineConfig({
     },
   },
   plugins: [react()],
+  
+
   build: {
     chunkSizeWarningLimit: 1600, // Adjust the chunk size warning limit
   },

@@ -3,7 +3,7 @@ import footer from "../assets/image/logo-footer.png";
 
 const Footer = () => {
   return (
-    <div className="bg-gray-100 text-black py-10 my-4">
+    <div className="bg-[#0F172A] text-white py-10 my-4">
       <div className="container mx-auto px-4">
         <div className="text-center mb-10">
           <h1 className="text-3xl font-bold mb-2">Some Useful Links</h1>
@@ -19,8 +19,8 @@ const Footer = () => {
           <div className="mb-6 md:mb-0 md:w-1/4">
             <h1 className="text-xl font-semibold mb-2">Our Company</h1>
             <ul>
-              <li className="mb-1"><a href="#about" className="hover:underline">About us</a></li>
-              <li className="mb-1"><a href="#testimonials" className="hover:underline">Testimonials</a></li>
+              <li className="mb-1"><a href="/AboutUs" className="hover:underline">About us</a></li>
+              <li className="mb-1"><a href="/Testimonials" className="hover:underline">Testimonials</a></li>
               <li className="mb-1"><a href="#gallery" className="hover:underline">Gallery</a></li>
               <li className="mb-1"><a href="#privacy" className="hover:underline">Privacy policy</a></li>
             </ul>
@@ -29,7 +29,7 @@ const Footer = () => {
             <h1 className="text-xl font-semibold mb-2">Customer Service</h1>
             <ul>
               <li className="mb-1"><a href="#services" className="hover:underline">Services</a></li>
-              <li className="mb-1"><a href="#contact" className="hover:underline">Contact us</a></li>
+              <li className="mb-1"><a href="/ContactUs" className="hover:underline">Contact us</a></li>
               <li className="mb-1"><a href="#faqs" className="hover:underline">Faqs</a></li>
             </ul>
           </div>

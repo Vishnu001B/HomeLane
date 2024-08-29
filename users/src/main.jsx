@@ -14,6 +14,11 @@ import homeLine from "./store/index";
 import CheckoutForm from "./components/CheckoutForm";
 import ViewCartAndUpdateCart from "./components/cart/ViewCartAndUpdateCart";
 import ProductDetail from "./components/ProductDetail";
+import VerticalGarden from "./components/verticalGarden/VerticalGarden";
+import AboutUs from "./components/about/AboutUs";
+import ContactUs from "./components/about/ContactUs";
+import Testimonials from "./components/Testimonials";
+import TestimonialSlider from "./components/testMonial/TestimonialSlider";
 
 
 const router = createBrowserRouter([
@@ -59,11 +64,26 @@ const router = createBrowserRouter([
         path: "/viewCartDeatils",
         element: <ViewCartAndUpdateCart/>,
       },
+      { 
 
-      // {
-      //   path: "/produ",
-      //   element: <ProductDetail/>,
-      // }
+             path:"/verticalGarden/:name",
+             element:<VerticalGarden/>
+
+      },
+      {
+        path:"/AboutUs",
+        element:<AboutUs/>
+      },
+      {
+        path:"/ContactUs",
+        element:<ContactUs/>
+      },{
+        path:"/Testimonials",
+        element:<TestimonialSlider/>
+      }
+
+
+    
     ],
   },
 ]);
