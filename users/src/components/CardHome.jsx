@@ -34,7 +34,7 @@ const CardHome = () => {
     { img: interior5, title: "Wallpapers" },
     // { img: interior6, title: "Customised Sofa" },
     { img: interior7, title: "Furniture" },
-    { img: interior8, title: "Carpets" },
+    { img: "https://s3.amazonaws.com/adroitart/images/22367/original/WL6001_zoom.JPG?1720683176", title: "Flooring" },
     { img: interior10, title: "Vertical Garden" },
   ];
 
