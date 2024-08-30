@@ -91,7 +91,7 @@ const Navbar2 = () => {
 
   return (
     <div
-      className="relative z-20 bg-[#EEE0D0] font-serif"
+      className=" z-20 bg-[#EEE0D0] font-serif fixed top-20 shadow-md w-full"
       style={{ height: "60px" }}
     >
       <div className="flex justify-center items-center content-center">

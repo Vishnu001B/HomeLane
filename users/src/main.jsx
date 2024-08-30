@@ -19,7 +19,7 @@ import AboutUs from "./components/about/AboutUs";
 import ContactUs from "./components/about/ContactUs";
 import Testimonials from "./components/Testimonials";
 import TestimonialSlider from "./components/testMonial/TestimonialSlider";
-
+import ScrollToTop from "./components/ScrollToTop"; // Import the new ScrollToTop component
 
 const router = createBrowserRouter([
   {
@@ -30,7 +30,6 @@ const router = createBrowserRouter([
         path: "/",
         element: <HomePage />,
       },
-
       {
         path: "/category/:name",
         element: <CategoryDetails />,
@@ -39,7 +38,6 @@ const router = createBrowserRouter([
         path: "/productDetails",
         element: <ProductDetails />,
       },
-
       {
         path: "*",
         element: <h1>Page Not Found</h1>,
@@ -65,10 +63,8 @@ const router = createBrowserRouter([
         element: <ViewCartAndUpdateCart/>,
       },
       { 
-
-             path:"/verticalGarden/:name",
-             element:<VerticalGarden/>
-
+        path:"/verticalGarden/:name",
+        element:<VerticalGarden/>
       },
       {
         path:"/AboutUs",
@@ -77,23 +73,22 @@ const router = createBrowserRouter([
       {
         path:"/ContactUs",
         element:<ContactUs/>
-      },{
+      },
+      {
         path:"/Testimonials",
         element:<TestimonialSlider/>
       }
-
-
-    
     ],
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-     <Provider store={homeLine}>
-        <RouterProvider router={router}>
-          <App />
-        </RouterProvider>
-      </Provider>
+    <Provider store={homeLine}>
+      <RouterProvider router={router}>
+        <ScrollToTop /> {/* Add the ScrollToTop component here */}
+        <App />
+      </RouterProvider>
+    </Provider>
   </React.StrictMode>
 );

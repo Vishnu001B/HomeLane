@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import vg from '../../assets/image/vg2.jpg';
 import CollectionOfImage from './CollectionOfImage';
 import VerticalDescription from './VerticalDescription';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { products } from '../../data';
 
 const VerticalGarden = () => {
     const { name } = useParams();
     const [filteredProducts, setFilteredProducts] = useState([]);
+    const { pathname } = useLocation();
+
 
     useEffect(() => {
         const selectname = name;
@@ -20,7 +22,9 @@ const VerticalGarden = () => {
         setFilteredProducts(filtered);
     }, [name]);
 
-    console.log(filteredProducts);
+    useEffect(() => {
+        window.scrollTo(0, 0);
+      }, [pathname]);
 
     return (
         <>

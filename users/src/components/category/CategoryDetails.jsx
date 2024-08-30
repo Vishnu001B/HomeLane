@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import CategoryBanner from "./categoryBanner";
 import Chandeliers from "./Chandeliers";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import {products} from "../../data"
 import ShowCategoryWise from "./ShowCategoryWise";
 
@@ -9,13 +9,17 @@ import ShowCategoryWise from "./ShowCategoryWise";
 
 const categoryDetails = ({ category }) => {
   const { name } = useParams();
+  const { pathname } = useLocation();
 
   const selectname = category || name;
 
   const filteredProducts = products.filter(
     (product) => product.category.toLowerCase() === selectname.toLowerCase()
   );
-  // Add more categories as needed
+ 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   return (
     <div>

@@ -11,6 +11,7 @@ import { bagActions } from '../../store/bagSlice';
 import { Snackbar, Alert, Button } from "@mui/material";
 import ProductDescription from './ProductDecription';
 
+
 // Set up the app element for accessibility
 Modal.setAppElement("#root");
 
@@ -30,17 +31,13 @@ const ProductDetails = () => {
     const [quantity, setQuantity] = useState(1); // Added state for quantity
 
     const { product } = location.state || {};
+    const { pathname } = useLocation();
 
     const navigate = useNavigate()
 
+    console.log("Artificial Grass",product)
     // Hardcoded images
-    const productImages = [
-        "https://homelineteam.com/images/products/full-home-interior/image-1.jpg",
-        "https://homelineteam.com/images/products/full-home-interior/image-2.jpg",
-        "https://homelineteam.com/images/products/full-home-interior/image-3.jpg",
-        "https://homelineteam.com/images/products/full-home-interior/image-4.jpg",
-        "https://homelineteam.com/images/products/full-home-interior/image-5.jpg",
-    ];
+
 
     useEffect(() => {
         const widthNum = parseFloat(width);
@@ -116,12 +113,16 @@ const ProductDetails = () => {
         });
     }
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+      }, [pathname]);
+
     const handleQuantityChange = (event) => {
         const value = Math.max(1, parseInt(event.target.value, 10)); // Ensure quantity is at least 1
         setQuantity(value);
     };
 
-
+    
 
     return (
         <div>
@@ -130,27 +131,27 @@ const ProductDetails = () => {
                     <Carousel
                         showThumbs={false}
                         showStatus={false}
-                        selectedItem={productImages.indexOf(currentImage)}
-                        onChange={(index) => setCurrentImage(productImages[index])}
+                        selectedItem={product?.img?.indexOf(currentImage)}
+                        onChange={(index) => setCurrentImage(product?.img[index])}
                         className='my-4'
                     >
-                        {productImages.map((img, index) => (
-                            <div key={index} className="zoom-container" onClick={() => openImageModal(img)}>
-                                <img src={img} alt={`${product.name} ${index + 1}`} className='zoom-image' />
+                       
+                            <div  className="zoom-container" onClick={() => openImageModal(product.img)}>
+                                <img src={product.img} alt={`${product.name} `} className='zoom-image' />
                             </div>
-                        ))}
+                 
                     </Carousel>
                     <div className='flex justify-center mt-4'>
-                        {productImages.map((img, index) => (
-                            <div key={index} className="zoom-container">
+                      
+                            <div  className="zoom-container">
                                 <img
-                                    src={img}
-                                    alt={`Thumbnail ${index + 1}`}
+                                    src={product.img}
+                                    alt={`Thumbnail`}
                                     className='w-20 h-20 cursor-pointer border-2 border-transparent zoom-image'
-                                    onClick={() => setCurrentImage(img)}
+                                    onClick={() => setCurrentImage(product.img)}
                                 />
                             </div>
-                        ))}
+                      
                     </div>
                 </div>
                 <div className='w-full md:w-1/2 flex flex-col justify-between h-full'>
