@@ -3,18 +3,13 @@ const dotenv = require("dotenv").config();
 const connectDB = require("./config/db");
 const cors = require("cors");
 const userRoutes = require("./user/routes/userRoutes");
-const productRoutes = require("./user/routes/productRoutes");
+
+const productRoutes = require("./admin/routes/productRoutes");
+
 // const categoryRoutes = require("./user/routes/categoryRoutes");
-const addToCartRoutes = require("./user/routes/addToCartRoutes");
-const userAddress = require("./user/routes/addressRoutes");
-const productOrderRoutes = require("./user/routes/productOrder");
-const vendorRoutes = require("./vendor/routes/userRoutes");
-const vendorAddProducts = require("./vendor/routes/productRoutes");
-const recivedVendororder = require("./vendor/routes/orderRouters");
-const admin = require("./admin/routes/userRoutes");
-const vendor = require("./admin/routes/vendorDetailsRouter");
-const order = require("./admin/routes/orderRouters");
-const deliveryRoutes = require("./deliveryBoy/routes/usersRoutes");
+
+const admin = require("./admin/routes/adminRoutes");
+
 const banner = require("./admin/routes/bannerRouters");
 const path = require("path");
 
@@ -22,46 +17,25 @@ connectDB();
 const app = express();
 app.use(express.json());
 app.use(cors());
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // Home route for admin routes
 app.get("/", (req, res) => {
   res.send("API is running successfully");
 });
 // Routes
-app.use("/api/users", userAddress);
 
 app.use("/api/user", userRoutes);
 
 // Use the product routes
-app.use("/api", productRoutes);
-
-// // Use the cart routes
-app.use("/api/cart", addToCartRoutes);
-
-app.use("/api/products", productOrderRoutes);
-
-//Vender
-app.use("/api/vendor", vendorRoutes);
-app.use("/api/vendor", vendorAddProducts);
-app.use("/api/vendor", recivedVendororder);
-app.use("/api/vendor/qty", recivedVendororder);
-
-app.use("/api/vendor", vendor);
 
 //admin
 
 app.use("/api/admin", admin);
-app.use("/api/admin", order);
-app.use("/api/admin",banner);
+
+app.use("/api/admin", banner);
+app.use("/api/admin", productRoutes);
 
 //deliver boys Users
-
-app.use("/api/deliveryBoys", deliveryRoutes);
-
-// // Home route for admin routes
-
-// // Use the category routes
-// app.use("/api/categories", categoryRoutes);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Server is running on port ${port}`));

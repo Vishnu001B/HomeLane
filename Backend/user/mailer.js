@@ -1,11 +1,11 @@
-const nodemailer = require('nodemailer');
+const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
-    service: 'Gmail',
-    auth: {
-        user: 'your-email@gmail.com', // replace with your email
-        pass: 'your-email-password'   // replace with your email password or app password
-    }
+  service: "Gmail",
+  auth: {
+    user: process.env.EMAIL_USER, // replace with your email
+    pass: process.env.EMAIL_PASS, // replace with your email password or app password
+  },
 });
 
 module.exports = transporter;
