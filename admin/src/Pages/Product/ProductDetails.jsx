@@ -32,6 +32,8 @@ const ProductDetails = ({ product, fetchProduct }) => {
     }
   };
 
+  console.log("images",product)
+
   return (
     <>
       <Card className={cn("w-full max-w-lg mx-auto shadow-md p-4")}>
@@ -48,9 +50,9 @@ const ProductDetails = ({ product, fetchProduct }) => {
           {/* Product Images */}
           <div className="grid grid-cols-3 gap-2">
             <img
-              src={`${URI}/uploads/${product[0]?.images}`}
+              src={`${URI}uploads/${product?.images[0]}`}
               alt={`Product image`}
-              className="w-full h-40 object-cover rounded-md"
+              className="w-full  object-cover rounded-md"
             />
           </div>
           <div>

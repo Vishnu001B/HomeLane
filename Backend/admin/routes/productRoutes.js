@@ -16,4 +16,15 @@ router.put("/products/:id", product.updateProduct);
 // Route to delete a product by ID
 router.delete("/product/:id", product.deleteProductById);
 
+router.get("/lastedproducts", product.lastedProduct)
+
+router.get("/getAllSubcategory", product.getAllsubcategorysByProduct)
+
+router.get("/getAllCategory", product.getAllcategorysByProduct)
+
+router.get("/getProductByCatogry/:category", product.getProductByCategory)
+
+router.get("/getProductBySubcategory/:subcategory", product.getProductBySubcategory)
+
+
 module.exports = router;

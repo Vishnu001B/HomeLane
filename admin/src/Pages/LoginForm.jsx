@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,9 +13,18 @@ export function LoginForm() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const navagite = useNavigate()
+  const navigate = useNavigate();
 
   const URI = import.meta.env.VITE_API_URL;
+
+  useEffect(()=>{
+    const token = localStorage.getItem("tpken");
+    if(token){
+      // User is already logged in, redirect to the dashboard or another page
+      navigate("/dashboard");
+    }
+
+  },[])
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -24,10 +33,16 @@ export function LoginForm() {
 
     try {
       const response = await axios.post(`${URI}api/admin/login`, { email, password });
-      // Handle successful login (store token, redirect, etc.)
+      
+      // Handle successful login
       console.log("Login successful:", response.data);
-      navagite("/dashboard")
+      
+      // Save token and user data in localStorage
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+      
       // Redirect to the dashboard or another page after successful login
+      navigate("/dashboard");
     } catch (err) {
       setError(err.response ? err.response.data : "Login failed");
     } finally {

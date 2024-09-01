@@ -1,41 +1,55 @@
-import React, { useEffect } from "react";
-import CategoryBanner from "./categoryBanner";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Chandeliers from "./Chandeliers";
 import { useLocation, useParams } from "react-router-dom";
-import {products} from "../../data"
 import ShowCategoryWise from "./ShowCategoryWise";
+import CategoryBanner from "./categoryBanner";
 
-
-
-const categoryDetails = ({ category }) => {
+const CategoryDetails = () => {
   const { name } = useParams();
   const { pathname } = useLocation();
+  const URI = import.meta.env.VITE_API_URL;
 
-  const selectname = category || name;
+  const [categoriesData, setCategoriesData] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
 
-  const filteredProducts = products.filter(
-    (product) => product.category.toLowerCase() === selectname.toLowerCase()
-  );
- 
+  // Use `name` from the URL or fallback to a default category name
+  const selectName = name || "defaultCategory";
+
+  useEffect(() => {
+    fetchCategories();
+  }, [selectName]);
+
+  const fetchCategories = async () => {
+    try {
+      const resp = await axios.get(`${URI}api/admin/getProductBySubcategory/${selectName}`);
+      if (resp.data.success) {
+        console.log(resp.data);
+        setCategoriesData(resp.data.productsBySubcategory);
+        // Assuming filteredProducts is based on categoriesData
+        setFilteredProducts(resp.data.productsBySubcategory);
+      }
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
 
   return (
     <div>
-      {name ? (
+      {selectName && (
         <>
           <CategoryBanner title="Our Products" />
-          <Chandeliers name={selectname} />{" "}
+          <Chandeliers name={selectName} />
         </>
-      ) : null}
+      )}
 
       <ShowCategoryWise products={filteredProducts} />
-      {/* <ShowCategoryWise title="Pendants" products={pendants} />
-        <ShowCategoryWise title="Wall Lights" products={wallLights} /> */}
-      {/* Add more categories as needed */}
     </div>
   );
 };
 
-export default categoryDetails;
+export default CategoryDetails;
