@@ -26,10 +26,10 @@ const CardHome = () => {
 
   const fetchCategories = async () => {
     try {
-      const resp = await axios.get(`${URI}api/admin/getAllSubcategory`);
-      console.log(resp.data);
+      const resp = await axios.get(`${URI}api/admin/getAllCategory`);
+      console.log("productsByCategory",resp.data.productsByCategory);
       if (resp.data.success) {
-        setCategoriesData(resp.data.productsBySubcategory);
+        setCategoriesData(resp.data.productsByCategory);
       }
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -43,10 +43,10 @@ const CardHome = () => {
       </h1>
       <div className="flex flex-wrap items-center justify-center lg:gap-6 xl:px-2 px-5">
         {categoriesData.map((data, index) => (
-          <Link to={`/category/${data.title}`} key={index} className="flex flex-col items-center mb-6">
+          <Link to={`/category/${data.categories}`} key={index} className="flex flex-col items-center mb-6">
             <Card
               img={`${URI}uploads/${data?.images[0]}`}
-              title={data.title}
+              title={data.categories}
             />
           </Link>
         ))}

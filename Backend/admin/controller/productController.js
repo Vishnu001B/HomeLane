@@ -367,7 +367,7 @@ exports.lastedProduct = async (req, res) => {
       const productsByCategory = await Product.aggregate([
         {
           $group: {
-            _id: "$category", // Group by category
+            _id: "$categories", // Group by category
             firstProduct: { $first: "$$ROOT" } // Get the first product document in each group
           }
         },
@@ -375,7 +375,7 @@ exports.lastedProduct = async (req, res) => {
           $project: {
             _id: "$firstProduct._id", // Use the product ID of the first product in each category
             images: "$firstProduct.images", // Get the thumbnail from the first product
-            category: "$_id", // Use the grouped category
+            categories: "$_id", // Use the grouped category
             title: "$firstProduct.title" // Get the title from the first product
           }
         }
@@ -399,8 +399,8 @@ exports.lastedProduct = async (req, res) => {
 
 exports.getProductByCategory = async (req, res) => {
   try {
-    const { category } = req.params;
-    const productsByCategory = await Product.find({ category });
+    const { categories } = req.params;
+    const productsByCategory = await Product.find({ categories });
 
     res.status(200).json({
       success: true,

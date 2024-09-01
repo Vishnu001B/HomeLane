@@ -9,9 +9,8 @@ const CategoryDetails = () => {
   const { name } = useParams();
   const { pathname } = useLocation();
   const URI = import.meta.env.VITE_API_URL;
-
   const [categoriesData, setCategoriesData] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
+
 
   // Use `name` from the URL or fallback to a default category name
   const selectName = name || "defaultCategory";
@@ -22,12 +21,10 @@ const CategoryDetails = () => {
 
   const fetchCategories = async () => {
     try {
-      const resp = await axios.get(`${URI}api/admin/getProductBySubcategory/${selectName}`);
+      const resp = await axios.get(`${URI}api/admin/getProductByCatogry/${selectName}`);
       if (resp.data.success) {
-        console.log(resp.data);
-        setCategoriesData(resp.data.productsBySubcategory);
-        // Assuming filteredProducts is based on categoriesData
-        setFilteredProducts(resp.data.productsBySubcategory);
+        setCategoriesData(resp.data.productsByCategory
+        );
       }
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -39,7 +36,7 @@ const CategoryDetails = () => {
   }, [pathname]);
 
   return (
-    <div>
+    <div className="pt-16">
       {selectName && (
         <>
           <CategoryBanner title="Our Products" />
@@ -47,7 +44,7 @@ const CategoryDetails = () => {
         </>
       )}
 
-      <ShowCategoryWise products={filteredProducts} />
+      <ShowCategoryWise products={categoriesData} />
     </div>
   );
 };

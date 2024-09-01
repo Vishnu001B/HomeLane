@@ -8,6 +8,8 @@ const ProductDetailsModal = ({ product, onClose }) => {
   const [isVisible, setIsVisible] = useState(false);
   const navigate = useNavigate();
 
+  const URI = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
     setIsVisible(true);
   }, []);
@@ -45,10 +47,10 @@ const ProductDetailsModal = ({ product, onClose }) => {
         <div className="flex flex-col md:flex-row max-h-[90vh] overflow-y-auto">
           {/* Image Section */}
           <div className="w-full md:w-1/2 bg-gray-50 flex justify-center items-center p-4 sm:p-6">
-            <img
-              src={product.img}
-              alt={product.name}
-              className="w-full h-auto object-cover rounded-md shadow-md max-h-64 md:max-h-full"
+          <img
+              src={`${URI}uploads/${product?.images[0]}`} // Use `src` instead of `img`
+              alt={product.title}
+              className="w-full h-96 mb-2 rounded-t-md"
             />
           </div>
 

@@ -22,7 +22,7 @@ router.get("/getAllSubcategory", product.getAllsubcategorysByProduct)
 
 router.get("/getAllCategory", product.getAllcategorysByProduct)
 
-router.get("/getProductByCatogry/:category", product.getProductByCategory)
+router.get("/getProductByCatogry/:categories", product.getProductByCategory)
 
 router.get("/getProductBySubcategory/:subcategory", product.getProductBySubcategory)
 
