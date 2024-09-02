@@ -7,6 +7,10 @@ import { Dashboard } from './Pages/Dashboard.jsx';
 import { TooltipProvider } from '@radix-ui/react-tooltip';
 import { Charts } from './Pages/Charts';
 import { LoginForm } from './Pages/LoginForm';
+import { SignUpForm } from './Pages/SingUpFrom';
+import { ProductHomePage } from './Pages/Product/ProductHomePage';
+import { AddProduct } from './Pages/Product/AddProduct';
+import { UpdateProduct } from './Pages/Product/UpdateProduct';
 
 // Create the router instance
 const router = createBrowserRouter([
@@ -19,12 +23,22 @@ const router = createBrowserRouter([
         element:<LoginForm/> ,
       },
       {
-        path: '/dashboard',
-        element: <Charts/>,
+        path: '/signup',
+        element: <SignUpForm/>,
       },
+    
       {
-        path: '/order',
+        path: '/dashboard',
         element: <Dashboard />,
+      },{
+        path: '/products',
+        element: <ProductHomePage />,
+      },{
+        path: '/AddProduct',
+        element:<AddProduct/>,
+      },{
+        path: '/UpdateProduct',
+        element:<UpdateProduct/>,
       }
     ],
   },

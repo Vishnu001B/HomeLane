@@ -26,9 +26,13 @@ export default function Drawer() {
   const [openDialog, setOpenDialog] = React.useState(false);
   const [itemToRemove, setItemToRemove] = React.useState(null);
 
+  const URI = import.meta.env.VITE_API_URL;
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const bag = useSelector((store) => store.bag) || { totalQuantity: 0, data: [] };
+
+  console.log("cart",bag)
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -56,10 +60,10 @@ export default function Drawer() {
           <>
             <List>
               {bag.data.map((item, index) => (
-                <ListItem key={index} disablePadding className='px-5'>
+                <ListItem key={index} disablePadding className='px-5 my-4'>
                   <Avatar
                     alt={item.name}
-                    src={item.img}
+                    src={`${URI}uploads/${item?.images[0]}`}
                     sx={{ width: 56, height: 56, marginRight: 2 }}
                   />
                   <ListItemText

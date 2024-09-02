@@ -13,7 +13,6 @@ import { Cateroy } from "./category/Cateroy";
 import CustomizedCurtains from "./CustomizedCurtains";
 import Blinds from "./Blinds";
 import WallPaper from "./WallPaper";
-import Footer from "./Footer";
 import Video from "./Video";
 
 const HomePage = () => (

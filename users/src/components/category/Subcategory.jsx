@@ -5,7 +5,7 @@ import { useLocation, useParams } from "react-router-dom";
 import ShowCategoryWise from "./ShowCategoryWise";
 import CategoryBanner from "./categoryBanner";
 
-const CategoryDetails = () => {
+const Subcategory = () => {
   const { name } = useParams();
   const { pathname } = useLocation();
   const URI = import.meta.env.VITE_API_URL;
@@ -21,9 +21,9 @@ const CategoryDetails = () => {
 
   const fetchCategories = async () => {
     try {
-      const resp = await axios.get(`${URI}api/admin/getProductByCatogry/${selectName}`);
+      const resp = await axios.get(`${URI}api/admin/getProductBySubcategory/${selectName}`);
       if (resp.data.success) {
-        setCategoriesData(resp.data.productsByCategory
+        setCategoriesData(resp.data.productsBySubcategory
         );
       }
     } catch (error) {
@@ -49,4 +49,4 @@ const CategoryDetails = () => {
   );
 };
 
-export default CategoryDetails;
+export default Subcategory;

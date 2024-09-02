@@ -7,7 +7,7 @@ function App() {
   const location = useLocation();
   
   // Add the paths where Navbar and Header should not be shown
-  const hideOnPaths = ["/",]; // Replace with actual paths
+  const hideOnPaths = ["/","/signup"]; // Replace with actual paths
   
   const shouldHideNavbarAndHeader = hideOnPaths.includes(location.pathname);
 

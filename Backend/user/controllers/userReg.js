@@ -9,7 +9,7 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASS,
   },
   tls: {
-    rejectUnauthorized: false, // This will allow self-signed certificates
+    rejectUnauthorized: false,
   },
 });
 
@@ -17,21 +17,17 @@ exports.register = async (req, res) => {
   try {
     const { email, password, name, mobile } = req.body;
 
-    // Check if all mandatory fields are present
     if (!email || !password || !name) {
       return res.status(400).json({ message: "All fields are mandatory" });
     }
 
-    // Check if the user already exists
     let user = await User.findOne({ email });
 
     if (user) {
-      // If user exists but is not verified, regenerate OTP and resend it
       if (!user.isVerified) {
-        user.generateOtp(); // Assuming this method regenerates and sets a new OTP
+        user.generateOtp();
         await user.save();
 
-        // Send verification email with OTP
         const mailOptions = {
           from: process.env.EMAIL_USER,
           to: user.email,
@@ -39,25 +35,18 @@ exports.register = async (req, res) => {
           text: `Your OTP is ${user.otp}`,
         };
 
-        transporter.sendMail(mailOptions, (error, info) => {
+        transporter.sendMail(mailOptions, (error) => {
           if (error) return res.status(500).send(error.toString());
           return res.status(200).send("OTP resent to your email");
         });
       } else {
-        // If the user is already verified
         return res.status(400).send("User already exists and is verified");
       }
     } else {
-      // Create a new user if one doesn't exist
       user = new User({ email, password, name, mobile });
-
-      // Generate OTP for new user
       user.generateOtp();
-
-      // Save the new user to the database
       await user.save();
 
-      // Send verification email with OTP
       const mailOptions = {
         from: process.env.EMAIL_USER,
         to: user.email,
@@ -65,7 +54,7 @@ exports.register = async (req, res) => {
         text: `Your OTP is ${user.otp}`,
       };
 
-      transporter.sendMail(mailOptions, (error, info) => {
+      transporter.sendMail(mailOptions, (error) => {
         if (error) return res.status(500).send(error.toString());
         res.status(200).send("OTP sent to your email for verification");
       });
@@ -108,7 +97,7 @@ exports.resendOtp = async (req, res) => {
     text: `Your OTP is ${user.otp}`,
   };
 
-  transporter.sendMail(mailOptions, (error, info) => {
+  transporter.sendMail(mailOptions, (error) => {
     if (error) return res.status(500).send(error.toString());
     res.status(200).send("OTP resent to your email");
   });
@@ -128,5 +117,206 @@ exports.login = async (req, res) => {
     res.send({ token, user });
   } catch (error) {
     res.status(500).send("Server error");
+  }
+};
+
+exports.addItemToCart = async (req, res) => {
+  const {
+    VendorUser,
+    userId,
+    productId,
+    productName,
+    quantity,
+    price,
+    attributes,
+    promotionCode,
+    discountPercentage,
+    Image,
+  } = req.body;
+
+  try {
+    let user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const existingItemIndex = user.cart.findIndex(
+      (item) => item.productId.toString() === productId
+    );
+
+    if (existingItemIndex !== -1) {
+      user.cart[existingItemIndex].quantity += quantity;
+      user.cart[existingItemIndex].price += price;
+    } else {
+      user.cart.push({
+        VendorUser,
+        productId,
+        productName,
+        quantity,
+        price,
+        attributes,
+        promotionCode,
+        discountPercentage,
+        Image,
+      });
+    }
+
+    user.totalPrice = user.cart.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    );
+
+    user = await user.save();
+    res.status(201).json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Error adding item to cart", error });
+  }
+};
+
+exports.removeItemFromCart = async (req, res) => {
+  const { userId, productId } = req.params;
+
+  try {
+    const user = await User.findByIdAndUpdate(
+      { _id: userId },
+      { $pull: { cart: { productId } } },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.totalPrice = user.cart.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    );
+
+    await user.save();
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Error removing item from cart", error });
+  }
+};
+
+exports.addProductQuantity = async (req, res) => {
+  const { userId, productId } = req.body;
+
+  try {
+    let user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const productIndex = user.cart.findIndex(
+      (item) => item.productId.toString() === productId
+    );
+
+    if (productIndex !== -1) {
+      user.cart[productIndex].quantity += 1;
+    } else {
+      return res.status(404).json({ message: "Product not found in cart" });
+    }
+
+    await user.save();
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Error updating product quantity", error });
+  }
+};
+
+exports.subProductQuantity = async (req, res) => {
+  const { userId, productId } = req.body;
+
+  try {
+    let user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const productIndex = user.cart.findIndex(
+      (item) => item.productId.toString() === productId
+    );
+
+    if (productIndex !== -1) {
+      user.cart[productIndex].quantity -= 1;
+
+      if (user.cart[productIndex].quantity === 0) {
+        user.cart.splice(productIndex, 1);
+      }
+    } else {
+      return res.status(404).json({ message: "Product not found in cart" });
+    }
+
+    await user.save();
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Error updating product quantity", error });
+  }
+};
+
+exports.getCartByUserId = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(user.cart);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching cart", error });
+  }
+};
+
+exports.updateCart = async (req, res) => {
+  const { userId, cartItems, promotionCode, totalPrice } = req.body;
+
+  try {
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { cart: cartItems, promotionCode, totalPrice },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.totalPrice = user.cart.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    );
+
+    await user.save();
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Error updating cart", error });
+  }
+};
+
+exports.getTotalQuantity = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const totalQuantity = user.cart.reduce(
+      (total, item) => total + item.quantity,
+      0
+    );
+
+    res.status(200).json({ totalQuantity });
+  } catch (error) {
+    res.status(500).json({ message: "Error getting total quantity", error });
   }
 };

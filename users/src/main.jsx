@@ -20,6 +20,7 @@ import ContactUs from "./components/about/ContactUs";
 import Testimonials from "./components/Testimonials";
 import TestimonialSlider from "./components/testMonial/TestimonialSlider";
 import ScrollToTop from "./components/ScrollToTop"; // Import the new ScrollToTop component
+import Subcategory from "./components/category/Subcategory";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
       {
         path: "/category/:name",
         element: <CategoryDetails />,
+      },
+      {
+        path: "/subcategory/:name",
+        element: <Subcategory />,
       },
       {
         path: "/productDetails",

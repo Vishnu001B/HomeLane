@@ -4,24 +4,41 @@ import CustomizedSteppers from './CustomizedSteppers';
 import { useLocation } from 'react-router-dom';
 
 const CheckoutForm = () => {
+  // Fetch bag data from the Redux store
   const { totalQuantity, data } = useSelector((store) => store.bag) || { totalQuantity: 0, data: [] };
   const location = useLocation();
   const product = location.state?.product;
+  const URI = import.meta.env.VITE_API_URL;
 
-  // If `data` is empty, use `product` from `location.state`
+  // Use `data` if available, otherwise use `product` from location state
   const newData = data.length > 0 ? data : product ? [product] : [];
 
-  // Calculate cart subtotal
-  const cartSubtotal = newData.reduce(
-    (total, item) => total + (parseFloat(item.price.replace(/,/g, '')) * (item.quantity || 1)), 
-    0
-  );
+  // Format price function
+  const formatPrice = (price) => {
+    if (typeof price === 'number') return price;
+    if (typeof price === 'string') {
+      return parseFloat(price.replace(/,/g, '').trim()) || 0;
+    }
+    console.error('Invalid price format:', price);
+    return 0;
+  };
+
+  // Calculate total price function
+  const calculateTotal = () => {
+    return newData.reduce((acc, item) => {
+      const price = formatPrice(item.price);
+      return acc + price * (item.quantity || 1); // Default quantity to 1 if undefined
+    }, 0);
+  };
+
+  // Shipping cost and order total
   const shippingCost = 0; // Assuming free shipping for this example
+  const cartSubtotal = calculateTotal();
   const orderTotal = cartSubtotal + shippingCost;
 
   return (
     <>
-      <div className='mt-20'>
+      <div className='lg:pt-52 md:pt-40 pt-32'>
         <CustomizedSteppers />
       </div>
       <div className="flex flex-col lg:flex-row gap-6 p-4 lg:p-8">
@@ -56,22 +73,12 @@ const CheckoutForm = () => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="country" className="block text-sm font-medium text-gray-700">Country *</label>
-                <select id="country" className="mt-1 block w-full p-2 border border-gray-300 rounded-md">
-                  <option>India</option>
-                  <option>United States</option>
-                  <option>Canada</option>
-                  <option>United Kingdom</option>
-                </select>
+                <label htmlFor="country" className="block text-sm font-medium text-gray-700">Country</label>
+                <input type="text" id="country" className="mt-1 block w-full p-2 border border-gray-300 rounded-md" />
               </div>
               <div>
-                <label htmlFor="state" className="block text-sm font-medium text-gray-700">State/Province *</label>
-                <select id="state" className="mt-1 block w-full p-2 border border-gray-300 rounded-md">
-                  <option>Maharashtra</option>
-                  <option>Delhi</option>
-                  <option>New York</option>
-                  <option>California</option>
-                </select>
+                <label htmlFor="pincode" className="block text-sm font-medium text-gray-700">Pincode</label>
+                <input type="number" id="pincode" className="mt-1 block w-full p-2 border border-gray-300 rounded-md" />
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -98,11 +105,19 @@ const CheckoutForm = () => {
                 <h3 className="text-lg font-semibold">Product Details</h3>
                 {newData.map((item, index) => (
                   <div key={index} className="flex items-center mt-2">
-                    <img src={item.img} alt={item.name} className="w-20 h-20 rounded-md" />
+                    {/* Adjust image source */}
+                    <img
+                      src={`${URI}uploads/${item.images[0]}`} // Use the first image in the images array
+                      alt={item.title}
+                      className="w-20 h-20 rounded-md"
+                    />
                     <div className="ml-4">
-                      <p className="text-sm">{item.name}</p>
-                      <p className="text-sm font-semibold">Rs. {item.price}</p>
+                      <p className="text-sm">{item.title}</p>
+                      <p className="text-sm font-semibold">
+                        Rs. {formatPrice(item.price).toLocaleString()}
+                      </p>
                       <p className="text-sm">Qty: {item.quantity || 1}</p>
+                      <p className="text-sm">Category: {item.categories || 'N/A'}</p>
                     </div>
                   </div>
                 ))}

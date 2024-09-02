@@ -8,6 +8,8 @@ const ProductDetailsModal = ({ product, onClose }) => {
   const [isVisible, setIsVisible] = useState(false);
   const navigate = useNavigate();
 
+  const URI = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
     setIsVisible(true);
   }, []);
@@ -46,9 +48,9 @@ const ProductDetailsModal = ({ product, onClose }) => {
           {/* Image Section */}
           <div className="w-full md:w-1/2 bg-gray-50 flex justify-center items-center p-4 sm:p-6">
             <img
-              src={product.img}
-              alt={product.name}
-              className="w-full h-auto object-cover rounded-md shadow-md max-h-64 md:max-h-full"
+              src={`${URI}uploads/${product?.images[0]}`}
+              alt={product.title}
+              className="w-full h-96 mb-2 rounded-t-md"
             />
           </div>
 
@@ -58,8 +60,9 @@ const ProductDetailsModal = ({ product, onClose }) => {
             style={{ backgroundColor: "#eaedf0" }}
           >
             <h3 className="text-2xl sm:text-3xl font-semibold text-gray-800 mb-4 sm:mb-8">
-              {product.name}
+              {product.title}
             </h3>
+            <p className="text-gray-500 mb-4">{product.descriptions}</p>
             <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
               <p className="text-red-600 text-xl font-bold">
                 ₹ {product.discountedPrice}
@@ -68,16 +71,11 @@ const ProductDetailsModal = ({ product, onClose }) => {
                 ₹ {product.price}
               </p>
               <p className="text-green-600 sm:ml-2">
-                ({product.discountPercentage}%) OFF
+                ({product.discount}%) OFF
               </p>
             </div>
-            <p className="text-gray-500 mb-4 sm:mb-12">{product.delivery}</p>
             <p className="text-gray-700 mb-4 sm:mb-8 leading-relaxed">
-              This product is perfect for those looking to enhance their space
-              with something stylish and functional. Made with high-quality
-              materials, it offers both durability and a modern look. Whether
-              for your home or office, this product is designed to meet your
-              needs and exceed your expectations.
+              {product.descriptions}
             </p>
 
             {/* Name and Phone Number Form */}

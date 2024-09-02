@@ -11,6 +11,8 @@ const productRoutes = require("./admin/routes/productRoutes");
 const admin = require("./admin/routes/adminRoutes");
 
 const banner = require("./admin/routes/bannerRouters");
+
+const bookNow = require("./user/routes/bookNowRouter");
 const path = require("path");
 
 connectDB();
@@ -25,6 +27,8 @@ app.get("/", (req, res) => {
 // Routes
 
 app.use("/api/user", userRoutes);
+
+app.use("/api/user", bookNow);
 
 // Use the product routes
 

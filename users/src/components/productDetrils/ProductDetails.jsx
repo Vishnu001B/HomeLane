@@ -1,54 +1,49 @@
 import React, { useState, useEffect } from 'react';
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { FaShoppingCart } from 'react-icons/fa';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import Modal from 'react-modal';
-import CategoryDetails from '../../components/category/CategoryDetails';
-import PremiumCategory from '../../components/category/PremiumCategory';
 import { useDispatch, useSelector } from 'react-redux';
+import { Snackbar, Alert, Button } from '@mui/material';
 import { bagActions } from '../../store/bagSlice';
-import { Snackbar, Alert, Button } from "@mui/material";
-import ProductDescription from './ProductDecription';
-
+import PremiumCategory from '../../components/category/PremiumCategory';
+// import ProductDescription from './ProductDescription';
 
 // Set up the app element for accessibility
-Modal.setAppElement("#root");
+Modal.setAppElement('#root');
 
 const ProductDetails = () => {
     const dispatch = useDispatch();
     const bagItem = useSelector((store) => store.bag);
     const location = useLocation();
+    const navigate = useNavigate();
+
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [currentImage, setCurrentImage] = useState("");
-    const [width, setWidth] = useState("");
-    const [height, setHeight] = useState("");
+    const [currentImage, setCurrentImage] = useState('');
+    const [width, setWidth] = useState('');
+    const [height, setHeight] = useState('');
     const [calculatedPrice, setCalculatedPrice] = useState(null);
     const [showPremiumModal, setShowPremiumModal] = useState(false);
     const [showClassicModal, setShowClassicModal] = useState(false);
     const [showEconomicModal, setShowEconomicModal] = useState(false);
-    const [quantity, setQuantity] = useState(1); // Added state for quantity
+    const [quantity, setQuantity] = useState(1);
 
     const { product } = location.state || {};
     const { pathname } = useLocation();
+     
+    const URI = import.meta.env.VITE_API_URL;
 
-    const navigate = useNavigate()
-
-    console.log("Artificial Grass",product)
-    // Hardcoded images
-
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [pathname]);
 
     useEffect(() => {
         const widthNum = parseFloat(width);
         const heightNum = parseFloat(height);
 
-        if (
-            !isNaN(widthNum) &&
-            !isNaN(heightNum) &&
-            widthNum > 0 &&
-            heightNum > 0
-        ) {
+        if (!isNaN(widthNum) && !isNaN(heightNum) && widthNum > 0 && heightNum > 0) {
             const area = widthNum * heightNum;
             const price = area * parseFloat(product?.price);
             setCalculatedPrice(price);
@@ -58,22 +53,31 @@ const ProductDetails = () => {
     }, [width, height, product?.price]);
 
     const calculateDiscountedPrice = (price, discountPercentage) => {
-        const priceNumber = parseFloat(price.replace(/,/g, ""));
+        let priceNumber;
+    
+        // Check if price is a string or a number
+        if (typeof price === 'string') {
+            priceNumber = parseFloat(price.replace(/,/g, '')); // Remove commas and parse to number
+        } else {
+            priceNumber = parseFloat(price); // Directly parse to number
+        }
+    
         const discount = discountPercentage / 100;
         return (priceNumber - priceNumber * discount).toFixed(2);
     };
-
-    const originalPrice = product.price;
+    
+    const originalPrice = product?.price || '0'; // Default to '0' if price is undefined
     const discountedPrice = calculateDiscountedPrice(
         originalPrice,
         parseFloat(product?.discontpersentage) || 0
     );
+    
 
     const addIntobag = () => {
         dispatch(
             bagActions.addToBag({
-                data: { ...product, quantity: 1 },
-                totalQuantity: 1,
+                data: { ...product, quantity },
+                totalQuantity: quantity,
             })
         );
         setOpenSnackbar(true);
@@ -93,9 +97,9 @@ const ProductDetails = () => {
     };
 
     const openCategoryModal = (category) => {
-        if (category === "Premium") setShowPremiumModal(true);
-        if (category === "Classic") setShowClassicModal(true);
-        if (category === "Economic") setShowEconomicModal(true);
+        if (category === 'Premium') setShowPremiumModal(true);
+        if (category === 'Classic') setShowClassicModal(true);
+        if (category === 'Economic') setShowEconomicModal(true);
     };
 
     const closeCategoryModal = (category) => {
@@ -104,29 +108,21 @@ const ProductDetails = () => {
         if (category === 'Economic') setShowEconomicModal(false);
     };
 
-
     const handleBookNow = () => {
-        navigate("/CheckoutForm", {
-            state: {
-                product: product
-            }
+        navigate('/CheckoutForm', {
+            state: { product },
         });
-    }
-
-    useEffect(() => {
-        window.scrollTo(0, 0);
-      }, [pathname]);
+    };
 
     const handleQuantityChange = (event) => {
-        const value = Math.max(1, parseInt(event.target.value, 10)); // Ensure quantity is at least 1
+        const value = Math.max(1, parseInt(event.target.value, 10));
         setQuantity(value);
     };
 
-    
-
     return (
         <div>
-            <div className='flex flex-wrap md:flex-nowrap justify-evenly items-center gap-5 lg:px-[10%] my-4 px-5'>
+            {/* Main Product Display Section */}
+            <div className='flex flex-wrap md:flex-nowrap justify-evenly items-center pt-32 gap-5 lg:px-[10%]  px-5'>
                 <div className='w-full md:w-1/2'>
                     <Carousel
                         showThumbs={false}
@@ -135,25 +131,24 @@ const ProductDetails = () => {
                         onChange={(index) => setCurrentImage(product?.img[index])}
                         className='my-4'
                     >
-                       
-                            <div  className="zoom-container" onClick={() => openImageModal(product.img)}>
-                                <img src={product.img} alt={`${product.name} `} className='zoom-image' />
-                            </div>
-                 
+                        <div className='zoom-container' onClick={() => openImageModal(product.img)}>
+                            <img src={`${URI}uploads/${product?.images[0]}`} alt={`${product.name}`} className='zoom-image' />
+                        </div>
                     </Carousel>
+                    {/* Image Thumbnails */}
                     <div className='flex justify-center mt-4'>
-                      
-                            <div  className="zoom-container">
-                                <img
-                                    src={product.img}
-                                    alt={`Thumbnail`}
-                                    className='w-20 h-20 cursor-pointer border-2 border-transparent zoom-image'
-                                    onClick={() => setCurrentImage(product.img)}
-                                />
-                            </div>
-                      
+                        <div className='zoom-container'>
+                            <img
+                                src={`${URI}uploads/${product?.images[0]}`}
+                                alt='Thumbnail'
+                                className='w-20 h-20 cursor-pointer border-2 border-transparent zoom-image'
+                                onClick={() => setCurrentImage(product.img)}
+                            />
+                        </div>
                     </div>
                 </div>
+
+                {/* Product Details Section */}
                 <div className='w-full md:w-1/2 flex flex-col justify-between h-full'>
                     <div className='flex flex-col justify-center h-full'>
                         <h1 className='text-2xl font-thin my-4'>{product.name}</h1>
@@ -171,54 +166,52 @@ const ProductDetails = () => {
                             <span className='text-black px-4'>(Price Inclusive Of All Taxes)</span>
                         </p>
                     </div>
-                    <div className='flex items-center my-4'>
-
-                    </div><div className='bg-yellow-400 w-16 text-white px-2 py-1 rounded-md'>
+                    {/* Ratings and Reviews */}
+                    <div className='bg-yellow-400 w-16 text-white px-2 py-1 rounded-md'>
                         4.3 ★
                     </div>
-
-                    {product?.category != 'InteriorDesgin' && (
+                    {product?.category !== 'InteriorDesgin' && (
                         <>
-
                             <span className='text-sm text-gray-600 ml-2'>
                                 (10,253 ratings & 1,200 reviews)
                             </span>
-
                             <div className='my-6'>
                                 <h2 className='text-xl font-semibold text-gray-700'>
                                     Product details
                                 </h2>
                                 <ul className='list-disc list-inside text-gray-600 mt-2'>
-                                    <li>Collection:Hera 6</li>
-                                    <li>Pattern Number :6086-1</li>
+                                    <li>Collection: Hera 6</li>
+                                    <li>Pattern Number: 6086-1</li>
                                     <li>Roll Size: 1.06mtr x 5.2mtr = 59sq.ft</li>
-                                    <li>Mrp/Roll:Rs 4000/Roll </li>
-                                    <li>MRP/Sq.ft:Rs 68</li>
+                                    <li>Mrp/Roll: Rs 4000/Roll</li>
+                                    <li>MRP/Sq.ft: Rs 68</li>
                                 </ul>
                             </div>
-                            <div className="flex items-center gap-4">
-                                <label htmlFor={`quantity-${product.id}`} className="text-lg ">Quantity:</label>
+                            {/* Quantity Input */}
+                            <div className='flex items-center gap-4'>
+                                <label htmlFor={`quantity-${product.id}`} className='text-lg'>Quantity:</label>
                                 <input
                                     id={`quantity-${product.id}`}
-                                    type="number"
-                                    name="quantity"
+                                    type='number'
+                                    name='quantity'
                                     value={quantity}
                                     onChange={handleQuantityChange}
-                                    className="w-16  rounded p-1 text-center border-black border-[0.5px]"
+                                    className='w-16 rounded p-1 text-center border-black border-[0.5px]'
                                 />
                             </div>
+                            {/* Dimensions Input and Calculated Price */}
                             <div className='my-4'>
                                 <p>Enter Dimensions:</p>
                                 <div className='flex gap-4'>
                                     <input
-                                        type="number"
+                                        type='number'
                                         placeholder='Width (ft)'
                                         value={width}
                                         onChange={(e) => setWidth(e.target.value)}
                                         className='px-4 w-24 py-2 rounded-sm border border-black'
                                     />
                                     <input
-                                        type="number"
+                                        type='number'
                                         placeholder='Height (ft)'
                                         value={height}
                                         onChange={(e) => setHeight(e.target.value)}
@@ -233,148 +226,77 @@ const ProductDetails = () => {
                             </div>
                         </>
                     )}
+
+                    {/* Call and WhatsApp Buttons */}
                     <div className='my-4 flex gap-4'>
                         <a
-                            href="tel:6352396301"
+                            href='tel:6352396301'
                             className='w-full py-4 bg-[#34b7f1] rounded-sm text-white flex justify-center items-center gap-5'
                         >
                             Call Now
                         </a>
                         <a
-                            href="https://wa.me/6352396301?text=Hello,%20I'm%20interested%20in%20your%20product!"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className='w-full py-4 bg-[#25d366] rounded-sm text-white flex justify-center items-center gap-5'
+                            href={`https://api.whatsapp.com/send?phone=6352396301&text=Hi%2C%20I%20am%20interested%20in%20your%20product%3A%20${product.name}`}
+                            className='w-full py-4 bg-[#25D366] rounded-sm text-white flex justify-center items-center gap-5'
                         >
-                            WhatsApp
+                            WhatsApp Now
                         </a>
                     </div>
-                    <div className='my-4'>
 
-                        <div className='bg-[#F8F9FA] p-4 rounded-md flex justify-around items-center'>
-                            <Button
-                                onClick={() => openCategoryModal('Premium')}
-                                className='text-white bg-[#6C63FF] hover:bg-[#5A55D6]'
-                            >
-                                Premium
-                            </Button>
-                            <Button
-                                onClick={() => openCategoryModal('Classic')}
-                                className='text-white bg-[#FF6F61] hover:bg-[#E66056]'
-                            >
-                                Classic
-                            </Button>
-                            <Button
-                                onClick={() => openCategoryModal('Economic')}
-                                className='text-white bg-[#28B6F6] hover:bg-[#239CCE]'
-                            >
-                                Economic
-                            </Button>
-                        </div>
-                    </div>
-
-
-                    <div>
-                        {product?.category === 'InteriorDesgin' && (
-                            <button className='w-full py-4 bg-[#615ef3] rounded-sm text-white flex justify-center items-center gap-5' onClick={handleBookNow}>
-                                Book Now
-                            </button>
-                        )}
-                    </div>
-                    <div className='my-4'>
-                        {product?.category !== 'InteriorDesgin' && (
-                            <>
-                                <button
-                                    onClick={addIntobag}
-                                    className='w-full py-4 bg-[#f89e1b] rounded-sm text-white flex justify-center items-center gap-5'
-                                >
-                                    <FaShoppingCart />
-                                    ADD TO CART
-                                </button>
-                            </>
-                        )}
-                        <Snackbar
-                            open={openSnackbar}
-                            autoHideDuration={3000}
-                            onClose={handleCloseSnackbar}
+                    {/* Conditional Button Rendering */}
+                    {product?.category !== 'InteriorDesgin' ? (
+                        <Button
+                            className='bg-[#6772E5] w-full py-4 rounded-sm text-white flex justify-center items-center gap-5'
+                            onClick={addIntobag}
                         >
-                            <Alert onClose={handleCloseSnackbar} severity="success">
-                                Product added to cart successfully!
-                            </Alert>
-                        </Snackbar>
-                    </div>
-
+                            <FaShoppingCart />
+                            ADD TO BAG
+                        </Button>
+                    ) : (
+                        <Button
+                            className='bg-[#FF2A6D] w-full py-4 rounded-sm text-white flex justify-center items-center gap-5'
+                            onClick={handleBookNow}
+                        >
+                            BOOK NOW
+                        </Button>
+                    )}
                 </div>
             </div>
-            <div className='lg:px-40 px-5 my-4 mt-10'>
-                <ProductDescription />
-            </div>
-            <div className='lg:px-[10%] md:px-5 my-4 px-5'>
-                <p>{product?.description}</p>
-            </div>
+
+            {/* Snackbar for Notifications */}
+            <Snackbar
+                open={openSnackbar}
+                autoHideDuration={3000}
+                onClose={handleCloseSnackbar}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+            >
+                <Alert onClose={handleCloseSnackbar} severity='success' sx={{ width: '100%' }}>
+                    Product added to bag successfully!
+                </Alert>
+            </Snackbar>
+
             {/* Image Modal */}
             <Modal
                 isOpen={isModalOpen}
                 onRequestClose={closeImageModal}
+                contentLabel='Image Modal'
                 className='modal'
-                overlayClassName='overlay'
+                overlayClassName='modal-overlay'
             >
-                <img src={currentImage} alt="Product" className='w-full h-full object-contain' />
+                <img src={currentImage} alt='Enlarged product' className='w-full h-full' />
             </Modal>
 
-            {/* Premium Modal */}
+            {/* Category Modals */}
             <Modal
                 isOpen={showPremiumModal}
-                onRequestClose={() => closeCategoryModal("Premium")}
-                className="modal"
-                overlayClassName="overlay"
-            >
-                <PremiumCategory
-                    category={product}
-                    onClose={() => closeCategoryModal("Premium")}
-                />
-            </Modal>
-
-            {/* Classic Modal */}
-            <Modal
-                isOpen={showClassicModal}
-                onRequestClose={() => closeCategoryModal("Classic")}
-                className="modal"
-                overlayClassName="overlay"
-            >
-                <PremiumCategory
-                    category={product}
-                    onClose={() => closeCategoryModal("Classic")}
-                />
-            </Modal>
-
-            {/* Economic Modal */}
-            <Modal
-                isOpen={showEconomicModal}
-                onRequestClose={() => closeCategoryModal('Economic')}
+                onRequestClose={() => closeCategoryModal('Premium')}
+                contentLabel='Premium Category Modal'
                 className='modal'
-                overlayClassName='overlay'
+                overlayClassName='modal-overlay'
             >
-                <PremiumCategory category={product} onClose={() => closeCategoryModal('Economic')} />
+                <PremiumCategory />
             </Modal>
-
-            <div>
-                <h1 className="text-center font-serif text-2xl my-20">
-                    Similar Products
-                </h1>
-                <CategoryDetails category={product.category} />
-            </div>
-
-            {/* Snackbar for confirmation */}
-            <Snackbar
-                open={openSnackbar}
-                autoHideDuration={6000}
-                onClose={handleCloseSnackbar}
-            >
-                <Alert onClose={handleCloseSnackbar} severity="success">
-                    Item added to cart!
-                </Alert>
-            </Snackbar>
+            {/* Repeat similar modals for Classic and Economic categories as needed */}
         </div>
     );
 };

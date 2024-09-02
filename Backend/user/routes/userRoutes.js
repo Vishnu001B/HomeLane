@@ -1,16 +1,18 @@
+// routes/authRoutes.js
 const express = require("express");
-const {
-  register,
-  verifyOtp,
-  resendOtp,
-  login,
-} = require("../controllers/userReg");
-
 const router = express.Router();
+const authController = require("../controllers/userReg");
 
-router.post("/register", register);
-router.post("/verify-otp", verifyOtp);
-router.post("/resend-otp", resendOtp);
-router.post("/login", login);
+router.post("/register", authController.register);
+router.post("/verifyOtp", authController.verifyOtp);
+router.post("/resendOtp", authController.resendOtp);
+router.post("/login", authController.login);
+router.post("/addItemToCart", authController.addItemToCart);
+router.delete("/removeItemFromCart/:userId/:productId", authController.removeItemFromCart);
+router.patch("/addProductQuantity", authController.addProductQuantity);
+router.patch("/subProductQuantity", authController.subProductQuantity);
+router.get("/getCartByUserId/:userId", authController.getCartByUserId);
+router.patch("/updateCart", authController.updateCart);
+router.get("/getTotalQuantity/:userId", authController.getTotalQuantity);
 
 module.exports = router;
