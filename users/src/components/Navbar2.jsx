@@ -28,7 +28,7 @@ const Navbar2 = () => {
 
   const fetchCategories = async () => {
     try {
-      const rep = await axios.get(`${URI}api/admin/categories`);
+      const rep = await axios.get(`${URI}api/admin/navheaders`);
       setCategories(rep.data);
       console.log("Categories fetched successfully:", rep.data);
     } catch (error) {
@@ -103,20 +103,20 @@ const Navbar2 = () => {
 
           {/* Fetched Categories Dropdown */}
           {categories.map((category, index) => (
-            <div key={index} className="relative p-1">
-              {category.category && (
+            <div key={category._id} className="relative p-1">
+              {category.categories && (
                 <button
                   className="flex items-center p-2 text-black rounded hover:text-light-green-700 transition duration-200"
                   onClick={() => handleCategoryClick(index)}
                 >
-                  {category.category}
+                  {category.categories}
                 </button>
               )}
               {activeCategory === index && (
                 <div className="absolute top-full left-0 mt-2 w-48 bg-gray-200 border border-gray-300 rounded shadow-lg z-30">
                   <ul>
-                    {category.subcategories &&
-                      category.subcategories.map((subcategory, subIndex) => (
+                    {category.subcategory &&
+                      category.subcategory.map((subcategory, subIndex) => (
                         <li
                           key={subIndex}
                           className="p-2 hover:bg-gray-100 cursor-pointer transition duration-200"
