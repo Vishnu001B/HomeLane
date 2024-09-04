@@ -4,6 +4,7 @@ const connectDB = require("./config/db");
 const cors = require("cors");
 const userRoutes = require("./user/routes/userRoutes");
 
+
 const productRoutes = require("./admin/routes/productRoutes");
 
 // const categoryRoutes = require("./user/routes/categoryRoutes");
@@ -13,6 +14,8 @@ const admin = require("./admin/routes/adminRoutes");
 const banner = require("./admin/routes/bannerRouters");
 
 const bookNow = require("./user/routes/bookNowRouter");
+
+const navHeaderRoutes = require('./admin/routes/navHeaderRoutes');
 const path = require("path");
 
 connectDB();
@@ -25,6 +28,7 @@ app.get("/", (req, res) => {
   res.send("API is running successfully");
 });
 // Routes
+app.use("/api/admin",navHeaderRoutes);
 
 app.use("/api/user", userRoutes);
 
