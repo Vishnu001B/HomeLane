@@ -3,18 +3,44 @@ import { Button } from '@/components/ui/button';
 
 const AddCategoryModal = ({ isOpen, onClose, onSave }) => {
   const [category, setCategory] = useState('');
-  const [image, setImage] = useState(null);
+  const [subcategories, setSubcategories] = useState(['']);
+  const [images, setImages] = useState([]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append('category', category);
-    formData.append('files', image);
+    subcategories.forEach((subcategory, index) => {
+      formData.append(`subcategories[${index}]`, subcategory);
+    });
+    images.forEach((image, index) => {
+      formData.append(`files`, image);
+    });
 
     onSave(formData);
     setCategory('');
-    setImage(null);
+    setSubcategories(['']);
+    setImages([]);
     onClose();
+  };
+
+  const handleAddSubcategory = () => {
+    setSubcategories([...subcategories, '']);
+  };
+
+  const handleSubcategoryChange = (index, value) => {
+    const updatedSubcategories = [...subcategories];
+    updatedSubcategories[index] = value;
+    setSubcategories(updatedSubcategories);
+  };
+
+  const handleRemoveSubcategory = (index) => {
+    const updatedSubcategories = subcategories.filter((_, i) => i !== index);
+    setSubcategories(updatedSubcategories);
+  };
+
+  const handleImageChange = (e) => {
+    setImages([...e.target.files]);
   };
 
   if (!isOpen) return null;
@@ -36,18 +62,50 @@ const AddCategoryModal = ({ isOpen, onClose, onSave }) => {
               maxLength={50}
             />
           </div>
+
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Category Image</label>
+            <label className="block text-gray-700 mb-2">Subcategories</label>
+            {subcategories.map((subcategory, index) => (
+              <div key={index} className="flex items-center mb-2">
+                <input
+                  type="text"
+                  value={subcategory}
+                  onChange={(e) => handleSubcategoryChange(index, e.target.value)}
+                  className="w-full px-3 py-2 border rounded-lg"
+                  required
+                />
+                <Button
+                  type="button"
+                  onClick={() => handleRemoveSubcategory(index)}
+                  className="ml-2 text-red-500"
+                >
+                  &times;
+                </Button>
+              </div>
+            ))}
+            <Button type="button" onClick={handleAddSubcategory} className="text-blue-500">
+              + Add Subcategory
+            </Button>
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-gray-700 mb-2">Category Images</label>
             <input
               type="file"
-              onChange={(e) => setImage(e.target.files[0])}
+              multiple
+              onChange={handleImageChange}
               className="w-full px-3 py-2 border rounded-lg"
               required
             />
           </div>
+
           <div className="flex justify-end">
-            <Button type="button" onClick={onClose} className="mr-2">Cancel</Button>
-            <Button type="submit" className="bg-blue-500 text-white">Save</Button>
+            <Button type="button" onClick={onClose} className="mr-2">
+              Cancel
+            </Button>
+            <Button type="submit" className="bg-blue-500 text-white">
+              Save
+            </Button>
           </div>
         </form>
       </div>

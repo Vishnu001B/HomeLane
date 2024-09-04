@@ -11,7 +11,11 @@ import { SignUpForm } from './Pages/SingUpFrom';
 import { ProductHomePage } from './Pages/Product/ProductHomePage';
 import { AddProduct } from './Pages/Product/AddProduct';
 import { UpdateProduct } from './Pages/Product/UpdateProduct';
+
 import  MangeCatogry  from './Pages/catogry/MangeCatogry';
+
+import NavbarController from './components/NavbarController';
+
 
 // Create the router instance
 const router = createBrowserRouter([
@@ -22,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: '/',
         element:<LoginForm/> ,
+      },
+      {
+        path: '/navbarheadercontroller',
+        element:<NavbarController/> ,
       },
       {
         path: '/signup',

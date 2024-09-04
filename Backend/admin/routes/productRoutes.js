@@ -29,4 +29,6 @@ router.get("/getProductBySubcategory/:subcategory", product.getProductBySubcateg
 router.get("/categories", product.getCategoriesWithSubcategories);
 
 
+
+
 module.exports = router;

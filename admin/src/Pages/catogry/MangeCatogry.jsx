@@ -5,33 +5,6 @@ import AddCategoryModal from "./AddCategoryModal"; // Adjust the path as needed
 import UpdateCategoryModal from "./UpdateCategoryModal"; // New Update Modal Component
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"; // Import the Alert components
 
-// Card Component
-const Card = ({ img, title, onDelete, onUpdate }) => {
-  return (
-    <div className="relative w-full md:w-72 lg:w-72 xl:w-80 rounded-lg overflow-hidden card group">
-      <div className="h-60 overflow-hidden relative">
-        <img
-          src={img}
-          alt={title}
-          className="w-full h-full rounded-lg object-cover"
-        />
-        <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 flex items-center justify-center space-x-4">
-          <Button className="bg-red-600" onClick={onDelete}>
-            Delete
-          </Button>
-          <Button className="bg-yellow-600" onClick={onUpdate}>
-            Update
-          </Button>
-        </div>
-      </div>
-      <h3 className="p-4 text-lg font-semibold text-white text-center">
-        {title}
-      </h3>
-    </div>
-  );
-};
-
-// MangeCatogry Component
 const MangeCatogry = () => {
   const [categoriesData, setCategoriesData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -49,7 +22,6 @@ const MangeCatogry = () => {
   const fetchCategories = async () => {
     try {
       const resp = await axios.get(`${URI}api/categories/`);
-      console.log("productsByCategory", resp.data);
       setCategoriesData(resp.data);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -70,7 +42,6 @@ const MangeCatogry = () => {
             headers: { "Content-Type": "multipart/form-data" },
           });
 
-      console.log("Category saved:", resp.data);
       window.location.reload();
 
       if (selectedCategory) {
@@ -165,17 +136,49 @@ const MangeCatogry = () => {
         </Alert>
       )}
 
-      <div className="flex flex-wrap items-center justify-center lg:gap-6 xl:px-2 px-5">
-        {filteredCategories.map((data, index) => (
-          <div key={index} className="flex flex-col items-center mb-6">
-            <Card
-              img={`${URI}${data.images?.[0] || "placeholder-image.jpg"}`} // Use a placeholder image if none are provided.
-              title={data.category}
-              onDelete={() => handleDeleteCategory(data._id)}
-              onUpdate={() => handleUpdateCategory(data)}
-            />
-          </div>
-        ))}
+      {/* Display categories in a full-screen table */}
+      <div className="overflow-x-auto max-h-screen">
+        <table className="min-w-full bg-gray-800 text-white border-collapse">
+          <thead>
+            <tr>
+              <th className="sticky top-0 px-6 py-3 border-b-2 border-gray-700 bg-gray-900">Image</th>
+              <th className="sticky top-0 px-6 py-3 border-b-2 border-gray-700 bg-gray-900">Category</th>
+              <th className="sticky top-0 px-6 py-3 border-b-2 border-gray-700 bg-gray-900">Subcategories</th>
+              <th className="sticky top-0 px-6 py-3 border-b-2 border-gray-700 bg-gray-900">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredCategories.map((data, index) => (
+              <tr key={index}>
+                <td className="px-6 py-4 border-b border-gray-700">
+                  <img
+                    src={`${URI}${data.images?.[0] || "placeholder-image.jpg"}`}
+                    alt={data.category}
+                    className="h-16 w-16 object-cover rounded-lg"
+                  />
+                </td>
+                <td className="px-6 py-4 border-b border-gray-700">{data.category}</td>
+                <td className="px-6 py-4 border-b border-gray-700">
+                  {data.subcategories.join(", ")}
+                </td>
+                <td className="px-6 py-4 border-b border-gray-700">
+                  <Button
+                    className="bg-red-600 mr-2"
+                    onClick={() => handleDeleteCategory(data._id)}
+                  >
+                    Delete
+                  </Button>
+                  <Button
+                    className="bg-yellow-600"
+                    onClick={() => handleUpdateCategory(data)}
+                  >
+                    Update
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
       <AddCategoryModal

@@ -10,24 +10,27 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { FaPlus, FaTrash } from "react-icons/fa"; // Importing icons
 
 const UpdateCategoryModal = ({ isOpen, onClose, onSave, category }) => {
   const [formData, setFormData] = useState({
     category: "",
     images: null, // For file upload
+    subcategories: [] // To manage subcategories
   });
 
-  // Effect to initialize form data when category prop changes
+  // Initialize form data when category prop changes
   useEffect(() => {
     if (category) {
       setFormData({
         category: typeof category.category === "string" ? category.category : "",
         images: category.images || null,
+        subcategories: category.subcategories || [] // Initialize subcategories
       });
     }
   }, [category]);
 
-  // Effect to clean up object URL when formData.images changes
+  // Clean up object URL when images change
   useEffect(() => {
     return () => {
       if (formData.images && formData.images instanceof File) {
@@ -40,16 +43,33 @@ const UpdateCategoryModal = ({ isOpen, onClose, onSave, category }) => {
     const { name, value, files } = e.target;
     if (name === "images" && files[0]) {
       const file = files[0];
-      // Set a preview URL for the image
       const previewUrl = URL.createObjectURL(file);
       setFormData({
         ...formData,
         [name]: file,
-        previewUrl: previewUrl, // Store preview URL for image display
+        previewUrl: previewUrl,
       });
     } else {
       setFormData({ ...formData, [name]: value });
     }
+  };
+
+  const handleSubcategoryChange = (index, e) => {
+    const { value } = e.target;
+    const newSubcategories = [...formData.subcategories];
+    newSubcategories[index] = value;
+    setFormData({ ...formData, subcategories: newSubcategories });
+  };
+
+  const addSubcategory = () => {
+    setFormData({ ...formData, subcategories: [...formData.subcategories, ""] });
+  };
+
+  const removeSubcategory = (index) => {
+    setFormData({
+      ...formData,
+      subcategories: formData.subcategories.filter((_, i) => i !== index),
+    });
   };
 
   const handleSubmit = () => {
@@ -58,6 +78,7 @@ const UpdateCategoryModal = ({ isOpen, onClose, onSave, category }) => {
     if (formData.images) {
       data.append("files", formData.images);
     }
+    data.append("subcategories", JSON.stringify(formData.subcategories)); // Serialize subcategories
     onSave(data);
     onClose();
   };
@@ -102,13 +123,42 @@ const UpdateCategoryModal = ({ isOpen, onClose, onSave, category }) => {
               />
             </div>
           )}
+          <div>
+            <Label htmlFor="subcategories">Subcategories</Label>
+            {formData.subcategories.map((sub, index) => (
+              <div key={index} className="flex items-center space-x-2 mb-2">
+                <Input
+                  type="text"
+                  name={`subcategory-${index}`}
+                  value={sub}
+                  onChange={(e) => handleSubcategoryChange(index, e)}
+                  placeholder="Enter subcategory"
+                />
+                <Button
+                  type="button"
+                  onClick={() => removeSubcategory(index)}
+                  variant="destructive"
+                >
+                  <FaTrash />
+                </Button>
+              </div>
+            ))}
+            <Button
+              type="button"
+              onClick={addSubcategory}
+              variant="primary"
+              className="mt-2"
+            >
+              <FaPlus /> Add Subcategory
+            </Button>
+          </div>
         </div>
         <DialogFooter>
           <Button variant="primary" onClick={handleSubmit}>
-            Save Changes
+            <FaPlus /> Save Changes
           </Button>
           <Button variant="destructive" onClick={onClose}>
-            Cancel
+            <FaTrash /> Cancel
           </Button>
         </DialogFooter>
       </DialogContent>

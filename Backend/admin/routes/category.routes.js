@@ -18,4 +18,12 @@ router.put('/:id', upload.array('files', 10), categoryController.updateCategory)
 // Delete a category by ID
 router.delete('/:id', categoryController.deleteCategory);
 
+router.post('/categories/:id/subcategories', categoryController.addSubcategory);
+
+// Route to update a subcategory in a specific category
+router.put('/categories/:id/subcategories', categoryController.updateSubcategory);
+
+// Route to delete a subcategory from a specific category
+router.delete('/categories/:id/subcategories', categoryController.deleteSubcategory);
+
 module.exports = router;

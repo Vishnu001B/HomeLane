@@ -3,14 +3,8 @@
 const mongoose = require('mongoose');
 
 const navHeaderSchema = new mongoose.Schema({
-    categories: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    subcategory: {
-        type: [String]
-    }
+    categories: { type: String, required: true },
+  subcategories: [{ type: String }],
 });
 navHeaderSchema.pre('save', function(next){
     if(this.categories)

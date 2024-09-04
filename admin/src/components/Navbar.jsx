@@ -20,6 +20,13 @@ const Navbar = () => {
           Dashboard
         </Link>
         <Link
+          to="/navbarheadercontroller"
+          className="flex items-center gap-4 px-2.5 text-foreground"
+        >
+          <ShoppingCart className="h-5 w-5" />
+          Navbar
+        </Link>
+        <Link
           to="/order"
           className="flex items-center gap-4 px-2.5 text-foreground"
         >
