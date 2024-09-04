@@ -6,7 +6,9 @@ exports.createCategory = async (req, res) => {
     const { category } = req.body;
     const images = req.files.map(file => file.path);
 
-    const newCategory = new Category({ category, images });
+    const Newcategory =  category.toLowerCase();
+
+    const newCategory = new Category({ category:Newcategory, images });
     await newCategory.save();
 
     res.status(201).json({ message: 'Category created successfully', category: newCategory });
@@ -41,11 +43,18 @@ exports.getCategoryById = async (req, res) => {
 exports.updateCategory = async (req, res) => {
   try {
     const { category } = req.body;
-    const images = req.files.map(file => file.path);
+    const Newcategory = category.toLowerCase();
+
+    // Check if new images were provided
+    let updatedData = { category: Newcategory };
+    if (req.files && req.files.length > 0) {
+      const images = req.files.map((file) => file.path);
+      updatedData.images = images;
+    }
 
     const updatedCategory = await Category.findByIdAndUpdate(
       req.params.id,
-      { category, images },
+      updatedData,
       { new: true }
     );
 
@@ -56,6 +65,7 @@ exports.updateCategory = async (req, res) => {
     res.status(500).json({ message: 'Error updating category', error });
   }
 };
+
 
 // DELETE: Delete a category by ID
 exports.deleteCategory = async (req, res) => {
