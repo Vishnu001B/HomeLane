@@ -1,15 +1,26 @@
 const NavHeader = require("../models/navHeader");
 
-// Create a new NavHeader
+// Create a new NavHeader// Ensure you have imported or required the NavHeader model
+
 exports.createNavHeader = async (req, res) => {
     try {
-        const navHeader = new NavHeader(req.body);
+        // Create a new NavHeader instance with the data from the request body
+        const navHeader = new NavHeader({
+            categories: req.body.categories,
+            subcategories: req.body.subcategories
+        });
+        
+        // Save the new NavHeader document to the database
         await navHeader.save();
+        
+        // Send a success response with the created document
         res.status(201).json(navHeader);
     } catch (error) {
+        // Send an error response if something goes wrong
         res.status(400).json({ message: error.message });
     }
 };
+
 
 // Get all NavHeaders
 exports.getAllNavHeaders = async (req, res) => {
