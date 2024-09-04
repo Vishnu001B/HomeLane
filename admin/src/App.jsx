@@ -14,12 +14,15 @@ function App() {
   return (
     <>
       {!shouldHideNavbarAndHeader && <Header />}
+      <div className='flex '>
       {!shouldHideNavbarAndHeader && (
-        <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
+
+        <aside className=" hidden w-60 flex-col border-r bg-background sm:flex">
           <Navbar />
         </aside>
       )}
       <Outlet />
+      </div>
     </>
   );
 }
