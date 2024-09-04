@@ -7,12 +7,13 @@ const NavbarController = () => {
 
   const [formData, setFormData] = useState({
     categories: '',
-    subcategories: [], // Initialize as an empty array
+    subcategories: [],
   });
   const [categories, setCategories] = useState([]);
   const [editingCategory, setEditingCategory] = useState(null);
-  const [subcategoryInput, setSubcategoryInput] = useState(''); // For handling subcategory input
-  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
+  const [subcategoryInput, setSubcategoryInput] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   // Fetch categories on component mount
   useEffect(() => {
@@ -22,9 +23,17 @@ const NavbarController = () => {
   const fetchCategories = async () => {
     try {
       const response = await axios.get(`${URI}api/admin/navheaders`);
+      console.log('Fetched categories:', response.data);
       setCategories(response.data);
     } catch (error) {
       console.error('Error fetching categories:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Failed to fetch categories',
+      });
+    } finally {
+      setLoading(false); // Set loading to false after fetch
     }
   };
 
@@ -32,7 +41,7 @@ const NavbarController = () => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value.toLowerCase(),
+      [name]: value,
     }));
   };
 
@@ -41,12 +50,13 @@ const NavbarController = () => {
   };
 
   const addSubcategory = () => {
-    if (subcategoryInput.trim() && !formData.subcategories.includes(subcategoryInput.trim())) {
+    const trimmedInput = subcategoryInput.trim();
+    if (trimmedInput && !formData.subcategories.includes(trimmedInput)) {
       setFormData((prevData) => ({
         ...prevData,
-        subcategories: [...prevData.subcategories, subcategoryInput.trim()],
+        subcategories: [...prevData.subcategories, trimmedInput],
       }));
-      setSubcategoryInput('');
+      setSubcategoryInput(''); // Clear input field
     }
   };
 
@@ -88,7 +98,7 @@ const NavbarController = () => {
     setEditingCategory(category);
     setFormData({
       categories: category.categories,
-      subcategories: category.subcategories || [], // Default to empty array if undefined
+      subcategories: category.subcategories || [],
     });
     setIsModalOpen(true); // Open the modal for editing
   };
@@ -125,14 +135,14 @@ const NavbarController = () => {
   };
 
   return (
-    <div className=" px-20">
+    <div className="px-5 w-full">
       {/* Button to open modal */}
       <div className="mb-4">
         <button
           onClick={() => setIsModalOpen(true)}
           className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600"
         >
-          Add New Category
+          Add New Navbar
         </button>
       </div>
 
@@ -154,7 +164,7 @@ const NavbarController = () => {
                   name="categories"
                   value={formData.categories}
                   onChange={handleInputChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  className="text-blue-950 font-serif font-semibold mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   required
                 />
               </div>
@@ -168,7 +178,7 @@ const NavbarController = () => {
                     id="subcategoryInput"
                     value={subcategoryInput}
                     onChange={handleSubcategoryChange}
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="text-blue-950 font-serif font-semibold mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   />
                   <button
                     type="button"
@@ -198,7 +208,7 @@ const NavbarController = () => {
                   type="submit"
                   className="px-4 py-2 bg-green-500 text-white rounded-md shadow-sm hover:bg-green-600"
                 >
-                  {editingCategory ? 'Update Category' : 'Add Category'}
+                  {editingCategory ? 'Update Category' : 'Add Navbar'}
                 </button>
               </div>
             </form>
@@ -206,9 +216,11 @@ const NavbarController = () => {
         </div>
       )}
 
-      <div className="h-screen overflow-x-auto"> {/* Add horizontal scrolling */}
-        {categories.length > 0 ? (
-          <div className="min-w-full overflow-x-auto">
+      <div className="h-[70%] overflow-x-auto"> {/* Add horizontal scrolling */}
+        {loading ? (
+          <p>Loading...</p>
+        ) : categories.length > 0 ? (
+          <div className="min-w-full h-screen ">
             <table className="min-w-full bg-white divide-y divide-gray-200">
               <thead>
                 <tr>
@@ -234,13 +246,13 @@ const NavbarController = () => {
                       <div className="flex space-x-2">
                         <button
                           onClick={() => handleEdit(category)}
-                          className="px-2 py-1 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600"
+                          className="px-2 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600"
                         >
                           Edit
                         </button>
                         <button
                           onClick={() => handleDelete(category._id)}
-                          className="px-2 py-1 bg-red-500 text-white rounded-md shadow-sm hover:bg-red-600"
+                          className="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-600"
                         >
                           Delete
                         </button>
@@ -252,7 +264,7 @@ const NavbarController = () => {
             </table>
           </div>
         ) : (
-          <p>No categories available.</p>
+          <p>No categories available</p>
         )}
       </div>
     </div>
