@@ -3,19 +3,21 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import axios from "axios";
+import { URL } from "./contants";
 
 const BannerSlider = () => {
   const [banners, setBanners] = useState([]);
 
-  const URI = import.meta.env.VITE_URI;
+
 
   useEffect(() => {
+   
     fetchBanners();
-  }, [URI]);
+  }, []);
 
   const fetchBanners = async () => {
     try {
-      const resp = await axios.get(`${URI}api/admin/banners`);
+      const resp = await axios.get(`${URL}/api/admin/banners`);
       // Check if response data is an array
       if (Array.isArray(resp.data)) {
         setBanners(resp.data);
@@ -46,14 +48,14 @@ const BannerSlider = () => {
           banners.map((banner) => (
             <div key={banner._id} className="relative">
               <img
-                src={`${URI}/${banner.path.replace(/\\/g, "/")}`} // Replace backslashes with forward slashes
+                src={`${URL}/${banner.path.replace(/\\/g, "/")}`} // Replace backslashes with forward slashes
                 alt={banner.filename}
-                className="w-screen lg:h-[800px] h-72 object-cover opacity-80" // Adjust opacity here
+                className="w-screen lg:h-[800px] h-96 object-cover opacity-80" // Adjust opacity here
                 style={{ border: "none", outline: "none" }} // Remove border and outline
                 loading="lazy" // Lazy loading
               />
               {/* Text container */}
-              <div className="absolute z-30 lg:top-1/2 lg:left-28 left-5 md:top-1/2 top-36 transform -translate-y-1/2 bg-black bg-opacity-50 p-6 text-white rounded-md lg:w-2/5 w-10/12  shadow-md shadow-blue-gray-100">
+              <div className="absolute z-30 lg:top-1/2 lg:left-28 left-5 md:top-1/2 top-60 transform -translate-y-1/2 bg-black bg-opacity-50 p-6 text-white rounded-md lg:w-2/5 w-10/12  shadow-md shadow-blue-gray-100">
                 <h2 className="text-md lg:text-4xl font-bold llg:mb-4 mb-2 drop-shadow-lg">
                   Enhance Your Space with Modern Decor
                 </h2>

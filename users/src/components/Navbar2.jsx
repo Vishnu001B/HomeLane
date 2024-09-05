@@ -15,8 +15,15 @@ const servise = {
   ],
 };
 
+const capitalizeWords = (str) => {
+  return str
+    .toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
+
 const Navbar2 = () => {
-  const [hoveredCategory, setHoveredCategory] = useState(null);
   const [activeCategory, setActiveCategory] = useState(null);
   const [categories, setCategories] = useState([]);
 
@@ -28,21 +35,17 @@ const Navbar2 = () => {
 
   const fetchCategories = async () => {
     try {
-      const rep = await axios.get(`${URI}api/admin/categories`);
-      console.log("API Response:", rep.data); // Log the response
-      // Ensure the response data is an array
-      if (Array.isArray(rep.data)) {
-        setCategories(rep.data);
-      } else {
-        console.error("Expected an array but got:", rep.data);
-      }
+      const response = await axios.get(`${URI}api/admin/navheaders`);
+      setCategories(response.data);
+      console.log("Categories fetched successfully:", response.data);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
   };
 
-  const handleCategoryClick = (index) => {
-    setActiveCategory(index === activeCategory ? null : index);
+  const handleCategoryClick = (categoryName) => {
+    console.log("Clicked category:", categoryName);
+    setActiveCategory(categoryName === activeCategory ? null : categoryName);
   };
 
   const handleSubcategoryClick = () => {
@@ -83,7 +86,7 @@ const Navbar2 = () => {
               className="flex items-center p-2 text-black rounded hover:text-light-green-700 transition duration-200"
               onClick={() => handleCategoryClick('services')}
             >
-              {servise.name}
+              {capitalizeWords(servise.name)}
             </button>
             {activeCategory === 'services' && (
               <div className="absolute top-full left-0 mt-2 w-48 bg-gray-200 border border-gray-300 rounded shadow-lg z-30">
@@ -97,7 +100,7 @@ const Navbar2 = () => {
                         to={`/subcategory/${encodeURIComponent(subcategory)}`}
                         onClick={handleSubcategoryClick}
                       >
-                        {subcategory}
+                        {capitalizeWords(subcategory)}
                       </Link>
                     </li>
                   ))}
@@ -107,32 +110,33 @@ const Navbar2 = () => {
           </div>
 
           {/* Fetched Categories Dropdown */}
-          {Array.isArray(categories) && categories.map((category, index) => (
-            <div key={index} className="relative p-1">
-              {category?.category && (
+          {categories.map((category) => (
+            <div key={category._id} className="relative p-1">
+              {category.categories && (
                 <button
                   className="flex items-center p-2 text-black rounded hover:text-light-green-700 transition duration-200"
-                  onClick={() => handleCategoryClick(index)}
+                  onClick={() => handleCategoryClick(category.categories)}
                 >
-                  {category.category}
+                  {capitalizeWords(category.categories)}
                 </button>
               )}
-              {activeCategory === index && (
+              {activeCategory === category.categories && (
                 <div className="absolute top-full left-0 mt-2 w-48 bg-gray-200 border border-gray-300 rounded shadow-lg z-30">
                   <ul>
-                    {category.subcategories && category.subcategories.map((subcategory, subIndex) => (
-                      <li
-                        key={subIndex}
-                        className="p-2 hover:bg-gray-100 cursor-pointer transition duration-200"
-                      >
-                        <Link
-                          to={`/subcategory/${encodeURIComponent(subcategory)}`}
-                          onClick={handleSubcategoryClick}
+                    {category.subcategories &&
+                      category.subcategories.map((subcategory, subIndex) => (
+                        <li
+                          key={subIndex}
+                          className="p-2 hover:bg-gray-100 cursor-pointer transition duration-200"
                         >
-                          {subcategory}
-                        </Link>
-                      </li>
-                    ))}
+                          <Link
+                            to={`/subcategory/${encodeURIComponent(subcategory)}`}
+                            onClick={handleSubcategoryClick}
+                          >
+                            {capitalizeWords(subcategory)}
+                          </Link>
+                        </li>
+                      ))}
                   </ul>
                 </div>
               )}

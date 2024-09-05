@@ -12,6 +12,12 @@ import { ProductHomePage } from './Pages/Product/ProductHomePage';
 import { AddProduct } from './Pages/Product/AddProduct';
 import { UpdateProduct } from './Pages/Product/UpdateProduct';
 
+import  MangeCatogry  from './Pages/catogry/MangeCatogry';
+
+import NavbarController from './components/NavbarController';
+import MangeBanner from './Pages/banner/MangeBanner';
+
+
 // Create the router instance
 const router = createBrowserRouter([
   {
@@ -21,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: '/',
         element:<LoginForm/> ,
+      },
+      {
+        path: '/navbarheadercontroller',
+        element:<NavbarController/> ,
       },
       {
         path: '/signup',
@@ -39,6 +49,13 @@ const router = createBrowserRouter([
       },{
         path: '/UpdateProduct',
         element:<UpdateProduct/>,
+      },
+      {
+        path: '/Category',
+        element: <MangeCatogry />,
+      },{
+        path: '/Banner',
+        element: <MangeBanner/>,
       }
     ],
   },
