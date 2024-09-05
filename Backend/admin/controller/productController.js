@@ -385,7 +385,11 @@ exports.lastedProduct = async (req, res) => {
 exports.getProductByCategory = async (req, res) => {
   try {
     const { categories } = req.params;
-    const productsByCategory = await Product.find({ categories });
+
+    const decodedsCategories = decodeURIComponent(categories).toLocaleLowerCase(); // Decode the encoded subcategory
+    console.log(decodedsCategories);
+
+    const productsByCategory = await Product.find({ categories:decodedsCategories });
 
     res.status(200).json({
       success: true,
@@ -401,24 +405,29 @@ exports.getProductByCategory = async (req, res) => {
   }
 };
 
-
 exports.getProductBySubcategory = async (req, res) => {
   try {
     const { subcategory } = req.params;
-    const productsBySubcategory = await Product.find({ subcategory });
+    const decodedSubcategory = decodeURIComponent(subcategory).toLocaleLowerCase(); // Decode the encoded subcategory
+    console.log(decodedSubcategory);
+
+    const productsBySubcategory = await Product.find({ subcategory: decodedSubcategory });
+
     res.status(200).json({
       success: true,
       message: "Products retrieved successfully for the given subcategory",
       productsBySubcategory,
     });
-    } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: "Failed to retrieve products by subcategory",
-        error: error.message,
-      });
-    }
-}  
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Failed to retrieve products by subcategory",
+      error: error.message,
+    });
+  }
+};
+
+ 
 
 
 exports.getCategoriesWithSubcategories = async (req, res) => {

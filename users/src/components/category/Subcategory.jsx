@@ -6,25 +6,24 @@ import ShowCategoryWise from "./ShowCategoryWise";
 import CategoryBanner from "./categoryBanner";
 
 const Subcategory = () => {
-  const { name } = useParams();
-  const { pathname } = useLocation();
+  const { name } = useParams(); // Capture 'name' from URL
+  const { pathname } = useLocation(); // Capture pathname for scroll-to-top
   const URI = import.meta.env.VITE_API_URL;
   const [categoriesData, setCategoriesData] = useState([]);
 
-
-  // Use `name` from the URL or fallback to a default category name
-  const selectName = name || "defaultCategory";
+  // Decode 'name' from URL to ensure special characters like spaces are handled
+  const selectName = name ? decodeURIComponent(name) : "defaultCategory";
+  console.log(selectName, "select name");
 
   useEffect(() => {
-    fetchCategories();
+    fetchCategories(); // Fetch categories based on subcategory
   }, [selectName]);
 
   const fetchCategories = async () => {
     try {
-      const resp = await axios.get(`${URI}api/admin/getProductBySubcategory/${selectName}`);
+      const resp = await axios.get(`${URI}api/admin/getProductBySubcategory/${encodeURIComponent(selectName)}`);
       if (resp.data.success) {
-        setCategoriesData(resp.data.productsBySubcategory
-        );
+        setCategoriesData(resp.data.productsBySubcategory); // Set the categories data
       }
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -32,7 +31,7 @@ const Subcategory = () => {
   };
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo(0, 0); // Scroll to top when pathname changes
   }, [pathname]);
 
   return (
