@@ -18,11 +18,15 @@ const Product = () => {
         navigate('/products'); // Adjust the route as needed
     };
 
-    const handleUpdate = () => {
-        // Implement update functionality here
-        console.log("Navigating to update page for product with ID:", product._id);
-        // Navigate to the update page with product ID
-        navigate(`/update-product/${product._id}`); // Adjust the route as needed
+    const handleUpdate = async() => {
+        try {
+            await axios.delete(`${URI}api/admin/product/${product._id}`, {
+              headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+            });
+            fetchProduct(); // Re-fetch products to update the list after deletion
+          } catch (error) {
+            console.error("Error deleting product", error.message);
+          }// Adjust the route as needed
     };
 
     const handleBack = () => {
@@ -79,13 +83,17 @@ const Product = () => {
 
                     <div className="mt-4 flex space-x-4">
                         <button 
-                            onClick={handleUpdate} 
+                            
+                            
+                            onClick={() => {
+                              navigate("/UpdateProduct", { state: { product } });
+                            }}
                             className="bg-blue-500 text-white px-4 py-2 rounded"
                         >
                             Update
                         </button>
                         <button 
-                            onClick={handleDelete} 
+                            onClick={handleUpdate} 
                             className="bg-red-500 text-white px-4 py-2 rounded"
                         >
                             Delete
