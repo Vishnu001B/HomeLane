@@ -149,7 +149,7 @@ export const AddProduct = () => {
     <div className=" mx-auto p-6">
       <div className='flex justify-between items-center my-4'>
         <h1 className="text-2xl font-bold mb-6">Add New Product</h1>
-        <Button onClick={() => navigate("/products")}>Back</Button>
+        <Button onClick={() => navigate(-1)}>Back</Button>
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className='grid grid-cols-1 gap-4'>

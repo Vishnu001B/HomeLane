@@ -99,7 +99,7 @@ const MangeCatogry = () => {
   );
 
   return (
-    <div className="lg:py-5 py-4 px-4 font-sans text-white">
+    <div className="lg:py-5 py-4 px-4 font-sans text-white w-full flex-row items-center content-center justify-center">
       <div className="flex flex-col lg:flex-row justify-between items-center gap-4 w-full">
         <div className="w-full lg:w-1/2">
           <input
@@ -139,7 +139,7 @@ const MangeCatogry = () => {
       {/* Display categories in a full-screen table */}
       <div className="overflow-x-auto max-h-screen">
         <table className="min-w-full bg-gray-800 text-white border-collapse">
-          <thead>
+          <thead className="flex-row items-center content-center justify-center">
             <tr>
               <th className="sticky top-0 px-6 py-3 border-b-2 border-gray-700 bg-gray-900">Image</th>
               <th className="sticky top-0 px-6 py-3 border-b-2 border-gray-700 bg-gray-900">Category</th>
@@ -147,23 +147,23 @@ const MangeCatogry = () => {
               <th className="sticky top-0 px-6 py-3 border-b-2 border-gray-700 bg-gray-900">Actions</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="">
             {filteredCategories.map((data, index) => (
-              <tr key={index}>
-                <td className="px-6 py-4 border-b border-gray-700">
+              <tr key={index} >
+                <td className="px-6 py-4 border-b border-gray-700 flex-row items-center content-center justify-center" >
                   <img
                     src={`${URI}${data.images?.[0] || "placeholder-image.jpg"}`}
                     alt={data.category}
                     className="h-16 w-16 object-cover rounded-lg"
                   />
                 </td>
-                <td className="px-6 py-4 border-b border-gray-700">{data.category}</td>
-                <td className="px-6 py-4 border-b border-gray-700">
+                <td className="px-6 py-4 border-b border-gray-700 text-center">{data.category}</td>
+                <td className="px-6 py-4 border-b border-gray-700 text-center">
                   {data.subcategories.join(", ")}
                 </td>
-                <td className="px-6 py-4 border-b border-gray-700">
+                <td className="px-6 py-4 border-b border-gray-700 ">
                   <Button
-                    className="bg-red-600 mr-2"
+                    className="bg-red-600 mr-2 "
                     onClick={() => handleDeleteCategory(data._id)}
                   >
                     Delete

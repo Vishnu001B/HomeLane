@@ -16,6 +16,7 @@ import  MangeCatogry  from './Pages/catogry/MangeCatogry';
 
 import NavbarController from './components/NavbarController';
 import MangeBanner from './Pages/banner/MangeBanner';
+import Product from './Pages/Product/Product';
 
 
 // Create the router instance
@@ -29,7 +30,7 @@ const router = createBrowserRouter([
         element:<LoginForm/> ,
       },
       {
-        path: '/navbarheadercontroller',
+        path: '/manage-navbar',
         element:<NavbarController/> ,
       },
       {
@@ -41,21 +42,24 @@ const router = createBrowserRouter([
         path: '/dashboard',
         element: <Dashboard />,
       },{
-        path: '/products',
+        path: '/Mange-product',
         element: <ProductHomePage />,
       },{
-        path: '/AddProduct',
+        path: '/create-product',
         element:<AddProduct/>,
       },{
         path: '/UpdateProduct',
         element:<UpdateProduct/>,
       },
       {
-        path: '/Category',
+        path: '/manage-category',
         element: <MangeCatogry />,
       },{
-        path: '/Banner',
+        path: '/manage-banner',
         element: <MangeBanner/>,
+      },{
+        path: '/Product-Details',
+        element: <Product/>,
       }
     ],
   },

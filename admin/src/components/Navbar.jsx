@@ -1,11 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 import {
   Home,
   ShoppingCart,
   Package,
-  Users2,
-  LineChart,
+  Users,
+  BarChart,
+  Edit,
 } from "lucide-react";
 
 const Navbar = () => {
@@ -20,45 +21,52 @@ const Navbar = () => {
           Dashboard
         </Link>
         <Link
-          to="/navbarheadercontroller"
-          className="flex items-center gap-4 px-2.5 text-foreground"
+          to="/manage-navbar"
+          className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
         >
-          <ShoppingCart className="h-5 w-5" />
-          Navbar
+          <Users className="h-5 w-5" />
+          Manage Navbar
         </Link>
         <Link
-          to="/order"
+          to="/orders"
           className="flex items-center gap-4 px-2.5 text-foreground"
         >
           <ShoppingCart className="h-5 w-5" />
           Orders
         </Link>
         <Link
-          to="/products"
+          to="/create-product"
           className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
         >
           <Package className="h-5 w-5" />
-          Create product
+          Create Product
         </Link>
         <Link
-          to="/Category"
+          to="/Mange-product"
           className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
         >
-          <Users2 className="h-5 w-5" />
-          Mange Catogry
+          <Package className="h-5 w-5" />
+          Mange-product
         </Link>
         <Link
-          to="/Banner"
+          to="/manage-category"
           className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
         >
-          <Users2 className="h-5 w-5" />
-          Mange Banner
+          <Edit className="h-5 w-5" />
+          Manage Category
         </Link>
         <Link
-          to="#"
+          to="/manage-banner"
           className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
         >
-          <LineChart className="h-5 w-5" />
+          <Edit className="h-5 w-5" />
+          Manage Banner
+        </Link>
+        <Link
+          to="/settings"
+          className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+        >
+          <BarChart className="h-5 w-5" />
           Settings
         </Link>
       </nav>

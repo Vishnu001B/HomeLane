@@ -23,6 +23,14 @@ const bannerSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  title:{
+    type: String,
+   
+  },
+  description:{
+    type: String,
+   
+  },
 });
 
 module.exports = mongoose.model('Banner', bannerSchema);
