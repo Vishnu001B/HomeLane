@@ -106,7 +106,7 @@ export const AddProduct = () => {
         }
       });
       console.log('Product added successfully', response.data);
-      navigate("/products");
+      navigate("/Product-Details");
     } catch (error) {
       console.error('Error adding product', error);
     }
