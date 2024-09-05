@@ -1,1 +1,1 @@
-export const URL = "http://localhost:5001"
+export const URL = "https://homelane-website-1-e2ud.onrender.com"
