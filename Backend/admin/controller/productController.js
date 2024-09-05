@@ -67,7 +67,7 @@ exports.createProduct = async (req, res, next) => {
         images: imagePaths, // Store multiple image paths
         title,
         descriptions,
-        categories:category,
+        categories:category.toLocacase(),
         subcategory: subcategory ? subcategory.split(",") : [], // Assuming subcategories are sent as a comma-separated string
         price: parsedPrice, // Store parsed price
         discount: parsedDiscount, // Store parsed discount
