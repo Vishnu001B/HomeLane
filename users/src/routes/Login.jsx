@@ -6,7 +6,7 @@ import LockOpenIcon from "@mui/icons-material/LockOpen";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import GoogleIcon from "@mui/icons-material/Google";
 import Register from "./Register";
-import { API_URL } from "../constants";
+
 
 const Login = ({ setIsLoginModalOpen }) => {
   const [isRegister, setIsRegister] = useState(false);
@@ -15,6 +15,7 @@ const Login = ({ setIsLoginModalOpen }) => {
   const [usernameOrEmail, setUsernameOrEmail] = useState("");
   const [password, setPassword] = useState("");
   const [otp, setOtp] = useState("");
+  const URI = import.meta.env.VITE_API_URL;
 
   const toggleForm = () => {
     setIsRegister(!isRegister);
@@ -26,7 +27,7 @@ const Login = ({ setIsLoginModalOpen }) => {
 
   const handleLoginWithPassword = async () => {
     try {
-      const response = await axios.post(`${API_URL}/api/user/login`, {
+      const response = await axios.post(`${URI}api/user/login`, {
         email: usernameOrEmail,
         password: password,
       });

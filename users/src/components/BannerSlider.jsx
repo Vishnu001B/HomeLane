@@ -3,21 +3,29 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import axios from "axios";
-import { API_URL } from "../constants";
 
 const BannerSlider = () => {
   const [banners, setBanners] = useState([]);
 
+  const URI = import.meta.env.VITE_URI;
+
   useEffect(() => {
     fetchBanners();
-  }, []);
+  }, [URI]);
 
   const fetchBanners = async () => {
     try {
-      const resp = await axios.get(`${API_URL}/api/admin/banners`);
-      setBanners(resp.data);
+      const resp = await axios.get(`${URI}api/admin/banners`);
+      // Check if response data is an array
+      if (Array.isArray(resp.data)) {
+        setBanners(resp.data);
+      } else {
+        console.error("Unexpected response data:", resp.data);
+        setBanners([]);
+      }
     } catch (error) {
       console.error("Error fetching banners:", error);
+      setBanners([]);
     }
   };
 
@@ -38,7 +46,7 @@ const BannerSlider = () => {
           banners.map((banner) => (
             <div key={banner._id} className="relative">
               <img
-                src={`${API_URL}/${banner.path.replace(/\\/g, "/")}`} // Replace backslashes with forward slashes
+                src={`${URI}/${banner.path.replace(/\\/g, "/")}`} // Replace backslashes with forward slashes
                 alt={banner.filename}
                 className="w-screen lg:h-[800px] h-72 object-cover opacity-80" // Adjust opacity here
                 style={{ border: "none", outline: "none" }} // Remove border and outline

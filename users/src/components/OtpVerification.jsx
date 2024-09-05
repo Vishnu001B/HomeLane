@@ -4,12 +4,14 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { API_URL } from "../../src/constants";
+
 
 function OtpVerification({ mobileNumber, setIsLoginModalOpen }) {
   const [otp, setOtp] = useState("");
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
+
+  const URI = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const storedEmail = localStorage.getItem("emailId");
@@ -27,7 +29,7 @@ function OtpVerification({ mobileNumber, setIsLoginModalOpen }) {
 
   const verifyOtp = async () => {
     try {
-      const resp = await axios.post(`${API_URL}/api/user/verify-otp`, {
+      const resp = await axios.post(`${URI}api/user/verify-otp`, {
         email,
         otp,
       });

@@ -26,7 +26,8 @@ export const UpdateProduct = () => {
       compositions: '',
       gsm: '',
       martindale: '',
-      material: ''
+      material: '',
+      specialsCategory: '',
     }
   });
   
@@ -59,7 +60,8 @@ export const UpdateProduct = () => {
         compositions: product.compositions || '',
         gsm: product.gsm || '',
         martindale: product.martindale || '',
-        material: product.material || ''
+        material: product.material || '',
+        specialsCategory: product.specialsCategory || '',
       });
     }
   }, [product, reset]);
@@ -95,7 +97,7 @@ export const UpdateProduct = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
+    <div className=" mx-auto p-6">
       <div className='flex justify-between content-center items-center my-4 '>
         <h1 className="text-2xl font-bold mb-6">Update Product</h1>
         <Button onClick={() => { navigate("/products") }}>
@@ -149,6 +151,16 @@ export const UpdateProduct = () => {
               />
             </div>
 
+            <div>
+              <label htmlFor="specialsCategory" className="block text-sm font-medium text-white">specialsCategory</label>
+              <input
+                id="specialsCategory"
+                type="text"
+                className="mt-1 block w-full border text-black border-gray-300 rounded-md shadow-sm p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                {...register('specialsCategory')}
+              />
+            </div>
+
             {/* Price */}
             <div>
               <label htmlFor="price" className="block text-sm font-medium text-white">Price</label>
@@ -158,7 +170,7 @@ export const UpdateProduct = () => {
                 className="mt-1 block w-full border text-black border-gray-300 rounded-md shadow-sm p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 {...register('price')}
               />
-              {errors.price && <p className="text-red-500 text-sm mt-1">{errors.price.message}</p>}
+             
             </div>
 
             {/* Discount */}
@@ -172,16 +184,7 @@ export const UpdateProduct = () => {
               />
             </div>
 
-            {/* Total Price */}
-            <div>
-              <label htmlFor="totalPrice" className="block text-sm font-medium text-white">Total Price</label>
-              <input
-                id="totalPrice"
-                type="number"
-                className="mt-1 block w-full border text-black border-gray-300 rounded-md shadow-sm p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                {...register('totalPrice', { valueAsNumber: true })}
-              />
-            </div>
+         
 
             {/* SKU Code */}
             <div>

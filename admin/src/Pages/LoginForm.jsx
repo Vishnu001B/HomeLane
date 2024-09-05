@@ -106,11 +106,10 @@ export function LoginForm() {
       </div>
       <div className="hidden bg-muted lg:block">
         <img
-          src="/placeholder.svg"
+          src="https://cdn.pixabay.com/photo/2017/06/29/07/32/furniture-2453307_1280.jpg"
           alt="Image"
-          width="1920"
-          height="1080"
-          className="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+          
+          className=" h-screen w-full object-cover dark:brightness-[0.2] dark:grayscale"
         />
       </div>
     </div>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import OtpVerification from "../components/OtpVerification";
-import { API_URL } from "../../src/constants";
+
 
 const Register = ({ toggleForm, setIsLoginModalOpen }) => {
   const [formData, setFormData] = useState({
@@ -13,6 +13,9 @@ const Register = ({ toggleForm, setIsLoginModalOpen }) => {
     password: "",
   });
   const [otpSent, setOtpSent] = useState(false);
+
+  
+  const URI = import.meta.env.VITE_API_URL;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,7 +28,7 @@ const Register = ({ toggleForm, setIsLoginModalOpen }) => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const resp = await axios.post(`${API_URL}/api/user/register`, {
+      const resp = await axios.post(`${URI}api/user/register`, {
         ...formData,
       });
       if (resp.status === 200) {

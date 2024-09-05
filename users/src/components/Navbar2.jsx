@@ -24,13 +24,18 @@ const Navbar2 = () => {
 
   useEffect(() => {
     fetchCategories();
-  }, []);
+  }, [URI]);
 
   const fetchCategories = async () => {
     try {
       const rep = await axios.get(`${URI}api/admin/categories`);
-      setCategories(rep.data);
-      console.log("Categories fetched successfully:", rep.data);
+      console.log("API Response:", rep.data); // Log the response
+      // Ensure the response data is an array
+      if (Array.isArray(rep.data)) {
+        setCategories(rep.data);
+      } else {
+        console.error("Expected an array but got:", rep.data);
+      }
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
@@ -102,9 +107,9 @@ const Navbar2 = () => {
           </div>
 
           {/* Fetched Categories Dropdown */}
-          {categories.map((category, index) => (
+          {Array.isArray(categories) && categories.map((category, index) => (
             <div key={index} className="relative p-1">
-              {category.category && (
+              {category?.category && (
                 <button
                   className="flex items-center p-2 text-black rounded hover:text-light-green-700 transition duration-200"
                   onClick={() => handleCategoryClick(index)}
@@ -115,20 +120,19 @@ const Navbar2 = () => {
               {activeCategory === index && (
                 <div className="absolute top-full left-0 mt-2 w-48 bg-gray-200 border border-gray-300 rounded shadow-lg z-30">
                   <ul>
-                    {category.subcategories &&
-                      category.subcategories.map((subcategory, subIndex) => (
-                        <li
-                          key={subIndex}
-                          className="p-2 hover:bg-gray-100 cursor-pointer transition duration-200"
+                    {category.subcategories && category.subcategories.map((subcategory, subIndex) => (
+                      <li
+                        key={subIndex}
+                        className="p-2 hover:bg-gray-100 cursor-pointer transition duration-200"
+                      >
+                        <Link
+                          to={`/subcategory/${encodeURIComponent(subcategory)}`}
+                          onClick={handleSubcategoryClick}
                         >
-                          <Link
-                            to={`/subcategory/${encodeURIComponent(subcategory)}`}
-                            onClick={handleSubcategoryClick}
-                          >
-                            {subcategory}
-                          </Link>
-                        </li>
-                      ))}
+                          {subcategory}
+                        </Link>
+                      </li>
+                    ))}
                   </ul>
                 </div>
               )}

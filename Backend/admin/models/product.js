@@ -7,7 +7,12 @@ const productSchema = new mongoose.Schema(
     descriptions: { type: String },
     categories: { type: String },
     subcategory: { type: [String] },
-
+    specialsCategory: {
+      type: [String], // Array of strings
+      enum: ["Premium", "Classic", "Economic"], // Corrected typo from "Ecommic" to "Economic"
+      default: ["Economic"], // Default value should also be an array
+    },
+    
     price: { type: Number, required: true }, // Updated to Number
     discount: { type: Number, default: 0 },
     totalPrice: { type: Number, default: 0 }, // Ensure totalPrice is a Number

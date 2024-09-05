@@ -17,7 +17,7 @@ exports.createProduct = async (req, res, next) => {
       const {
         title,
         descriptions,
-        categories,
+        category,
         subcategory,
         price,
         discount,
@@ -35,6 +35,7 @@ exports.createProduct = async (req, res, next) => {
         material,
         rollSizeHeight,
         rollSizeWeight,
+        specialsCategory
       } = req.body;
 
       // Parse price and discount as numbers, ensuring they are valid
@@ -66,7 +67,7 @@ exports.createProduct = async (req, res, next) => {
         images: imagePaths, // Store multiple image paths
         title,
         descriptions,
-        categories,
+        categories:category,
         subcategory: subcategory ? subcategory.split(",") : [], // Assuming subcategories are sent as a comma-separated string
         price: parsedPrice, // Store parsed price
         discount: parsedDiscount, // Store parsed discount
@@ -84,6 +85,7 @@ exports.createProduct = async (req, res, next) => {
         gsm,
         martindale,
         material,
+        specialsCategory
       });
 
       // Save the product document to MongoDB
@@ -152,7 +154,6 @@ exports.getAllProducts = async (req, res) => {
 
 // Update a product by its ID
 exports.updateProduct = async (req, res, next) => {
-  // Multiple file upload using multer
   upload.array("files", 10)(req, res, async (err) => {
     if (err instanceof multer.MulterError) {
       return res.status(400).json({ message: err.message });
@@ -161,10 +162,7 @@ exports.updateProduct = async (req, res, next) => {
     }
 
     try {
-      // Extract product ID from the request params (if available for update)
       const productId = req.params.id;
-
-      // Extract additional fields from the request body
       const {
         title,
         descriptions,
@@ -186,79 +184,65 @@ exports.updateProduct = async (req, res, next) => {
         material,
         rollSizeHeight,
         rollSizeWeight,
+        specialsCategory,
       } = req.body;
 
-      // Parse price and discount as numbers, ensuring they are valid
       const parsedPrice = price ? parseFloat(price) : 0;
       const parsedDiscount = discount ? parseFloat(discount) : 0;
-
-      // Calculate total price after applying the discount
       const discountAmount = (parsedPrice * parsedDiscount) / 100;
       const totalPrice = parsedPrice - discountAmount;
 
-      // Check if totalPrice is valid
       if (isNaN(totalPrice)) {
-        return res
-          .status(400)
-          .json({ message: "Invalid totalPrice calculation." });
+        return res.status(400).json({ message: "Invalid totalPrice calculation." });
       }
 
-      // Collect file paths from the uploaded files
-      const imagePaths = req.files.map((file) => file.filename);
+      const productData = {};
 
-      // Handle RollSize data
-      const rollSize = {
-        height: rollSizeHeight,
-        weight: rollSizeWeight,
-      };
+      if (title) productData.title = title;
+      if (descriptions) productData.descriptions = descriptions;
+      if (categories) productData.categories = categories;
+      if (subcategory) productData.subcategory = subcategory.split(",");
+      if (price) productData.price = parsedPrice;
+      if (discount) productData.discount = parsedDiscount;
+      if (totalPrice) productData.totalPrice = totalPrice;
+      if (skuCode) productData.skuCode = skuCode;
+      if (rating) productData.rating = rating;
+      if (productCollection) productData.productCollection = productCollection;
+      if (patternNumber) productData.patternNumber = patternNumber;
+      if (mrp_roll) productData.mrp_roll = mrp_roll;
+      if (quality) productData.quality = quality;
+      if (color) productData.color = color;
+      if (endUse) productData.endUse = endUse;
+      if (compositions) productData.compositions = compositions;
+      if (gsm) productData.gsm = gsm;
+      if (martindale) productData.martindale = martindale;
+      if (material) productData.material = material;
+      if (rollSizeHeight || rollSizeWeight) {
+        productData.RollSize = [{ height: rollSizeHeight, weight: rollSizeWeight }];
+      }
+      if (specialsCategory) productData.specialsCategory = specialsCategory;
 
-      // Prepare product data
-      const productData = {
-        images: imagePaths, // Store multiple image paths
-        title,
-        descriptions,
-        categories,
-        subcategory: subcategory ? subcategory.split(",") : [], // Assuming subcategories are sent as a comma-separated string
-        price: parsedPrice, // Store parsed price
-        discount: parsedDiscount, // Store parsed discount
-        totalPrice, // Store calculated total price
-        skuCode,
-        rating,
-        productCollection, // Renamed field
-        patternNumber,
-        RollSize: [rollSize], // Store RollSize as an array with height and weight
-        mrp_roll,
-        quality,
-        color,
-        endUse,
-        compositions,
-        gsm,
-        martindale,
-        material,
-      };
+      if (req.files.length > 0) {
+        const imagePaths = req.files.map((file) => file.filename);
+        productData.images = imagePaths;
+      }
 
-      // Create or update the product
       const upsertedProduct = await Product.findByIdAndUpdate(
         productId,
         productData,
-        { new: true, upsert: true, runValidators: true } // Create if not exists and return updated document
+        { new: true, upsert: true, runValidators: true }
       );
 
-      // Construct the file URLs
       const fileUrls = req.files.map(
-        (file) =>
-          `${req.protocol}://${req.get("host")}/uploads/${file.filename}`
+        (file) => `${req.protocol}://${req.get("host")}/uploads/${file.filename}`
       );
 
-      // Send a successful response with the product data
       res.json({
-        message: productId
-          ? "Product updated successfully"
-          : "Product created successfully",
+        message: productId ? "Product updated successfully" : "Product created successfully",
         files: req.files,
         urls: fileUrls,
-        totalPrice, // Send totalPrice in the response
-        product: upsertedProduct, // Return the upserted product data
+        totalPrice,
+        product: upsertedProduct,
       });
     } catch (error) {
       res.status(500).json({
@@ -268,6 +252,7 @@ exports.updateProduct = async (req, res, next) => {
     }
   });
 };
+
 
 // Delete a product by ID
 exports.deleteProductById = async (req, res, next) => {

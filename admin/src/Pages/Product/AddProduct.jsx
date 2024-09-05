@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 // Initial categories and subcategories data
 const initialCategories = [
   {
-    category: "InteriorDesign",
+    category: "Interior Design",
     subcategories: [
       "Full Home Interior",
       "Wardrobe",
@@ -67,6 +67,14 @@ const initialCategories = [
   },
 ];
 
+const specialsCategoryOptions = [
+  { value: 'Premium', label: 'Premium' },
+  { value: 'Classic', label: 'Classic' },
+  { value: 'Economic', label: 'Economic' },
+  
+];
+
+
 export const AddProduct = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [images, setImages] = useState([]);
@@ -114,7 +122,7 @@ export const AddProduct = () => {
     setSelectedSubcategory('');
   };
 
-  const handleSubcategoryChange = (e) => {
+  const handleSubcategoryChange = (e) => {  
     setSelectedSubcategory(e.target.value);
   };
 
@@ -127,9 +135,9 @@ export const AddProduct = () => {
 
   const addSubcategory = () => {
     if (newSubcategory.trim() && selectedCategory) {
-      setCategories(categories.map(cat => 
-        cat.category === selectedCategory 
-          ? { ...cat, subcategories: [...cat.subcategories, newSubcategory] } 
+      setCategories(categories.map(cat =>
+        cat.category === selectedCategory
+          ? { ...cat, subcategories: [...cat.subcategories, newSubcategory] }
           : cat
       ));
       setNewSubcategory('');
@@ -138,7 +146,7 @@ export const AddProduct = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
+    <div className=" mx-auto p-6">
       <div className='flex justify-between items-center my-4'>
         <h1 className="text-2xl font-bold mb-6">Add New Product</h1>
         <Button onClick={() => navigate("/products")}>Back</Button>
@@ -233,7 +241,24 @@ export const AddProduct = () => {
                 )}
               </div>
             )}
-             <div>
+
+            <div>
+              <label htmlFor="specialsCategory" className="block text-sm font-medium text-white">Specials Category</label>
+              <select
+                id="specialsCategory"
+                className="mt-1 block w-full text-black border border-gray-300 rounded-md shadow-sm p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                {...register('specialsCategory')}
+              >
+                <option value="">Select Specials Category</option>
+                {specialsCategoryOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
               <label htmlFor="price" className="block text-sm font-medium text-white">Price</label>
               <input
                 id="price"
@@ -255,16 +280,7 @@ export const AddProduct = () => {
               />
             </div>
 
-            {/* Total Price */}
-            <div>
-              <label htmlFor="totalPrice" className="block text-sm font-medium text-white">Total Price</label>
-              <input
-                id="totalPrice"
-                type="number"
-                className="mt-1 block w-full border text-black border-gray-300 rounded-md shadow-sm p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                {...register('totalPrice', { valueAsNumber: true })}
-              />
-            </div>
+
 
             {/* SKU Code */}
             <div>
