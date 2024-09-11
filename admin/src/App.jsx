@@ -3,6 +3,8 @@ import { Outlet, useLocation } from "react-router-dom";
 import Navbar from './components/Navbar';
 import Header from './components/Header';
 
+
+
 function App() {
   const location = useLocation();
 
@@ -23,6 +25,8 @@ function App() {
         )}
         <Outlet />
       </div>
+ 
+   
     </>
   );
 }

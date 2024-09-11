@@ -17,6 +17,9 @@ import  MangeCatogry  from './Pages/catogry/MangeCatogry';
 import NavbarController from './components/NavbarController';
 import MangeBanner from './Pages/banner/MangeBanner';
 import Product from './Pages/Product/Product';
+import Order from './Pages/Order';
+
+import BookOrder from './Pages/BookOrder';
 
 
 // Create the router instance
@@ -60,6 +63,14 @@ const router = createBrowserRouter([
       },{
         path: '/Product-Details',
         element: <Product/>,
+      },
+      {
+        path: '/order',
+        element: <Order/>,
+      },
+      {
+        path: '/order-book',
+        element: <BookOrder/>,
       }
     ],
   },
