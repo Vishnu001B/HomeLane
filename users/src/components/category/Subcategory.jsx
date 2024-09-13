@@ -21,7 +21,11 @@ const Subcategory = () => {
 
   const fetchCategories = async () => {
     try {
-      const resp = await axios.get(`${URI}api/admin/getProductBySubcategory/${encodeURIComponent(selectName)}`);
+      const resp = await axios.get(
+        `${URI}api/admin/getProductBySubcategory/${encodeURIComponent(
+          selectName
+        )}`
+      );
       if (resp.data.success) {
         setCategoriesData(resp.data.productsBySubcategory); // Set the categories data
       }

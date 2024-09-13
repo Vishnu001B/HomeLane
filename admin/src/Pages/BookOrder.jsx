@@ -1,55 +1,62 @@
-import React from 'react';
+import React from "react";
 
 const orders = [
   {
     id: 1,
-    date: 'Sep 11, 2024 5:28 PM',
-    customerName: 'Anish',
-    phone: '6363022752',
-    pickupLocation: '393, Channasandra, Srinivaspura, Bengaluru, Karnataka 560060, India',
-    dropLocation: '2F5H+3JW, Andrahalli, Bengaluru, Karnataka 560091, India',
-    city: 'Bangalore',
-    status: 'Update',
+    date: "Sep 11, 2024 5:28 PM",
+    customerName: "Anish",
+    phone: "6363022752",
+    pickupLocation:
+      "393, Channasandra, Srinivaspura, Bengaluru, Karnataka 560060, India",
+    dropLocation: "2F5H+3JW, Andrahalli, Bengaluru, Karnataka 560091, India",
+    city: "Bangalore",
+    status: "Update",
   },
   {
     id: 2,
-    date: 'Sep 9, 2024 12:17 PM',
-    customerName: 'Ram',
-    phone: '6363427479',
-    pickupLocation: 'Shop No 1, Appanna Layout, Outer Ring Rd, Mahadevapura, Bengaluru, Karnataka 560048, India',
-    dropLocation: '6-11, off B.M. Kaval, off Kanakapura Road, Thathaguni, Bengaluru, Karnataka 560062, India',
-    city: 'Bangalore',
-    status: 'Update',
+    date: "Sep 9, 2024 12:17 PM",
+    customerName: "Ram",
+    phone: "6363427479",
+    pickupLocation:
+      "Shop No 1, Appanna Layout, Outer Ring Rd, Mahadevapura, Bengaluru, Karnataka 560048, India",
+    dropLocation:
+      "6-11, off B.M. Kaval, off Kanakapura Road, Thathaguni, Bengaluru, Karnataka 560062, India",
+    city: "Bangalore",
+    status: "Update",
   },
   {
     id: 3,
-    date: 'Sep 9, 2024 6:22 PM',
-    customerName: 'Pankaj',
-    phone: '7760779659',
-    pickupLocation: '01, Near, Mahadevapura Flyover, Mahadevapura, Bengaluru, Karnataka 560048, India',
-    dropLocation: '01, Amarjyothi Colony, Cholanayakanahalli, Hebbal, Bengaluru, Karnataka 560032, India',
-    city: 'Lucknow',
-    status: 'Update',
+    date: "Sep 9, 2024 6:22 PM",
+    customerName: "Pankaj",
+    phone: "7760779659",
+    pickupLocation:
+      "01, Near, Mahadevapura Flyover, Mahadevapura, Bengaluru, Karnataka 560048, India",
+    dropLocation:
+      "01, Amarjyothi Colony, Cholanayakanahalli, Hebbal, Bengaluru, Karnataka 560032, India",
+    city: "Lucknow",
+    status: "Update",
   },
   {
     id: 4,
-    date: 'Aug 30, 2024 5:28 PM',
-    customerName: 'yogesh nnc11',
-    phone: '6363022752',
-    pickupLocation: '393, Channasandra, Srinivaspura, Bengaluru, Karnataka 560060, India',
-    dropLocation: '2F5H+3JW, Andrahalli, Bengaluru, Karnataka 560091, India',
-    city: 'Bangalore',
-    status: 'Update',
+    date: "Aug 30, 2024 5:28 PM",
+    customerName: "yogesh nnc11",
+    phone: "6363022752",
+    pickupLocation:
+      "393, Channasandra, Srinivaspura, Bengaluru, Karnataka 560060, India",
+    dropLocation: "2F5H+3JW, Andrahalli, Bengaluru, Karnataka 560091, India",
+    city: "Bangalore",
+    status: "Update",
   },
   {
     id: 5,
-    date: 'Aug 30, 2024 5:28 PM',
-    customerName: 'yogesh nnc11',
-    phone: '6363022752',
-    pickupLocation: '393, Channasandra, Srinivaspura, Bengaluru, Karnataka 560060, India',
-    dropLocation: '2F5H+3JW, Andrahalli, Bengaluru, Karnataka 560091, India',
-    city: 'Bangalore',
-    status: 'Update',
+    date: "Aug 30, 2024 5:28 PM",
+    customerName: "yogesh nnc11",
+    phone: "6363022752",
+    pickupLocation:
+      "393, Channasandra, Srinivaspura, Bengaluru, Karnataka 560060, India",
+    dropLocation: "2F5H+3JW, Andrahalli, Bengaluru, Karnataka 560091, India",
+    city: "Bangalore",
+    status: "Update",
   },
 ];
 
@@ -58,11 +65,11 @@ const BookOrder = () => {
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Try to booking Order</h1>
       <p className="text-sm text-green-600 mb-4">List of Orders</p>
-      
+
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-200 shadow-md rounded-lg">
           <thead>
-            <tr className="bg-green-100 text-left">
+            <tr className=" bg-blue-300 text-left">
               <th className="py-2 px-4 border-b">Date</th>
               <th className="py-2 px-4 border-b">Customer Name</th>
               <th className="py-2 px-4 border-b">Phone No.</th>

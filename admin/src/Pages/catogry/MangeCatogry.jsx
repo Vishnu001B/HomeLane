@@ -138,7 +138,7 @@ const MangeCatogry = () => {
 
       {/* Display categories in a full-screen table */}
       <div className="overflow-x-auto max-h-screen">
-        <table className="min-w-full bg-blue-300  text-black border-collapse">
+        <table className="min-w-full bg-blue-300 text-black border-collapse">
           <thead className="flex-row items-center content-center justify-center">
             <tr>
               <th className="sticky top-0 px-6 py-3 border-b-2 border-gray-700 bg-blue-500">

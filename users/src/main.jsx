@@ -61,28 +61,28 @@ const router = createBrowserRouter([
       },
       {
         path: "/CheckoutForm",
-        element: <CheckoutForm/>,
+        element: <CheckoutForm />,
       },
       {
         path: "/viewCartDeatils",
-        element: <ViewCartAndUpdateCart/>,
-      },
-      { 
-        path:"/verticalGarden/:name",
-        element:<VerticalGarden/>
+        element: <ViewCartAndUpdateCart />,
       },
       {
-        path:"/AboutUs",
-        element:<AboutUs/>
+        path: "/verticalGarden/:name",
+        element: <VerticalGarden />,
       },
       {
-        path:"/ContactUs",
-        element:<ContactUs/>
+        path: "/AboutUs",
+        element: <AboutUs />,
       },
       {
-        path:"/Testimonials",
-        element:<TestimonialSlider/>
-      }
+        path: "/ContactUs",
+        element: <ContactUs />,
+      },
+      {
+        path: "/Testimonials",
+        element: <TestimonialSlider />,
+      },
     ],
   },
 ]);
