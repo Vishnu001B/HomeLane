@@ -3,6 +3,7 @@ const dotenv = require("dotenv").config();
 const connectDB = require("./config/db");
 const cors = require("cors");
 const userRoutes = require("./user/routes/userRoutes");
+const quotetionRoutes = require("./admin/routes/quotetionRoutes");
 
 const productRoutes = require("./admin/routes/productRoutes");
 
@@ -45,6 +46,7 @@ app.use("/api/admin", productRoutes);
 app.use("/api/categories", categoryRoutes);
 
 app.use("/api/quotes", quoteRoutes);
+app.use('/api', quotetionRoutes);
 
 //deliver boys Users
 

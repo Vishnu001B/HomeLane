@@ -21,6 +21,7 @@ import Order from "./Pages/Order";
 
 import BookOrder from "./Pages/BookOrder";
 import Testimonials from "./Pages/quote/Testimonials";
+import QuotetionForm from "./Pages/QuotetionForm";
 
 // Create the router instance
 const router = createBrowserRouter([
@@ -80,6 +81,10 @@ const router = createBrowserRouter([
       {
         path: "/testimonials",
         element: <Testimonials />,
+      },
+      {
+        path: "/quotetionForm",
+        element: <QuotetionForm />,
       },
     ],
   },

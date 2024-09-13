@@ -100,6 +100,14 @@ const Navbar = () => {
                 <Edit className="h-5 w-5" />
                 Manage Banner
               </Link>
+
+              <Link
+                to="/testimonials"
+                className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+              >
+                <Users className="h-5 w-5" />
+              Testimonials
+              </Link>
             </div>
           )}
         </div>
@@ -194,7 +202,7 @@ const Navbar = () => {
                 Enquiry
               </Link>
               <Link
-                to="/manage-category"
+                to="/quotetionForm"
                 className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
               >
                 <Edit className="h-5 w-5" />
