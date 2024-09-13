@@ -1,23 +1,26 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from "react";
 
 const testimonials = [
   {
-    img: 'https://cruip-tutorials.vercel.app/fancy-testimonials-slider/testimonial-01.jpg',
-    quote: "The ability to capture responses is a game-changer. If a user gets tired of the sign-up and leaves, that data is still persisted. Additionally, it's great to select between formats.",
-    name: 'Jessie J',
-    role: 'Acme LTD'
+    img: "https://cruip-tutorials.vercel.app/fancy-testimonials-slider/testimonial-01.jpg",
+    quote:
+      "The ability to capture responses is a game-changer. If a user gets tired of the sign-up and leaves, that data is still persisted. Additionally, it's great to select between formats.",
+    name: "Jessie J",
+    role: "Acme LTD",
   },
   {
-    img: 'https://cruip-tutorials.vercel.app/fancy-testimonials-slider/testimonial-02.jpg',
-    quote: "Having the power to capture user feedback is revolutionary. Even if a participant abandons the sign-up process midway, their valuable input remains intact.",
-    name: 'Nick V',
-    role: 'Malika Inc.'
+    img: "https://cruip-tutorials.vercel.app/fancy-testimonials-slider/testimonial-02.jpg",
+    quote:
+      "Having the power to capture user feedback is revolutionary. Even if a participant abandons the sign-up process midway, their valuable input remains intact.",
+    name: "Nick V",
+    role: "Malika Inc.",
   },
   {
-    img: 'https://cruip-tutorials.vercel.app/fancy-testimonials-slider/testimonial-03.jpg',
-    quote: "The functionality to capture responses is a true game-changer. Even if a user becomes fatigued during sign-up and abandons the process, their information remains stored.",
-    name: 'Amelia W',
-    role: 'Panda AI'
+    img: "https://cruip-tutorials.vercel.app/fancy-testimonials-slider/testimonial-03.jpg",
+    quote:
+      "The functionality to capture responses is a true game-changer. Even if a user becomes fatigued during sign-up and abandons the process, their information remains stored.",
+    name: "Amelia W",
+    role: "Panda AI",
   },
 ];
 
@@ -63,7 +66,9 @@ const TestimonialSlider = () => {
               <div
                 key={index}
                 className={`absolute inset-0 -z-10 transition duration-700 ease-[cubic-bezier(0.68,-0.3,0.32,1)] ${
-                  active === index ? 'opacity-100 rotate-0' : 'opacity-0 -rotate-[60deg]'
+                  active === index
+                    ? "opacity-100 rotate-0"
+                    : "opacity-0 -rotate-[60deg]"
                 }`}
               >
                 <img
@@ -85,7 +90,9 @@ const TestimonialSlider = () => {
           <div
             key={index}
             className={`relative flex flex-col transition-all duration-150 delay-300 ease-in-out ${
-              active === index ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4 absolute'
+              active === index
+                ? "opacity-100 translate-x-0"
+                : "opacity-0 translate-x-4 absolute"
             }`}
           >
             <div className="text-2xl font-bold text-slate-900 before:content-['\201C'] after:content-['\201D']">
@@ -101,7 +108,9 @@ const TestimonialSlider = () => {
           <button
             key={index}
             className={`inline-flex justify-center whitespace-nowrap rounded-full px-3 py-1.5 m-1.5 text-xs shadow-sm focus-visible:outline-none focus-visible:ring focus-visible:ring-indigo-300 dark:focus-visible:ring-slate-600 transition-colors duration-150 ${
-              active === index ? 'bg-indigo-500 text-white shadow-indigo-950/10' : 'bg-white hover:bg-indigo-100 text-slate-900'
+              active === index
+                ? "bg-indigo-500 text-white shadow-indigo-950/10"
+                : "bg-white hover:bg-indigo-100 text-slate-900"
             }`}
             onClick={() => {
               setActive(index);
@@ -109,7 +118,14 @@ const TestimonialSlider = () => {
             }}
           >
             <span>{testimonial.name}</span>
-            <span className={active === index ? 'text-indigo-200' : 'text-slate-300'}> - </span>
+            <span
+              className={
+                active === index ? "text-indigo-200" : "text-slate-300"
+              }
+            >
+              {" "}
+              -{" "}
+            </span>
             <span>{testimonial.role}</span>
           </button>
         ))}
