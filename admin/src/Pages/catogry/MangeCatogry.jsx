@@ -138,26 +138,36 @@ const MangeCatogry = () => {
 
       {/* Display categories in a full-screen table */}
       <div className="overflow-x-auto max-h-screen">
-        <table className="min-w-full bg-gray-800 text-white border-collapse">
+        <table className="min-w-full bg-blue-300  text-black border-collapse">
           <thead className="flex-row items-center content-center justify-center">
             <tr>
-              <th className="sticky top-0 px-6 py-3 border-b-2 border-gray-700 bg-gray-900">Image</th>
-              <th className="sticky top-0 px-6 py-3 border-b-2 border-gray-700 bg-gray-900">Category</th>
-              <th className="sticky top-0 px-6 py-3 border-b-2 border-gray-700 bg-gray-900">Subcategories</th>
-              <th className="sticky top-0 px-6 py-3 border-b-2 border-gray-700 bg-gray-900">Actions</th>
+              <th className="sticky top-0 px-6 py-3 border-b-2 border-gray-700 bg-blue-500">
+                Image
+              </th>
+              <th className="sticky top-0 px-6 py-3 border-b-2 border-gray-700  bg-blue-500">
+                Category
+              </th>
+              <th className="sticky top-0 px-6 py-3 border-b-2 border-gray-700  bg-blue-500">
+                Subcategories
+              </th>
+              <th className="sticky top-0 px-6 py-3 border-b-2 border-gray-700  bg-blue-500">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody className="">
             {filteredCategories.map((data, index) => (
-              <tr key={index} >
-                <td className="px-6 py-4 border-b border-gray-700 flex-row items-center content-center justify-center" >
+              <tr key={index}>
+                <td className="px-6 py-4 border-b border-gray-700 flex-row items-center content-center justify-center">
                   <img
                     src={`${URI}${data.images?.[0] || "placeholder-image.jpg"}`}
                     alt={data.category}
                     className="h-16 w-16 object-cover rounded-lg"
                   />
                 </td>
-                <td className="px-6 py-4 border-b border-gray-700 text-center">{data.category}</td>
+                <td className="px-6 py-4 border-b border-gray-700 text-center">
+                  {data.category}
+                </td>
                 <td className="px-6 py-4 border-b border-gray-700 text-center">
                   {data.subcategories.join(", ")}
                 </td>

@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import Swal from 'sweetalert2';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 const NavbarController = () => {
   const URI = import.meta.env.VITE_API_URL;
 
   const [formData, setFormData] = useState({
-    categories: '',
+    categories: "",
     subcategories: [],
   });
   const [categories, setCategories] = useState([]);
   const [editingCategory, setEditingCategory] = useState(null);
-  const [subcategoryInput, setSubcategoryInput] = useState('');
+  const [subcategoryInput, setSubcategoryInput] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -23,14 +23,14 @@ const NavbarController = () => {
   const fetchCategories = async () => {
     try {
       const response = await axios.get(`${URI}api/admin/navheaders`);
-      console.log('Fetched categories:', response.data);
+      console.log("Fetched categories:", response.data);
       setCategories(response.data);
     } catch (error) {
-      console.error('Error fetching categories:', error);
+      console.error("Error fetching categories:", error);
       Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Failed to fetch categories',
+        icon: "error",
+        title: "Error",
+        text: "Failed to fetch categories",
       });
     } finally {
       setLoading(false); // Set loading to false after fetch
@@ -56,7 +56,7 @@ const NavbarController = () => {
         ...prevData,
         subcategories: [...prevData.subcategories, trimmedInput],
       }));
-      setSubcategoryInput(''); // Clear input field
+      setSubcategoryInput(""); // Clear input field
     }
   };
 
@@ -65,32 +65,37 @@ const NavbarController = () => {
     try {
       if (editingCategory) {
         // Update existing category
-        await axios.put(`${URI}api/admin/navheaders/${editingCategory._id}`, formData);
+        await axios.put(
+          `${URI}api/admin/navheaders/${editingCategory._id}`,
+          formData
+        );
         Swal.fire({
-          icon: 'success',
-          title: 'Success',
-          text: 'Category updated successfully!',
+          icon: "success",
+          title: "Success",
+          text: "Category updated successfully!",
         });
         setEditingCategory(null);
       } else {
         // Create new category
         await axios.post(`${URI}api/admin/navheaders`, formData);
         Swal.fire({
-          icon: 'success',
-          title: 'Success',
-          text: 'Category and Subcategory created successfully!',
+          icon: "success",
+          title: "Success",
+          text: "Category and Subcategory created successfully!",
         });
       }
       fetchCategories(); // Refresh category list
-      setFormData({ categories: '', subcategories: [] }); // Reset form
+      setFormData({ categories: "", subcategories: [] }); // Reset form
       setIsModalOpen(false); // Close the modal
     } catch (error) {
       Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: `Failed to ${editingCategory ? 'update' : 'create'} category: ${error.message}`,
+        icon: "error",
+        title: "Error",
+        text: `Failed to ${editingCategory ? "update" : "create"} category: ${
+          error.message
+        }`,
       });
-      console.error('Error submitting data:', error);
+      console.error("Error submitting data:", error);
     }
   };
 
@@ -105,31 +110,27 @@ const NavbarController = () => {
 
   const handleDelete = async (categoryId) => {
     const result = await Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "You won't be able to revert this!",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!',
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
     });
 
     if (result.isConfirmed) {
       try {
         await axios.delete(`${URI}api/admin/navheaders/${categoryId}`);
-        Swal.fire(
-          'Deleted!',
-          'Category has been deleted.',
-          'success'
-        );
+        Swal.fire("Deleted!", "Category has been deleted.", "success");
         fetchCategories(); // Refresh category list
       } catch (error) {
         Swal.fire({
-          icon: 'error',
-          title: 'Error',
+          icon: "error",
+          title: "Error",
           text: `Failed to delete category: ${error.message}`,
         });
-        console.error('Error deleting category:', error);
+        console.error("Error deleting category:", error);
       }
     }
   };
@@ -149,13 +150,16 @@ const NavbarController = () => {
       {/* Modal for adding/editing category */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="bg-black p-6 rounded-lg shadow-lg w-full max-w-md">
+          <div className="bg-blue-500 p-6 rounded-lg shadow-lg w-full max-w-md">
             <h2 className="text-2xl font-semibold mb-4">
-              {editingCategory ? 'Edit Category' : 'Add Category'}
+              {editingCategory ? "Edit Category" : "Add Category"}
             </h2>
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
-                <label htmlFor="categories" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="categories"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Category
                 </label>
                 <input
@@ -169,7 +173,10 @@ const NavbarController = () => {
                 />
               </div>
               <div className="mb-4">
-                <label htmlFor="subcategories" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="subcategories"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Subcategories
                 </label>
                 <div className="flex mb-2">
@@ -208,7 +215,7 @@ const NavbarController = () => {
                   type="submit"
                   className="px-4 py-2 bg-green-500 text-white rounded-md shadow-sm hover:bg-green-600"
                 >
-                  {editingCategory ? 'Update Category' : 'Add Navbar'}
+                  {editingCategory ? "Update Category" : "Add Navbar"}
                 </button>
               </div>
             </form>
@@ -216,7 +223,9 @@ const NavbarController = () => {
         </div>
       )}
 
-      <div className="h-[70%] overflow-x-auto"> {/* Add horizontal scrolling */}
+      <div className="h-[70%] overflow-x-auto">
+        {" "}
+        {/* Add horizontal scrolling */}
         {loading ? (
           <p>Loading...</p>
         ) : categories.length > 0 ? (
@@ -224,9 +233,15 @@ const NavbarController = () => {
             <table className="min-w-full bg-white divide-y divide-gray-200">
               <thead>
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subcategories</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Category
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Subcategories
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
