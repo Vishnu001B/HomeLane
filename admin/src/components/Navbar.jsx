@@ -19,6 +19,9 @@ const Navbar = () => {
 
   const [showVendorManagmentOptions, setShowVendorManagmentOptions] =
     useState(false);
+
+
+    const [showContentManagmentOptions , setShowContentManagmentOptions] = useState(false);
   const toggleOptions = () => {
     setShowManageProductOptions(!showManageProductOptions);
   };
@@ -33,6 +36,9 @@ const Navbar = () => {
 
   const togalVendorManagmentOptions = () => {
     setShowVendorManagmentOptions(!showVendorManagmentOptions);
+  };
+  const toggleContentManagmentOptions = () => {
+    setShowContentManagmentOptions(!showContentManagmentOptions);
   };
 
   return (
@@ -237,6 +243,63 @@ const Navbar = () => {
               >
                 <Users className="h-5 w-5" />
                 Manage Navbar
+              </Link>
+              <Link
+                to="/create-product"
+                className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+              >
+                <Package className="h-5 w-5" />
+                Create Product
+              </Link>
+              <Link
+                to="/Mange-product"
+                className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+              >
+                <Package className="h-5 w-5" />
+                Product
+              </Link>
+              <Link
+                to="/manage-category"
+                className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+              >
+                <Edit className="h-5 w-5" />
+                Category
+              </Link>
+              <Link
+                to="/manage-category"
+                className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+              >
+                <Edit className="h-5 w-5" />
+                Subcategory
+              </Link>
+
+              <Link
+                to="/manage-banner"
+                className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+              >
+                <Edit className="h-5 w-5" />
+                Manage Banner
+              </Link>
+            </div>
+          )}
+        </div>
+  {/* content Managment  Options */}
+        <div>
+          <button
+            onClick={toggleContentManagmentOptions}
+            className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground focus:outline-none"
+          >
+            <Package className="h-5 w-5" />
+            Content Managment
+          </button>
+          {showContentManagmentOptions && (
+            <div className="ml-8 mt-2 space-y-2">
+              <Link
+                to="/bannerContent"
+                className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+              >
+                <Users className="h-5 w-5" />
+                Banner Content
               </Link>
               <Link
                 to="/create-product"

@@ -83,6 +83,7 @@ const router = createBrowserRouter([
         path: "/Testimonials",
         element: <TestimonialSlider />,
       },
+     
     ],
   },
 ]);
