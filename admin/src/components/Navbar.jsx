@@ -302,18 +302,18 @@ const Navbar = () => {
                 Banner Content
               </Link>
               <Link
-                to="/create-product"
+                to="/aboutContent"
                 className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
               >
                 <Package className="h-5 w-5" />
-                Create Product
+                About Us
               </Link>
               <Link
-                to="/Mange-product"
+                to="/PrivacyPolicy"
                 className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
               >
                 <Package className="h-5 w-5" />
-                Product
+                Privacy policy
               </Link>
               <Link
                 to="/manage-category"

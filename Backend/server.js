@@ -22,6 +22,9 @@ const categoryRoutes = require("./admin/routes/category.routes");
 const quoteRoutes = require("./admin/routes/quoteRoutes");
 
 const bannerRoutes = require("../Backend/contentManagment/routes/banner");
+const aboutRoutes = require("../Backend/contentManagment/routes/about");
+
+const privacyRoutes = require("../Backend/contentManagment/routes/privacyPolicy")
 
 const path = require("path");
 
@@ -52,6 +55,9 @@ app.use('/api', quotetionRoutes);
 
 //content Managment
 app.use('/api/content-banner', bannerRoutes);
+
+app.use('/api/content-about', aboutRoutes)
+app.use('/api' , privacyRoutes)
 
 //deliver boys Users
 

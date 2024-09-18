@@ -23,6 +23,9 @@ import BookOrder from "./Pages/BookOrder";
 import Testimonials from "./Pages/quote/Testimonials";
 import QuotetionForm from "./Pages/QuotetionForm";
 import BannerContent from "./Pages/contentManagment/BannerContent";
+import { About } from "./components/contentManagment/About";
+import AboutGet from "./components/contentManagment/AboutGet";
+import PrivacyPolicy from "./components/contentManagment/PrivacyPolicy";
 
 // Create the router instance
 const router = createBrowserRouter([
@@ -90,6 +93,15 @@ const router = createBrowserRouter([
       {
         path: "/bannerContent",
         element: <BannerContent />,
+      },
+      {
+        path: "/aboutContent",
+        element: <About />,
+      },
+   
+      {
+        path: "/privacyPolicy",
+        element: <PrivacyPolicy/>,
       },
     ],
   },
