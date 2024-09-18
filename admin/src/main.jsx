@@ -26,6 +26,7 @@ import BannerContent from "./Pages/contentManagment/BannerContent";
 import { About } from "./components/contentManagment/About";
 import AboutGet from "./components/contentManagment/AboutGet";
 import PrivacyPolicy from "./components/contentManagment/PrivacyPolicy";
+import Enquiry from "./components/Enquiry";
 
 // Create the router instance
 const router = createBrowserRouter([
@@ -102,6 +103,10 @@ const router = createBrowserRouter([
       {
         path: "/privacyPolicy",
         element: <PrivacyPolicy/>,
+      },
+      {
+        path: "/enquiry",
+        element: <Enquiry/>,
       },
     ],
   },

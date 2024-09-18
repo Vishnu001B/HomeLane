@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import axios from "axios";
 
 const ProductDetailsModal = ({ product, onClose }) => {
-  const [phone, setPhone] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState(""); // Updated variable name
   const [name, setName] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const navigate = useNavigate();
@@ -14,10 +15,46 @@ const ProductDetailsModal = ({ product, onClose }) => {
     setIsVisible(true);
   }, []);
 
-  const handleSubmit = () => {
-    if (name && phone) {
-      navigate("/productDetails", { state: { product } });
-      onClose();
+  const handleSubmit = async () => {
+    if (name && phoneNumber) {
+      try {
+        // Log the data being sent
+        console.log("Submitting data:", { name, phoneNumber });
+
+        // Prepare the data
+        const payload = {
+          name: name, // Directly matching what your backend expects
+          phoneNumber: phoneNumber, // Directly matching what your backend expects
+        };
+
+        // Send POST request to API
+        const response = await axios.post("http://localhost:5002/api/user/save", payload);
+
+        // Check response and navigate or show success message
+        if (response.status === 201) {
+          Swal.fire({
+            title: "Success",
+            text: "Data submitted successfully!",
+            icon: "success",
+            confirmButtonText: "OK",
+          });
+
+          // Navigate to the product details page
+          navigate("/productDetails", { state: { product } });
+          onClose();
+        }
+      } catch (error) {
+        // Log the error
+        console.error("Error submitting data:", error.response?.data || error.message);
+
+        // Handle error
+        Swal.fire({
+          title: "Submission Failed",
+          text: error.response?.data?.message || "There was an error submitting the data.",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+      }
     } else {
       Swal.fire({
         title: "Submission Failed",
@@ -90,8 +127,8 @@ const ProductDetailsModal = ({ product, onClose }) => {
               <input
                 type="number"
                 placeholder="Enter your phone number"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
                 className="border border-gray-500 p-3 rounded-md w-full mb-6 focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
               <button

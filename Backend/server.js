@@ -26,6 +26,8 @@ const aboutRoutes = require("../Backend/contentManagment/routes/about");
 
 const privacyRoutes = require("../Backend/contentManagment/routes/privacyPolicy")
 
+const UserDetailsRouter = require("../Backend/user/routes/userdetails");
+
 const path = require("path");
 
 connectDB();
@@ -44,6 +46,8 @@ app.use("/api/user", userRoutes);
 
 app.use("/api/user", bookNow);
 
+app.use("/api/user", UserDetailsRouter);
+
 app.use("/api/admin", admin);
 
 app.use("/api/admin", banner);
@@ -52,6 +56,7 @@ app.use("/api/categories", categoryRoutes);
 
 app.use("/api/quotes", quoteRoutes);
 app.use('/api', quotetionRoutes);
+
 
 //content Managment
 app.use('/api/content-banner', bannerRoutes);
