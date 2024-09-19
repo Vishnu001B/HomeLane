@@ -1,71 +1,71 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 // Initial categories and subcategories data
-const initialCategories = [
-  {
-    category: "Interior Design",
-    subcategories: [
-      "Full Home Interior",
-      "Wardrobe",
-      "Kitchen",
-      "Living Room",
-      "False Ceiling",
-      "Interior Lighting",
-    ],
-  },
-  {
-    category: "Curtains",
-    subcategories: ["Readymade Curtains", "Customized Curtains"],
-  },
-  {
-    category: "Blinds",
-    subcategories: [
-      "Roman Blinds",
-      "Zebra Blinds",
-      "Wooden Blinds",
-      "PVC Blinds",
-      "Roller Blinds",
-    ],
-  },
-  {
-    category: "Mattress",
-    subcategories: ["Peps Mattress"],
-  },
-  {
-    category: "Wallpapers",
-    subcategories: [
-      "Customized Wallpapers",
-      "Imported Wallpapers",
-      "Foam Panels",
-      "Kitchen Wallpapers",
-      "Bathroom Wallpapers",
-    ],
-  },
-  {
-    category: "Furniture",
-    subcategories: [
-      "Customized Sofa Set",
-      "Customized Bed",
-      "Customized Dining Table & Chair",
-    ],
-  },
-  {
-    category: "Flooring",
-    subcategories: [
-      "Wooden Flooring",
-      "Vinyl Flooring",
-      "Artificial Grass",
-      "Wall-to-wall Carpet",
-      "Carpet Tiles",
-      "Handmade Carpets",
-      "Gym Tiles",
-    ],
-  },
-];
+// const initialCategories = [
+//   {
+//     category: "Interior Design",
+//     subcategories: [
+//       "Full Home Interior",
+//       "Wardrobe",
+//       "Kitchen",
+//       "Living Room",
+//       "False Ceiling",
+//       "Interior Lighting",
+//     ],
+//   },
+//   {
+//     category: "Curtains",
+//     subcategories: ["Readymade Curtains", "Customized Curtains"],
+//   },
+//   {
+//     category: "Blinds",
+//     subcategories: [
+//       "Roman Blinds",
+//       "Zebra Blinds",
+//       "Wooden Blinds",
+//       "PVC Blinds",
+//       "Roller Blinds",
+//     ],
+//   },
+//   {
+//     category: "Mattress",
+//     subcategories: ["Peps Mattress"],
+//   },
+//   {
+//     category: "Wallpapers",
+//     subcategories: [
+//       "Customized Wallpapers",
+//       "Imported Wallpapers",
+//       "Foam Panels",
+//       "Kitchen Wallpapers",
+//       "Bathroom Wallpapers",
+//     ],
+//   },
+//   {
+//     category: "Furniture",
+//     subcategories: [
+//       "Customized Sofa Set",
+//       "Customized Bed",
+//       "Customized Dining Table & Chair",
+//     ],
+//   },
+//   {
+//     category: "Flooring",
+//     subcategories: [
+//       "Wooden Flooring",
+//       "Vinyl Flooring",
+//       "Artificial Grass",
+//       "Wall-to-wall Carpet",
+//       "Carpet Tiles",
+//       "Handmade Carpets",
+//       "Gym Tiles",
+//     ],
+//   },
+// ];
 
 const specialsCategoryOptions = [
   { value: "Premium", label: "Premium" },
@@ -74,19 +74,37 @@ const specialsCategoryOptions = [
 ];
 
 export const AddProduct = () => {
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
   const [images, setImages] = useState([]);
-  const [categories, setCategories] = useState(initialCategories);
+  const [categories, setCategories] = useState("");
   const [newCategory, setNewCategory] = useState("");
   const [newSubcategory, setNewSubcategory] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSubcategory, setSelectedSubcategory] = useState("");
   const navigate = useNavigate();
   const URI = import.meta.env.VITE_API_URL;
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const resp = await axios.get(`${URI}api/categories/`);
+      setCategories(resp.data);
+      console.log(setCategories(resp.data));
+      
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
+
+
 
   const onSubmit = async (data) => {
     const formData = new FormData();
@@ -112,7 +130,7 @@ export const AddProduct = () => {
         }
       );
       console.log("Product added successfully", response.data);
-      navigate("/Product-Details");
+      navigate("/Mange-product");
     } catch (error) {
       console.error("Error adding product", error);
     }
@@ -202,7 +220,7 @@ export const AddProduct = () => {
             </div>
 
             {/* Category Selection */}
-            <div>
+            {/* <div>
               <label
                 htmlFor="category"
                 className="block text-sm font-medium text-black"
@@ -238,7 +256,43 @@ export const AddProduct = () => {
                   </Button>
                 </div>
               )}
-            </div>
+            </div> */}
+
+<div>
+            <label htmlFor="category" className="block text-sm font-medium text-black">
+              Category
+            </label>
+            <select
+              id="category"
+              className="mt-1 block w-full text-black border border-gray-300 rounded-md shadow-sm p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              {...register("category")}
+              onChange={handleCategoryChange}
+              value={selectedCategory}
+            >
+              <option value="">Select Category</option>
+              {Array.isArray(categories) && categories.map((cat, index) => (
+                <option key={index} value={cat.category}>
+                  {cat.category}
+                </option>
+              ))}
+              <option value="add-new-category">Add New Category</option>
+            </select>
+            {selectedCategory === "add-new-category" && (
+              <div className="mt-2">
+                <input
+                  type="text"
+                  value={newCategory}
+                  onChange={(e) => setNewCategory(e.target.value)}
+                  placeholder="Enter new category"
+                  className="block w-full border border-gray-300 text-black rounded-md shadow-sm p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                />
+                <Button type="button" onClick={addCategory} className="mt-2">
+                  Add Category
+                </Button>
+              </div>
+            )}
+          </div>
+
 
             {/* Subcategory Selection */}
             {selectedCategory && selectedCategory !== "add-new-category" && (

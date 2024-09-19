@@ -14,8 +14,9 @@ const NavbarController = () => {
   const [subcategoryInput, setSubcategoryInput] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [newCategory, setNewCategory] = useState("");
 
-  // Fetch categories on component mount
   useEffect(() => {
     fetchCategories();
   }, []);
@@ -23,17 +24,15 @@ const NavbarController = () => {
   const fetchCategories = async () => {
     try {
       const response = await axios.get(`${URI}api/admin/navheaders`);
-      console.log("Fetched categories:", response.data);
       setCategories(response.data);
     } catch (error) {
-      console.error("Error fetching categories:", error);
       Swal.fire({
         icon: "error",
         title: "Error",
         text: "Failed to fetch categories",
       });
     } finally {
-      setLoading(false); // Set loading to false after fetch
+      setLoading(false);
     }
   };
 
@@ -56,7 +55,7 @@ const NavbarController = () => {
         ...prevData,
         subcategories: [...prevData.subcategories, trimmedInput],
       }));
-      setSubcategoryInput(""); // Clear input field
+      setSubcategoryInput("");
     }
   };
 
@@ -64,7 +63,6 @@ const NavbarController = () => {
     e.preventDefault();
     try {
       if (editingCategory) {
-        // Update existing category
         await axios.put(
           `${URI}api/admin/navheaders/${editingCategory._id}`,
           formData
@@ -76,7 +74,6 @@ const NavbarController = () => {
         });
         setEditingCategory(null);
       } else {
-        // Create new category
         await axios.post(`${URI}api/admin/navheaders`, formData);
         Swal.fire({
           icon: "success",
@@ -84,18 +81,15 @@ const NavbarController = () => {
           text: "Category and Subcategory created successfully!",
         });
       }
-      fetchCategories(); // Refresh category list
-      setFormData({ categories: "", subcategories: [] }); // Reset form
-      setIsModalOpen(false); // Close the modal
+      fetchCategories();
+      setFormData({ categories: "", subcategories: [] });
+      setIsModalOpen(false);
     } catch (error) {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: `Failed to ${editingCategory ? "update" : "create"} category: ${
-          error.message
-        }`,
+        text: `Failed to ${editingCategory ? "update" : "create"} category: ${error.message}`,
       });
-      console.error("Error submitting data:", error);
     }
   };
 
@@ -105,7 +99,7 @@ const NavbarController = () => {
       categories: category.categories,
       subcategories: category.subcategories || [],
     });
-    setIsModalOpen(true); // Open the modal for editing
+    setIsModalOpen(true);
   };
 
   const handleDelete = async (categoryId) => {
@@ -123,21 +117,36 @@ const NavbarController = () => {
       try {
         await axios.delete(`${URI}api/admin/navheaders/${categoryId}`);
         Swal.fire("Deleted!", "Category has been deleted.", "success");
-        fetchCategories(); // Refresh category list
+        fetchCategories();
       } catch (error) {
         Swal.fire({
           icon: "error",
           title: "Error",
           text: `Failed to delete category: ${error.message}`,
         });
-        console.error("Error deleting category:", error);
+      }
+    }
+  };
+
+  const addCategory = async () => {
+    if (newCategory.trim()) {
+      try {
+        await axios.post(`${URI}api/admin/navheaders`, { categories: newCategory });
+        Swal.fire("Success!", "New category added.", "success");
+        fetchCategories();
+        setNewCategory("");
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: `Failed to add category: ${error.message}`,
+        });
       }
     }
   };
 
   return (
     <div className="px-5 w-full">
-      {/* Button to open modal */}
       <div className="mb-4">
         <button
           onClick={() => setIsModalOpen(true)}
@@ -147,7 +156,6 @@ const NavbarController = () => {
         </button>
       </div>
 
-      {/* Modal for adding/editing category */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
           <div className="bg-blue-500 p-6 rounded-lg shadow-lg w-full max-w-md">
@@ -224,12 +232,10 @@ const NavbarController = () => {
       )}
 
       <div className="h-[70%] overflow-x-auto">
-        {" "}
-        {/* Add horizontal scrolling */}
         {loading ? (
           <p>Loading...</p>
         ) : categories.length > 0 ? (
-          <div className="min-w-full h-screen ">
+          <div className="min-w-full h-screen">
             <table className="min-w-full bg-white divide-y divide-gray-200">
               <thead>
                 <tr>
@@ -244,34 +250,33 @@ const NavbarController = () => {
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody>
                 {categories.map((category) => (
                   <tr key={category._id}>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       {category.categories}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      <ul>
-                        {(category.subcategories || []).map((sub, index) => (
-                          <li key={index}>{sub}</li>
-                        ))}
+                      <ul className="list-disc pl-5">
+                        {category.subcategories &&
+                          category.subcategories.map((sub, index) => (
+                            <li key={index}>{sub}</li>
+                          ))}
                       </ul>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      <div className="flex space-x-2">
-                        <button
-                          onClick={() => handleEdit(category)}
-                          className="px-2 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => handleDelete(category._id)}
-                          className="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-600"
-                        >
-                          Delete
-                        </button>
-                      </div>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <button
+                        onClick={() => handleEdit(category)}
+                        className="text-indigo-600 hover:text-indigo-900"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(category._id)}
+                        className="ml-4 text-red-600 hover:text-red-900"
+                      >
+                        Delete
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -279,8 +284,24 @@ const NavbarController = () => {
             </table>
           </div>
         ) : (
-          <p>No categories available</p>
+          <p>No categories available.</p>
         )}
+      </div>
+
+      <div className="mt-4">
+        <input
+          type="text"
+          value={newCategory}
+          onChange={(e) => setNewCategory(e.target.value)}
+          placeholder="Add New Category"
+          className="text-blue-950 font-serif font-semibold mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+        />
+        <button
+          onClick={addCategory}
+          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600"
+        >
+          Add Category
+        </button>
       </div>
     </div>
   );
