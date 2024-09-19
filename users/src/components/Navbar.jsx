@@ -11,12 +11,17 @@ import { Link, useNavigate } from 'react-router-dom';
 import Login from '../routes/Login';
 import MiniDrawer from './MiniDrawer'; 
 import Drawer from "./module/Drawer";// Import the MiniDrawer component
+import { FaUserCircle } from 'react-icons/fa';
+import ArrowForwardOutlinedIcon from "@mui/icons-material/ArrowForwardOutlined";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false); // State for the mini drawer
   const navigate = useNavigate();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const email = localStorage.getItem('email');
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -27,14 +32,17 @@ const Navbar = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('userId');
-    localStorage.removeItem('email');
+    localStorage.clear();
+    
     navigate('/');
   };
 
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
+  };
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
   };
 
   return (
@@ -55,25 +63,86 @@ const Navbar = () => {
           />
         </div>
 
-        <div className="flex items-center space-x-4 w-1/4 justify-end hidden sm:flex">
-          <div className="relative flex items-center space-x-2 cursor-pointer">
-            {localStorage.getItem('token') ? (
-              <>
-                <LogoutIcon className="text-6xl" onClick={handleLogout} />
-                <span className="text-xl">Account</span>
-              </>
-            ) : (
-              <>
-                <AccountCircleIcon
-                  className="text-6xl"
-                  onClick={toggleLoginModal}
-                />
-                <span className="text-xl">Sign In</span>
-              </>
-            )}
-            <div className="flex items-center space-x-2 cursor-pointer">
+        <div className="hidden items-center space-x-4 w-1/4 justify-end  sm:flex">
+        <div className="flex items-center space-x-2 cursor-pointer">
             <Drawer/>
           </div>
+          <div className="relative flex items-center space-x-2 cursor-pointer">
+            {localStorage.getItem('token') ? (
+             <div className="relative">
+             <button
+               className="flex items-center bg-transparent border-none text-black text-sm md:text-base"
+               onClick={toggleDropdown}
+             >
+               <FaUserCircle className="ml-1 mr-2 text-2xl" /> Account
+             </button>
+             {isDropdownOpen && (
+               <div className="absolute bg-white text-gray-600 shadow-md rounded w-60 mt-4 p-5 z-10">
+                 <Link
+                   to={`/user-Profile/MyAcount`}
+                   className="block px-4 py-2 hover:bg-gray-200 text-lg font-semibold"
+                 >
+                   My Account
+                   <p className="text-sm font-thin">
+                     {email}
+                   </p>
+                 </Link>
+                 <Link
+                   to={`/user-Profile/MyOrder`}
+                   className="block px-4 py-2 hover:bg-gray-200"
+                 >
+                   My Orders
+                 </Link>
+                 <Link
+                   to={`/user-Profile/SaveAddress`}
+                   className="block px-4 py-2 hover:bg-gray-200"
+                 >
+                   Save Address
+                 </Link>
+                 <Link
+                   to={`/user-Profile/MyWishlist`}
+                   className="px-4 py-2 hover:bg-gray-200 flex justify-between items-center"
+                 >
+                   <span>My Wishlist</span>
+                   <span className="text-sm font-thin">
+                     ₹ 50
+                   </span>
+                 </Link>
+                 <div className="border-t my-2"></div>
+                 <Link
+                   to="/faqs"
+                   className="block px-4 py-2 hover:bg-gray-200"
+                 >
+                   FAQ's
+                 </Link>
+                 <Link
+                   to="/account-privacy"
+                   className="block px-4 py-2 hover:bg-gray-200"
+                 >
+                   Account Privacy
+                 </Link>
+                 <button
+                   className="block px-4 py-2 hover:bg-gray-200 text-red-500"
+                   onClick={handleLogout}
+                 >
+                   Logout
+                 </button>
+               </div>
+             )}
+           </div>
+            ) : (
+              <div  onClick={toggleLoginModal} className='flex justify-center items-center content-center gap-2'>
+                <button
+                className="flex items-center bg-transparent border-none text-black text-sm md:text-base"
+                onClick={() => {
+                  navigate("/My-Account");
+                }}
+              >
+                LOGIN <ArrowForwardOutlinedIcon className="ml-1" />
+              </button>
+              </div>
+            )}
+            
           </div>
 
         </div>

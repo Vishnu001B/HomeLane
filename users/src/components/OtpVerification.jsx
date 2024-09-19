@@ -29,7 +29,7 @@ function OtpVerification({ mobileNumber, setIsLoginModalOpen }) {
 
   const verifyOtp = async () => {
     try {
-      const resp = await axios.post(`${URI}api/user/verify-otp`, {
+      const resp = await axios.post(`${URI}api/user/verifyOtp`, {
         email,
         otp,
       });

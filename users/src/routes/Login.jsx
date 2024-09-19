@@ -35,8 +35,8 @@ const Login = ({ setIsLoginModalOpen }) => {
     
         // Store token in localStorage
         localStorage.setItem("token", response.data.token);
-        localStorage.setItem("userId", response.data.data._id);
-        localStorage.setItem("email", response.data.data.email);
+        localStorage.setItem("userId", response.data.user._id);
+        localStorage.setItem("email", response.data.user.email);
 
         // Show success alert
         Swal.fire({
@@ -93,10 +93,10 @@ const Login = ({ setIsLoginModalOpen }) => {
         otp,
       });
 
-      if (response.data.success) {
+     
         // Store token in localStorage
         localStorage.setItem("token", response.data.token);
-        localStorage.setItem("userId", response.data.userId);
+        localStorage.setItem("userId", response.data.user._id);
 
         Swal.fire({
           icon: "success",
@@ -106,13 +106,7 @@ const Login = ({ setIsLoginModalOpen }) => {
 
         // Close the login modal
         setIsLoginModalOpen(false);
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "OTP Verification Failed",
-          text: response.data.message,
-        });
-      }
+      
     } catch (error) {
       console.error("OTP verification failed", error);
       Swal.fire({

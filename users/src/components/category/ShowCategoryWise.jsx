@@ -69,12 +69,14 @@ const ShowCategoryWise = ({ title, products }) => {
             className="border-2 border-gray-300 bg-gray-100 rounded-md my-10 shadow-lg shadow-blue-gray-200 overflow-hidden transition-transform duration-300 transform hover:scale-105"
           >
             <img
-              src={`${URI}uploads/${product?.images[0]}`} // Use `src` instead of `img`
+              src={`${URI}uploads/${product?.images[0]}`} 
               alt={product.title}
               className="w-full h-96 mb-2 rounded-t-md"
             />
             <div className="px-5">
-              <h3 className="text-lg font-semibold mb-1">{title}</h3>
+           <h3 className="text-lg font-semibold mb-1 line-clamp-2">{title}</h3>
+
+
 
               {parseFloat(discountedPrice) < parseFloat(originalPrice) ? (
                 <div className="flex justify-between items-center gap-2">
@@ -89,7 +91,7 @@ const ShowCategoryWise = ({ title, products }) => {
               )}
             </div>
             <div
-              className={`mt-4 flex w-full my-4 px-5 gap-5 ${
+              className={`mt-4 flex w-full my-4 px-5 gap-2 ${
                 path !== "/category/InteriorDesign" &&
                 path !== "/category/Interior Design"
                   ? "justify-center"
@@ -98,7 +100,7 @@ const ShowCategoryWise = ({ title, products }) => {
             >
               <button
                 onClick={() => handleOnClick(product)}
-                className="border-2 hover:border-none border-black rounded-md text-black py-1 px-4 hover:bg-green-500 w-full hover:text-white transition duration-300 flex justify-center items-center gap-5"
+                className="border-2 hover:border-none border-black rounded-md text-sm text-black py-1 px-4 hover:bg-green-500 w-full hover:text-white transition duration-300 flex justify-center items-center gap-5"
               >
                 Book Now
               </button>
@@ -107,10 +109,10 @@ const ShowCategoryWise = ({ title, products }) => {
                 path !== "/category/Interior Design" && (
                   <button
                     onClick={() => handleAddToCart(product)}
-                    className="border-2  hover:border-none border-black rounded-md text-black py-1 px-4 hover:bg-red-500 w-full hover:text-white transition duration-300 flex justify-center items-center gap-5"
+                    className="border-2  hover:border-none border-black rounded-md  text-black py-1 px-4 hover:bg-red-500 w-full hover:text-white transition duration-300 flex justify-center items-center gap-2"
                   >
-                    <FaCartPlus className="mr-2" />
-                    Add to Cart
+                    <FaCartPlus className="text-xl" />
+                   <p className="text-sm"> Add to Cart</p>
                   </button>
                 )}
             </div>

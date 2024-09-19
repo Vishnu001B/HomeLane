@@ -3,18 +3,15 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import OtpVerification from "../components/OtpVerification";
 
-
 const Register = ({ toggleForm, setIsLoginModalOpen }) => {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    name: "",
     phone: "",
     email: "",
     password: "",
   });
   const [otpSent, setOtpSent] = useState(false);
 
-  
   const URI = import.meta.env.VITE_API_URL;
 
   const handleChange = (e) => {
@@ -41,6 +38,7 @@ const Register = ({ toggleForm, setIsLoginModalOpen }) => {
       Swal.fire("Error", "Registration failed. Please try again.", "error");
     }
   };
+
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
@@ -56,18 +54,10 @@ const Register = ({ toggleForm, setIsLoginModalOpen }) => {
               <div className="space-y-4">
                 <input
                   type="text"
-                  name="firstName"
-                  value={formData.firstName}
+                  name="name"
+                  value={formData.name}
                   onChange={handleChange}
-                  placeholder="First Name"
-                  className="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                  type="text"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  placeholder="Last Name"
+                  placeholder="Full Name"
                   className="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <input
@@ -110,7 +100,6 @@ const Register = ({ toggleForm, setIsLoginModalOpen }) => {
             </div>
           </>
         )}
-      
       </div>
     </div>
   );
