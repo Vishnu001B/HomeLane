@@ -4,8 +4,10 @@ import Swal from "sweetalert2";
 
 const Enquiry = () => {
   const [users, setUsers] = useState([]);
+  const URI = import.meta.env.VITE_API_URL;
 
-  const API_BASE_URL = "http://localhost:5002/api/user/";
+
+  const API_BASE_URL = `${URI}api/user/`;
 
   // Fetch all users when component mounts
   useEffect(() => {

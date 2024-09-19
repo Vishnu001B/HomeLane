@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 
 const ProductDetailsModal = ({ product, onClose }) => {
+
   const [phoneNumber, setPhoneNumber] = useState(""); // Updated variable name
   const [name, setName] = useState("");
   const [isVisible, setIsVisible] = useState(false);
@@ -28,7 +29,7 @@ const ProductDetailsModal = ({ product, onClose }) => {
         };
 
         // Send POST request to API
-        const response = await axios.post("http://localhost:5002/api/user/save", payload);
+        const response = await axios.post(`${URI}api/user/save`, payload);
 
         // Check response and navigate or show success message
         if (response.status === 201) {

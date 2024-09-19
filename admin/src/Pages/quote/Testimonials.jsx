@@ -6,28 +6,35 @@ import "slick-carousel/slick/slick-theme.css";
 import axios from "axios";
 import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import EditModal from "./EditModal";
-import CreateTestimonialModal from "./CreateTestimonialModal"; // Import the new modal
-import { Button } from "react-bootstrap";
+import CreateTestimonialModal from "./CreateTestimonialModal";
+import { Button, Spinner, Alert } from "react-bootstrap";
 
 const Testimonials = () => {
   const [testimonials, setTestimonials] = useState([]);
   const [selectedTestimonial, setSelectedTestimonial] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const [showCreateModal, setShowCreateModal] = useState(false); // Modal for creating testimonials
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
   const URI = import.meta.env.VITE_API_URL;
 
   // Fetch testimonials from the API
   useEffect(() => {
     const fetchTestimonials = async () => {
+      setLoading(true);
+      setError("");
       try {
         const response = await axios.get(`${URI}api/quotes/new-quotes`);
         setTestimonials(response.data);
       } catch (error) {
-        console.error("Error fetching testimonials", error);
+        setError("Error fetching testimonials. Please try again later.");
+        console.error(error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchTestimonials();
-  }, []);
+  }, [URI]);
 
   // Handle Delete
   const handleDelete = async (id) => {
@@ -44,14 +51,12 @@ const Testimonials = () => {
   // Open Modal for Editing
   const handleEdit = (testimonial) => {
     setSelectedTestimonial(testimonial);
-    setShowModal(true);
+    setShowEditModal(true);
   };
 
-  // Close Modal
-  const closeModal = () => {
-    setShowModal(false);
-    setSelectedTestimonial(null);
-  };
+  // Close Modals
+  const closeEditModal = () => setShowEditModal(false);
+  const closeCreateModal = () => setShowCreateModal(false);
 
   // Handle Update (PUT)
   const handleUpdate = async (updatedTestimonial) => {
@@ -67,26 +72,21 @@ const Testimonials = () => {
             : testimonial
         )
       );
-      closeModal();
+      closeEditModal();
     } catch (error) {
       console.error("Error updating testimonial", error);
     }
   };
 
-  // Open the Create Testimonial Modal
-  const handleCreateTestimonial = () => {
-    setShowCreateModal(true);
-  };
-
   // Handle successful creation of a testimonial
   const handleCreateSuccess = () => {
     setShowCreateModal(false);
-    // Refresh testimonials after creation
     axios.get(`${URI}api/quotes/new-quotes`).then((response) => {
       setTestimonials(response.data);
     });
   };
 
+  // Slider settings for responsive design
   const settings = {
     dots: true,
     infinite: true,
@@ -115,44 +115,55 @@ const Testimonials = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 w-full max-w-full my-8">
+    <div className="container mx-auto p-4 my-2 ">
       <div className="flex justify-between items-center mb-8">
-        <h2 className="text-4xl font-bold">Testimonials</h2>
+        <h2 className="text-3xl font-bold">Testimonials</h2>
         <Button
-          onClick={handleCreateTestimonial}
-          className="bg-blue-500 text-white"
+        className="p-4 bg-blue-600 rounded-md mr-16 text-cyan-50 "
+          onClick={() => setShowCreateModal(true)}
+          variant="primary"
         >
           Create Testimonial
         </Button>
       </div>
-      <Slider {...settings}>
-        {testimonials.map((testimonial) => (
-          <div key={testimonial._id} className="relative px-4">
-            <TestimonialCard
-              photo={`${URI}${testimonial.authorImage}`}
-              name={testimonial.author}
-              date={new Date(testimonial.date).toLocaleDateString()}
-              rating={testimonial.rating}
-              description={testimonial.quote}
-            />
-            <div className="absolute top-0 right-0 flex space-x-2 p-2">
-              <AiFillEdit
-                className="cursor-pointer text-blue-500"
-                onClick={() => handleEdit(testimonial)}
-              />
-              <AiFillDelete
-                className="cursor-pointer text-red-500"
-                onClick={() => handleDelete(testimonial._id)}
-              />
-            </div>
-          </div>
-        ))}
-      </Slider>
 
-      {showModal && selectedTestimonial && (
+      {loading ? (
+        <div className="text-center">
+          <Spinner animation="border" variant="primary" />
+        </div>
+      ) : error ? (
+        <Alert variant="danger">{error}</Alert>
+      ) : (
+        <Slider {...settings}>
+          {testimonials.map((testimonial) => (
+            <div key={testimonial._id} className="relative p-4">
+              <TestimonialCard
+                photo={`${URI}${testimonial.authorImage}`}
+                name={testimonial.author}
+                date={new Date(testimonial.date).toLocaleDateString()}
+                rating={testimonial.rating}
+                description={testimonial.quote}
+              />
+              <div className="absolute top-0 right-0 flex space-x-2 p-2 bg-white rounded-md shadow">
+                <AiFillEdit
+                  className="cursor-pointer text-blue-500 hover:text-blue-600"
+                  onClick={() => handleEdit(testimonial)}
+                />
+                <AiFillDelete
+                  className="cursor-pointer text-red-500 hover:text-red-600"
+                  onClick={() => handleDelete(testimonial._id)}
+                />
+              </div>
+            </div>
+          ))}
+        </Slider>
+      )}
+
+      {/* Edit Modal */}
+      {showEditModal && selectedTestimonial && (
         <EditModal
           testimonial={selectedTestimonial}
-          onClose={closeModal}
+          onClose={closeEditModal}
           onUpdate={handleUpdate}
         />
       )}
@@ -161,7 +172,7 @@ const Testimonials = () => {
       {showCreateModal && (
         <CreateTestimonialModal
           show={showCreateModal}
-          onClose={() => setShowCreateModal(false)}
+          onClose={closeCreateModal}
           onCreate={handleCreateSuccess}
         />
       )}
