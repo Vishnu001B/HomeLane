@@ -14,6 +14,7 @@ import CustomizedCurtains from "./CustomizedCurtains";
 import Blinds from "./Blinds";
 import WallPaper from "./WallPaper";
 import Video from "./Video";
+import { Api } from "../Api";
 
 const HomePage = () => (
   <div className="w-full">
@@ -30,6 +31,7 @@ const HomePage = () => (
       <OfferSales />
       {/* <SalesAdOfferHomepage /> */}
       <Testimonials />
+      <Api/>
 
       
     </div>

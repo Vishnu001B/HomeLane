@@ -7,9 +7,11 @@ import Footer from "./components/Footer";
 
 
 
+
 function App() {
   return (
     <div>
+      
       <Navbar />
       <div className="lg:block md:block hidden">
       <Navbar2 />

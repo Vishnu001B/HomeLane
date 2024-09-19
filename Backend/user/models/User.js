@@ -3,6 +3,38 @@ const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 
+const addressSchema = new mongoose.Schema({
+  street: { type: String, required: true },
+  city: { type: String, required: true },
+  state: { type: String, required: true },
+  country: { type: String, required: true },
+  postalCode: { type: String, required: true },
+  name: { type: String, required: true },
+  phone: { type: String },
+  addressType: { type: String, required: true },
+  location: {
+    lat: Number,
+    lng: Number,
+  },
+});
+
+// Define the Cart Item schema
+const cartItemSchema = new mongoose.Schema({
+  productId: { type: String, required: true },
+  productName: { type: String, required: true },
+  quantity: { type: Number, required: true },
+  price: { type: Number, required: true },
+  discount: { type: Number },
+  image: {
+    type: String,
+    required: true,
+  },
+  attributes: {
+    size: { type: [String] },  // Change to array of strings
+    color: { type: [String] }, // Change to array of strings
+  },
+});
+
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
 
@@ -13,6 +45,8 @@ const userSchema = new mongoose.Schema({
   isVerified: { type: Boolean, default: false },
   otp: { type: String, required: true },
   otpExpires: { type: Date, required: true },
+  addresses: [addressSchema],
+  cart: [cartItemSchema],
 });
 
 userSchema.pre("save", async function (next) {

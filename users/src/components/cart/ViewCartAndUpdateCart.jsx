@@ -14,13 +14,15 @@ const ViewCartAndUpdateCart = () => {
 
   const handleQuantityChange = (productId, newQuantity) => {
     if (newQuantity > 0) {
-      // Check if newQuantity is greater than the current quantity
-      if (newQuantity > bag.data.find(item => item._id === productId).quantity) {
-        // Increase quantity
-        dispatch(bagActions.increaseQuantity({ _id: productId }));
-      } else {
-        // Decrease quantity
-        dispatch(bagActions.decreaseQuantity({ _id: productId }));
+      const currentItem = bag.data.find(item => item._id === productId);
+      if (currentItem) {
+        if (newQuantity > currentItem.quantity) {
+          // Increase quantity
+          dispatch(bagActions.increaseQuantity({ _id: productId }));
+        } else {
+          // Decrease quantity
+          dispatch(bagActions.decreaseQuantity({ _id: productId }));
+        }
       }
     }
   };
@@ -49,39 +51,43 @@ const ViewCartAndUpdateCart = () => {
 
   return (
     <>
-      <div className='lg:pt-52 md:pt-40 pt-32  '>
+      <div className='lg:pt-52 md:pt-40 pt-32'>
         <CustomizedSteppers />
       </div>
       <div className="p-4 md:flex md:justify-between md:gap-10">
         <div className="space-y-4 w-full md:w-8/12 border-y-2 border-gray-300 p-2">
-          {bag.data.map((item) => (
-            <div
-              key={item._id}
-              className="flex flex-col md:flex-row items-center justify-between gap-4 border-b-2 border-gray-200 pb-4"
-            >
-              <div className="flex items-center gap-4">
-                <img
-                  src={`${URI}uploads/${item.images[0]}`} // Ensure the correct image URL
-                  alt={item.title} // Changed from name to title
-                  className="w-32 h-32 object-cover rounded-md"
-                />
-                <h3 className="font-semibold text-lg">{item.title}</h3> {/* Changed from name to title */}
+          {bag.data && bag.data.length > 0 ? (
+            bag.data.map((item) => (
+              <div
+                key={item._id}
+                className="flex flex-col md:flex-row items-center justify-between gap-4 border-b-2 border-gray-200 pb-4"
+              >
+                <div className="flex items-center gap-4">
+                  <img
+                    src={`${URI}uploads/${item.image}`} // Ensure the correct image URL
+                    alt={item.title} // Changed from name to title
+                    className="w-32 h-32 object-cover rounded-md"
+                  />
+                  <h3 className="font-semibold text-lg">{item.title}</h3> {/* Changed from name to title */}
+                </div>
+                <div className="flex items-center gap-4">
+                  <label htmlFor={`quantity-${item._id}`} className="text-sm">Quantity:</label>
+                  <input
+                    id={`quantity-${item._id}`} // Changed from item.id to item._id
+                    type="number"
+                    name="quantity"
+                    value={item.quantity}
+                    onChange={(e) => handleQuantityChange(item._id, parseInt(e.target.value, 10))}
+                    className="w-16 border rounded p-1 text-center"
+                    min="1"
+                  />
+                </div>
+                <p className="text-lg font-semibold">Rs {formatPrice(item.price).toFixed(2)}</p>
               </div>
-              <div className="flex items-center gap-4">
-                <label htmlFor={`quantity-${item._id}`} className="text-sm">Quantity:</label>
-                <input
-                  id={`quantity-${item._id}`} // Changed from item.id to item._id
-                  type="number"
-                  name="quantity"
-                  value={item.quantity}
-                  onChange={(e) => handleQuantityChange(item._id, parseInt(e.target.value, 10))}
-                  className="w-16 border rounded p-1 text-center"
-                  min="1"
-                />
-              </div>
-              <p className="text-lg font-semibold">Rs {formatPrice(item.price).toFixed(2)}</p>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p>No items in the cart.</p>
+          )}
         </div>
 
         <div className="mt-6 md:w-4/12">

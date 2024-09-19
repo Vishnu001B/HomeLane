@@ -5,6 +5,9 @@ import { FaCartPlus } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { bagActions } from "../../store/bagSlice";
 import { Snackbar, Alert } from "@mui/material";
+import Swal from "sweetalert2";
+import axios from "axios";
+import { fetchItems } from '../../fetchItems';
 
 const ShowCategoryWise = ({ title, products }) => {
   const navigate = useNavigate();
@@ -15,6 +18,7 @@ const ShowCategoryWise = ({ title, products }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const URI = import.meta.env.VITE_API_URL;
+  const userId = localStorage.getItem('userId');
 
   // Function to calculate the discounted price
   const calculateDiscountedPrice = (price, discountPercentage) => {
@@ -35,14 +39,38 @@ const ShowCategoryWise = ({ title, products }) => {
     setSelectedProduct(null);
   };
 
-  const handleAddToCart = (product) => {
-    dispatch(
-      bagActions.addToBag({
-        data: { ...product, quantity: 1 },
-        totalQuantity: 1,
-      })
-    );
-    setOpenSnackbar(true);
+  const handleAddToCart = async(product) => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      Swal.fire({
+        title: 'Login Required',
+        text: 'Please log in to add products to the cart.',
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+    try {
+      const response = await axios.post(`${URI}api/user/addItemToCart`, {
+        userId,
+        productId: product._id,
+        productName: product.title,
+        quantity: 1,
+        price: product.price,
+        attributes: {
+          size: product.size,
+          color: product.color,
+        },
+        discount: product.discount,
+        image: product.images[0],
+      });
+      fetchItems(dispatch);
+      setOpenSnackbar(true);
+    } catch (error) {
+      console.error("Error adding product to cart:", error);
+      
+    }
   };
 
   const handleCloseSnackbar = () => {
@@ -51,7 +79,10 @@ const ShowCategoryWise = ({ title, products }) => {
 
   const path = decodeURIComponent(location.pathname);
 
-  console.log("products", products);
+
+  const handleOnClickImg = (product) => {
+    navigate("/productDetails", { state: { product } });
+  };
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-10">
@@ -72,7 +103,7 @@ const ShowCategoryWise = ({ title, products }) => {
               src={`${URI}uploads/${product?.images[0]}`} 
               alt={product.title}
               className="w-full h-96 mb-2 rounded-t-md"
-            />
+             onClick={()=>handleOnClickImg(product)}/>
             <div className="px-5">
            <h3 className="text-lg font-semibold mb-1 line-clamp-2">{title}</h3>
 

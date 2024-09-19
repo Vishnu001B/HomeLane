@@ -8,11 +8,10 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import Avatar from '@mui/material/Avatar';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { IoCartSharp } from "react-icons/io5";
 import { useSelector, useDispatch } from 'react-redux';
-import Avatar from '@mui/material/Avatar';
 import { useNavigate } from 'react-router-dom';
 import { bagActions } from '../../store/bagSlice';
 import Dialog from '@mui/material/Dialog';
@@ -20,6 +19,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import axios from 'axios';
 
 export default function Drawer() {
   const [state, setState] = React.useState({ right: false });
@@ -27,12 +27,13 @@ export default function Drawer() {
   const [itemToRemove, setItemToRemove] = React.useState(null);
 
   const URI = import.meta.env.VITE_API_URL;
+  const userId = localStorage.getItem('userId');
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const bag = useSelector((store) => store.bag) || { totalQuantity: 0, data: [] };
 
-  console.log("cart",bag)
+  console.log("cart", bag);
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -62,21 +63,20 @@ export default function Drawer() {
               {bag.data.map((item, index) => (
                 <ListItem key={index} disablePadding className='px-5 my-4'>
                   <Avatar
-                    alt={item.name}
-                    src={`${URI}uploads/${item?.images[0]}`}
+                    alt={item.productName}
+                    src={item.image ? `${URI}uploads/${item.image}` : '/default-image.jpg'} // Fallback image
                     sx={{ width: 56, height: 56, marginRight: 2 }}
                   />
                   <ListItemText
-                    primary={item.name}
+                    primary={item.productName}
                     secondary={`Quantity: ${item.quantity} | Price: ₹${item.price}`}
                   />
-
                   <IconButton
                     aria-label="delete"
                     onClick={() => confirmDelete(item)}
-                    sx={{ color: 'red' }} // Set the color to green
+                    sx={{ color: 'red' }}
                   >
-                    <DeleteIcon sx={{ fontSize: '2rem' }} /> {/* Increase the icon size */}
+                    <DeleteIcon sx={{ fontSize: '2rem' }} />
                   </IconButton>
                 </ListItem>
               ))}
@@ -111,10 +111,14 @@ export default function Drawer() {
     setOpenDialog(true);
   };
 
-  const handleDelete = () => {
-    // Dispatch action to remove item from the bag
-    dispatch(bagActions.removeFromBag({ productId: itemToRemove.productId }));
-    setOpenDialog(false); // Close the dialog
+  const handleDelete =async () => {
+    try {
+      await axios.delete(`${URI}api/user/removeItemFromCart/${userId}/${itemToRemove._id}`); // Ensure the correct item ID is sent in the request
+      dispatch(bagActions.removeFromBag({ productId: itemToRemove._id })); // Use the correct ID from itemToRemove
+      setOpenDialog(false); // Close the dialog after deletion
+    } catch (error) {
+      console.error('Error deleting item:', error);
+    }
   };
 
   const handleCheckout = () => {
@@ -135,12 +139,10 @@ export default function Drawer() {
     <div>
       <Button
         onClick={toggleDrawer('right', true)}
-        className='relative  '
-       
+        className='relative'
       >
         {/* Cart icon always visible */}
-        <IoCartSharp  className='text-black  text-3xl'/>
-
+        <IoCartSharp className='text-black text-3xl' />
         {/* Conditionally show the item count */}
         {bag.totalQuantity > 0 && (
           <p className='absolute h-7 w-7 -right-0 -top-5 bg-deep-purple-400 rounded-full text-white'>
@@ -168,7 +170,7 @@ export default function Drawer() {
         <DialogTitle id="confirm-dialog-title">Confirm Delete</DialogTitle>
         <DialogContent>
           <DialogContentText id="confirm-dialog-description">
-            Are you sure you want to remove {itemToRemove?.name} from the cart?
+            Are you sure you want to remove {itemToRemove?.productName} from the cart?
           </DialogContentText>
         </DialogContent>
         <DialogActions>

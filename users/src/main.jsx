@@ -13,14 +13,13 @@ import { Provider } from "react-redux";
 import homeLine from "./store/index";
 import CheckoutForm from "./components/CheckoutForm";
 import ViewCartAndUpdateCart from "./components/cart/ViewCartAndUpdateCart";
-import ProductDetail from "./components/ProductDetail";
 import VerticalGarden from "./components/verticalGarden/VerticalGarden";
 import AboutUs from "./components/about/AboutUs";
 import ContactUs from "./components/about/ContactUs";
-import Testimonials from "./components/Testimonials";
-import TestimonialSlider from "./components/testMonial/TestimonialSlider";
+
 import ScrollToTop from "./components/ScrollToTop"; // Import the new ScrollToTop component
 import Subcategory from "./components/category/Subcategory";
+import UserProfile from "./components/UserProfile/UserProfile";
 
 const router = createBrowserRouter([
   {
@@ -80,9 +79,10 @@ const router = createBrowserRouter([
         element: <ContactUs />,
       },
       {
-        path: "/Testimonials",
-        element: <TestimonialSlider />,
+        path: "/user-Profile/:name",
+        element: <UserProfile />,
       },
+     
      
      
     ],
