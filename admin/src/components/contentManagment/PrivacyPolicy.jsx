@@ -11,7 +11,7 @@ const PrivacyPolicy = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState('');
 
-//   const URI = 'http://localhost:5002/api/privacy-policy';
+
   const URI = import.meta.env.VITE_API_URL;
 
   // Fetch data on component mount

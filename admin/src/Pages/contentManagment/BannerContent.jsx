@@ -3,6 +3,7 @@ import axios from 'axios';
 import Modal from 'react-modal'; // You can install Modal using `npm install react-modal`
 
 const BannerContent = () => {
+  const URI = import.meta.env.VITE_API_URL;
   const [bannerData, setBannerData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentBanner, setCurrentBanner] = useState({ title: '', description: '', _id: '' });
@@ -12,7 +13,7 @@ const BannerContent = () => {
   useEffect(() => {
     const fetchBannerContent = async () => {
       try {
-        const response = await axios.get('http://localhost:5002/api/content-banner');
+        const response = await axios.get(`${URI}api/content-banner`);
         setBannerData(response.data);
       } catch (error) {
         console.error('Error fetching banner content:', error);
@@ -37,7 +38,7 @@ const BannerContent = () => {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:5002/api/content-banner/${currentBanner._id}`, updatedBanner);
+      await axios.put(`${URI}api/content-banner/${currentBanner._id}`, updatedBanner);
       setBannerData((prevData) =>
         prevData.map((banner) =>
           banner._id === currentBanner._id ? { ...banner, ...updatedBanner } : banner
@@ -52,7 +53,7 @@ const BannerContent = () => {
   // Delete banner
   const deleteBanner = async (id) => {
     try {
-      await axios.delete(`http://localhost:5002/api/content-banner/${id}`);
+      await axios.delete(`${URI}api/content-banner/${id}`);
       setBannerData(bannerData.filter((banner) => banner._id !== id));
     } catch (error) {
       console.error('Error deleting banner:', error);
