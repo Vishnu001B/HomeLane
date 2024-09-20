@@ -20,6 +20,10 @@ import ContactUs from "./components/about/ContactUs";
 import ScrollToTop from "./components/ScrollToTop"; // Import the new ScrollToTop component
 import Subcategory from "./components/category/Subcategory";
 import UserProfile from "./components/UserProfile/UserProfile";
+import AddressForm from "./components/UserProfile/AddressForm";
+import SelectAddress from "./components/cart/SelectAddress";
+import PaymentHomePage from "./components/payment/PaymentHomepage"
+import OrderDetails from "./components/UserProfile/OrderDetails"
 
 const router = createBrowserRouter([
   {
@@ -60,7 +64,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/CheckoutForm",
-        element: <CheckoutForm />,
+        element: <SelectAddress />,
       },
       {
         path: "/viewCartDeatils",
@@ -82,6 +86,16 @@ const router = createBrowserRouter([
         path: "/user-Profile/:name",
         element: <UserProfile />,
       },
+      {
+        path: "/addressForm",
+        element: <AddressForm />,
+      },{
+        path: "/payment",
+        element: <PaymentHomePage />,
+      },{
+        path:"/orderDetails/:id",
+        element: <OrderDetails/>// Add the component for order details when the path is "/orderDetails/:id"
+      }
      
      
      

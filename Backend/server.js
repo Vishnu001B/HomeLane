@@ -29,6 +29,7 @@ const privacyRoutes = require("../Backend/contentManagment/routes/privacyPolicy"
 const UserDetailsRouter = require("../Backend/user/routes/userdetails");
 const addressRoutes = require("./user/routes/addressRoutes");
 const path = require("path");
+const productOrderRoutes = require("./user/routes/productOrderRoutes");
 
 connectDB();
 const app = express();
@@ -48,6 +49,8 @@ app.use("/api/user", userRoutes);
 app.use("/api/user", bookNow);
 
 app.use("/api/user", UserDetailsRouter);
+
+app.use("/api/productOrder",productOrderRoutes)
 
 app.use("/api/admin", admin);
 

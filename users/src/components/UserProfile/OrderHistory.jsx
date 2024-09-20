@@ -75,12 +75,14 @@ const OrderHistory = () => {
             >
               <div className="flex items-start sm:items-center mb-4 sm:mb-0">
                 <img
-                  src={`${URI}${order.products[0].thumbnail}`} 
-                  alt={order.products[0].productId.title}
+                  src={`${URI}uploads/${order.products[0].image}`} 
+                  alt={order.products[0].productName
+                  }
                   className="w-16 h-16 sm:w-20 sm:h-20 mr-4 rounded-md object-cover"
                 />
                 <div className="text-sm sm:text-base">
-                  <h2 className="font-semibold">{order.products[0].productId.title}</h2>
+                  <h2 className="font-semibold">{order.products[0].productName
+                  }</h2>
                   <p className="text-gray-600">Price: ₹{order.products[0].price}</p>
                   <p className="text-gray-500">Shipping: {order.products[0]?.productId?.shippingInformation || "5 days"}</p>
                 </div>

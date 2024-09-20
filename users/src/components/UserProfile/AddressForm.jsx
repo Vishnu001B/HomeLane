@@ -83,7 +83,7 @@ const AddressForm = () => {
   };
 
   return (
-    <div className="p-1 max-w-4xl mx-auto lg:flex md:flex block gap-10 px-10 pt-28">
+    <div className="p-1 max-w-4xl mx-auto lg:flex md:flex block gap-10 px-10 pt-40">
       <div className="lg:w-1/2 md:w-1/2 w-full my-8">
         <GoogleMap
           mapContainerStyle={mapContainerStyle}

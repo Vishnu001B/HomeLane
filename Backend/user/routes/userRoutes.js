@@ -14,5 +14,6 @@ router.patch("/subProductQuantity", authController.subProductQuantity);
 router.get("/getCartByUserId/:userId", authController.getCartByUserId);
 router.patch("/updateCart", authController.updateCart);
 router.get("/getTotalQuantity/:userId", authController.getTotalQuantity);
+router.delete('/:userId', authController.deleteCartByUserId);
 
 module.exports = router;

@@ -177,10 +177,13 @@ exports.addItemToCart = async (req, res) => {
 exports.removeItemFromCart = async (req, res) => {
   const { userId, productId } = req.params;
 
+  console.log("Removing item from cart", userId, productId);
+
   try {
-    const user = await User.findByIdAndUpdate(
+    // Step 1: Remove the item from the cart using $pull
+    const user = await User.findOneAndUpdate(
       { _id: userId },
-      { $pull: { cart: { productId } } },
+      { $pull: { cart: { productId: productId } } }, // Match and remove the item by productId
       { new: true }
     );
 
@@ -188,14 +191,33 @@ exports.removeItemFromCart = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    user.totalPrice = user.cart.reduce(
-      (total, item) => total + item.price * item.quantity,
-      0
-    );
+    // Step 2: Use the aggregation pipeline to recalculate the total price after removal
+    const updatedUser = await User.aggregate([
+      { $match: { _id: new mongoose.Types.ObjectId(userId) } }, // Correct use of ObjectId
+      { 
+        $addFields: {
+          totalPrice: { 
+            $sum: {
+              $map: {
+                input: "$cart",
+                as: "item",
+                in: { $multiply: ["$$item.price", "$$item.quantity"] }
+              }
+            }
+          }
+        }
+      }
+    ]);
 
-    await user.save();
-    res.status(200).json(user);
+    // Step 3: Check if the user still exists after aggregation
+    if (updatedUser.length === 0) {
+      return res.status(404).json({ message: "User not found after item removal" });
+    }
+
+    // Send back the updated user with the recalculated total price
+    res.status(200).json({ message: "Item removed and total price recalculated", user: updatedUser[0] });
   } catch (error) {
+    console.error("Error removing item from cart", error);
     res.status(500).json({ message: "Error removing item from cart", error });
   }
 };
@@ -318,5 +340,25 @@ exports.getTotalQuantity = async (req, res) => {
     res.status(200).json({ totalQuantity });
   } catch (error) {
     res.status(500).json({ message: "Error getting total quantity", error });
+  }
+};
+
+exports.deleteCartByUserId = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    // Find the user by userId and delete the cart
+    const user = await User.findByIdAndUpdate(userId, {
+      cart: [],
+      totalPrice: 0,
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "Cart deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting cart", error });
   }
 };
