@@ -10,13 +10,15 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { FaPlus, FaTrash } from "react-icons/fa"; // Importing icons
+import { FaPlus, FaTrash } from "react-icons/fa";
 
 const UpdateCategoryModal = ({ isOpen, onClose, onSave, category }) => {
+  const URI = import.meta.env.VITE_API_URL;
   const [formData, setFormData] = useState({
     category: "",
-    images: null, // For file upload
-    subcategories: [] // To manage subcategories
+    images: null,
+    subcategory: "", // Single subcategory instead of array
+    previewUrl: null,
   });
 
   // Initialize form data when category prop changes
@@ -25,7 +27,8 @@ const UpdateCategoryModal = ({ isOpen, onClose, onSave, category }) => {
       setFormData({
         category: typeof category.category === "string" ? category.category : "",
         images: category.images || null,
-        subcategories: category.subcategories || [] // Initialize subcategories
+        subcategory: category.subcategory || "", // Assuming category has a single subcategory field
+        previewUrl: category.images ? `${URI}${category.images}` : null, // Load the current image if present
       });
     }
   }, [category]);
@@ -34,7 +37,7 @@ const UpdateCategoryModal = ({ isOpen, onClose, onSave, category }) => {
   useEffect(() => {
     return () => {
       if (formData.images && formData.images instanceof File) {
-        URL.revokeObjectURL(formData.images.previewUrl);
+        URL.revokeObjectURL(formData.previewUrl);
       }
     };
   }, [formData.images]);
@@ -54,31 +57,13 @@ const UpdateCategoryModal = ({ isOpen, onClose, onSave, category }) => {
     }
   };
 
-  const handleSubcategoryChange = (index, e) => {
-    const { value } = e.target;
-    const newSubcategories = [...formData.subcategories];
-    newSubcategories[index] = value;
-    setFormData({ ...formData, subcategories: newSubcategories });
-  };
-
-  const addSubcategory = () => {
-    setFormData({ ...formData, subcategories: [...formData.subcategories, ""] });
-  };
-
-  const removeSubcategory = (index) => {
-    setFormData({
-      ...formData,
-      subcategories: formData.subcategories.filter((_, i) => i !== index),
-    });
-  };
-
   const handleSubmit = () => {
     const data = new FormData();
     data.append("category", formData.category);
     if (formData.images) {
       data.append("files", formData.images);
     }
-    data.append("subcategories", JSON.stringify(formData.subcategories)); // Serialize subcategories
+    data.append("subcategory", formData.subcategory); // Send single subcategory
     onSave(data);
     onClose();
   };
@@ -124,33 +109,15 @@ const UpdateCategoryModal = ({ isOpen, onClose, onSave, category }) => {
             </div>
           )}
           <div>
-            <Label htmlFor="subcategories">Subcategories</Label>
-            {formData.subcategories.map((sub, index) => (
-              <div key={index} className="flex items-center space-x-2 mb-2">
-                <Input
-                  type="text"
-                  name={`subcategory-${index}`}
-                  value={sub}
-                  onChange={(e) => handleSubcategoryChange(index, e)}
-                  placeholder="Enter subcategory"
-                />
-                <Button
-                  type="button"
-                  onClick={() => removeSubcategory(index)}
-                  variant="destructive"
-                >
-                  <FaTrash />
-                </Button>
-              </div>
-            ))}
-            <Button
-              type="button"
-              onClick={addSubcategory}
-              variant="primary"
-              className="mt-2"
-            >
-              <FaPlus /> Add Subcategory
-            </Button>
+            <Label htmlFor="subcategory">Subcategory</Label>
+            <Input
+              type="text"
+              name="subcategory"
+              id="subcategory"
+              value={formData.subcategory}
+              onChange={handleChange}
+              placeholder="Enter subcategory"
+            />
           </div>
         </div>
         <DialogFooter>

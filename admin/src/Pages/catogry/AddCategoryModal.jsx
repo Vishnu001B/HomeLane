@@ -89,6 +89,15 @@ const AddCategoryModal = ({ isOpen, onClose, onSave }) => {
           </div>
 
           <div className="mb-4">
+            <label className="block text-gray-700 mb-2">Existing Subcategories</label>
+            <ul className="list-disc ml-5">
+              <li>Readymade Curtains</li>
+              <li>Customized Curtains</li>
+              {/* Add more items as needed */}
+            </ul>
+          </div>
+
+          <div className="mb-4">
             <label className="block text-gray-700 mb-2">Category Images</label>
             <input
               type="file"

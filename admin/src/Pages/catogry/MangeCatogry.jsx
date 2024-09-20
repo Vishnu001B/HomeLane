@@ -5,7 +5,7 @@ import AddCategoryModal from "./AddCategoryModal"; // Adjust the path as needed
 import UpdateCategoryModal from "./UpdateCategoryModal"; // New Update Modal Component
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"; // Import the Alert components
 
-const MangeCatogry = () => {
+const ManageCategory = () => {
   const [categoriesData, setCategoriesData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false); // New state for update modal
@@ -42,8 +42,6 @@ const MangeCatogry = () => {
             headers: { "Content-Type": "multipart/form-data" },
           });
 
-      window.location.reload();
-
       if (selectedCategory) {
         setCategoriesData(
           categoriesData.map((cat) =>
@@ -61,8 +59,11 @@ const MangeCatogry = () => {
           message: "Category added successfully!",
         });
       }
-
+      fetchCategories()
       setSelectedCategory(null);
+      setIsModalOpen(false);
+      setIsUpdateModalOpen(false);
+     
     } catch (error) {
       console.error("Error saving category:", error);
       setAlert({
@@ -94,9 +95,10 @@ const MangeCatogry = () => {
     setIsUpdateModalOpen(true); // Open the update modal
   };
 
-  const filteredCategories = categoriesData.filter((category) =>
-    category.category?.toLowerCase().includes(searchTerm?.toLowerCase())
-  );
+  const filteredCategories = categoriesData.filter((category) => {
+    const categoryName = typeof category.category === 'string' ? category.category : "";
+    return categoryName.toLowerCase().includes(searchTerm?.toLowerCase());
+  });
 
   return (
     <div className="lg:py-5 py-4 px-4 font-sans text-white w-full flex-row items-center content-center justify-center">
@@ -144,50 +146,60 @@ const MangeCatogry = () => {
               <th className="sticky top-0 px-6 py-3 border-b-2 border-gray-700 bg-blue-500">
                 Image
               </th>
-              <th className="sticky top-0 px-6 py-3 border-b-2 border-gray-700  bg-blue-500">
+              <th className="sticky top-0 px-6 py-3 border-b-2 border-gray-700 bg-blue-500">
                 Category
               </th>
-              <th className="sticky top-0 px-6 py-3 border-b-2 border-gray-700  bg-blue-500">
+              <th className="sticky top-0 px-6 py-3 border-b-2 border-gray-700 bg-blue-500">
                 Subcategories
               </th>
-              <th className="sticky top-0 px-6 py-3 border-b-2 border-gray-700  bg-blue-500">
+              <th className="sticky top-0 px-6 py-3 border-b-2 border-gray-700 bg-blue-500">
                 Actions
               </th>
             </tr>
           </thead>
           <tbody className="">
-            {filteredCategories.map((data, index) => (
-              <tr key={index}>
-                <td className="px-6 py-4 border-b border-gray-700 flex-row items-center content-center justify-center">
-                  <img
-                    src={`${URI}${data.images?.[0] || "placeholder-image.jpg"}`}
-                    alt={data.category}
-                    className="h-16 w-16 object-cover rounded-lg"
-                  />
-                </td>
-                <td className="px-6 py-4 border-b border-gray-700 text-center">
-                  {data.category}
-                </td>
-                <td className="px-6 py-4 border-b border-gray-700 text-center">
-                  {data.subcategories.join(", ")}
-                </td>
-                <td className="px-6 py-4 border-b border-gray-700 ">
-                  <Button
-                    className="bg-red-600 mr-2 "
-                    onClick={() => handleDeleteCategory(data._id)}
-                  >
-                    Delete
-                  </Button>
-                  <Button
-                    className="bg-yellow-600"
-                    onClick={() => handleUpdateCategory(data)}
-                  >
-                    Update
-                  </Button>
-                </td>
-              </tr>
+  {filteredCategories.map((data, index) => (
+    <tr key={index}>
+      <td className="px-6 py-4 border-b border-gray-700 flex-row items-center content-center justify-center">
+        <img
+          src={`${URI}${data.images?.[0] || "placeholder-image.jpg"}`}
+          alt={data.category}
+          className="h-16 w-16 object-cover rounded-lg"
+        />
+      </td>
+      <td className="px-6 py-4 border-b border-gray-700 text-center">
+        {typeof data.category === 'string' ? data.category : "No Category"}
+      </td>
+      <td className="px-6 py-4 border-b border-gray-700 text-center">
+        {/* Check if subcategories is an array and render it */}
+        {Array.isArray(data.subcategories) && data.subcategories.length > 0 ? (
+          <ul>
+            {data.subcategories.map((subcategory, subIndex) => (
+              <li key={subIndex}>{subcategory}</li>
             ))}
-          </tbody>
+          </ul>
+        ) : (
+          "No Subcategories"
+        )}
+      </td>
+      <td className="px-6 py-4 border-b border-gray-700">
+        <Button
+          className="bg-red-600 mr-2"
+          onClick={() => handleDeleteCategory(data._id)}
+        >
+          Delete
+        </Button>
+        <Button
+          className="bg-yellow-600"
+          onClick={() => handleUpdateCategory(data)}
+        >
+          Update
+        </Button>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
         </table>
       </div>
 
@@ -195,16 +207,18 @@ const MangeCatogry = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSave={handleSaveCategory}
-        category={selectedCategory} // Pass selected category for updating
+        category={selectedCategory}
+        // Pass selected category for updating
       />
       <UpdateCategoryModal
         isOpen={isUpdateModalOpen}
         onClose={() => setIsUpdateModalOpen(false)}
         onSave={handleSaveCategory}
-        category={selectedCategory} // Pass selected category for updating
+        category={selectedCategory}
+        fetchCategories ={fetchCategories} // Pass selected category for updating
       />
     </div>
   );
 };
 
-export default MangeCatogry;
+export default ManageCategory;
