@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert";
 import Modal from "react-modal";
+import { Link, useNavigate } from "react-router-dom";
 
 Modal.setAppElement("#root");
 
@@ -15,7 +16,9 @@ const BookOrder = () => {
   const [currentUserId, setCurrentUserId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [ordersPerPage] = useState(10);
-  const [searchTerm, setSearchTerm] = useState(""); // New search state
+  const [searchTerm, setSearchTerm] = useState("");
+  const [expandedOrders, setExpandedOrders] = useState({}); // Track which orders are expanded
+  const navigate = useNavigate()
 
   const URI = import.meta.env.VITE_API_URL;
 
@@ -25,7 +28,7 @@ const BookOrder = () => {
 
   useEffect(() => {
     filterOrdersByStatus();
-  }, [activeTab, orders, searchTerm]); // Added searchTerm dependency
+  }, [activeTab, orders, searchTerm]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -46,27 +49,23 @@ const BookOrder = () => {
 
   const filterOrdersByStatus = () => {
     let filtered = orders;
-  
-    // Filter by active tab
+
     if (activeTab !== "all") {
       filtered = filtered.filter((order) => order.status === activeTab);
     }
-  
-    // Filter by search term
+
     if (searchTerm) {
       filtered = filtered.filter(order =>
         order.user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        order.address.phone.includes(searchTerm) || // Include phone number in search
+        order.address.phone.includes(searchTerm) ||
         order.products.some(product =>
-          product.productName && // Ensure productName exists
-          product.productName.toLowerCase().includes(searchTerm.toLowerCase())
-        ) // Check if any product name includes the search term
+          product.productName && product.productName.toLowerCase().includes(searchTerm.toLowerCase())
+        )
       );
     }
-  
+
     setFilteredOrders(filtered);
   };
-  
 
   const handleOnclick = async (orderId, status, userId) => {
     if (status === "pending") {
@@ -141,11 +140,9 @@ const BookOrder = () => {
     });
   };
 
-  // Pagination logic
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
   const currentOrders = filteredOrders.slice(indexOfFirstOrder, indexOfLastOrder);
-
   const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
 
   const handleNextPage = () => {
@@ -160,11 +157,19 @@ const BookOrder = () => {
     }
   };
 
+  const toggleOrderExpand = (orderId) => {
+    setExpandedOrders((prev) => ({
+      ...prev,
+      [orderId]: !prev[orderId],
+    }));
+  };
+
+ 
+
   return (
     <div className="container overflow-hidden p-4">
       <h1 className="text-2xl font-bold mb-4">Order Details</h1>
 
-      {/* Search Bar */}
       <div className="mb-4">
         <input
           type="text"
@@ -172,13 +177,12 @@ const BookOrder = () => {
           value={searchTerm}
           onChange={(e) => {
             setSearchTerm(e.target.value);
-            setCurrentPage(1); // Reset to first page on search
+            setCurrentPage(1);
           }}
           className="border p-2 rounded w-full"
         />
       </div>
 
-      {/* Tab Bar for Order Status */}
       <div className="flex space-x-4 mb-6">
         {["all", "pending", "processing", "shipped", "delivered", "cancelled"].map((status) => (
           <button
@@ -203,90 +207,86 @@ const BookOrder = () => {
         <table className="min-w-full border bg-white text-black shadow-md rounded-lg">
           <thead>
             <tr className="text-left bg-gray-800 text-white">
-              <th className="py-2 px-4">Date</th>
-              <th className="py-2 px-4">Customer Name</th>
-              <th className="py-2 px-4">Phone NO</th>
+              <th className="py-2 px-4">Customer Info</th>
               <th className="py-2 px-4">Shipping Information</th>
-              <th className="py-2 px-4">Product Image</th>
               <th className="py-2 px-4">Product Details</th>
-              <th className="py-2 px-4">Attributes</th>
               <th className="py-2 px-4">Status</th>
             </tr>
           </thead>
           <tbody>
             {currentOrders.map((order) => (
-              <tr key={order._id} className="border bg-gray-500 text-white">
-                <td className="py-2 px-4">
-                  {new Date(order.createdAt).toLocaleString()}
-                </td>
-                <td className="py-2 px-4">{order.user.email}</td>
-                <td className="py-2 px-4">{order.address.phone}</td>
-                <td className="py-2 px-4">
-                  <p>{order.address.street}</p>
-                  <p>
-                    {order.address.city}, {order.address.state}
-                  </p>
-                  <p>
-                    {order.address.country}, {order.address.postalCode}
-                  </p>
-                </td>
-                <td className="py-2 px-4">
-                  {order.products.map((product) => (
-                    <img
-                      key={product.productId}
-                      src={`${URI}uploads/${product.image}`}
-                      alt="Product"
-                      className="w-20 rounded-sm"
-                    />
-                  ))}
-                </td>
-                <td className="py-2 px-4">
-                  {order.products.map((product) => (
-                    <div key={product.productId}>
-                      <p>Product Name: {product.productName}</p>
-                      <p>Product ID: {product.productId}</p>
-                      <p>Quantity: {product.quantity}</p>
-                      <p>Price: {product.price}</p>
-                    </div>
-                  ))}
-                </td>
-                <td className="py-2 px-4">
-                  {order.products.map((product) => (
-                    <div key={product.productId}>
-                      <p>Size: {product.attributes.size.join(", ")}</p>
-                      <p>Color: {product.attributes.color.join(", ")}</p>
-                    </div>
-                  ))}
-                </td>
-                <td className="py-2 px-4 flex justify-center items-center gap-4 flex-wrap">
-                  <button
-                    onClick={() => handleOnclick(order._id, order.status, order.user._id)}
-                    className={`py-1 px-2 rounded ${
-                      order.status === "delivered"
-                        ? "bg-green-500 text-white"
-                        : order.status === "cancelled"
-                        ? "bg-red-500 text-white"
-                        : "bg-blue-500 text-white"
-                    }`}
-                  >
-                    {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-                  </button>
-                  {order.status !== "delivered" && order.status !== "cancelled" && (
+              <React.Fragment key={order._id}>
+                <tr className="border bg-gray-500 text-white">
+                  <td className="py-2 px-4 text-center">
+                    <p>Order Date <br />{new Date(order.createdAt).toLocaleString()}</p>
+                    <p>{order.user.email}</p>
+                    <p>{order.address.phone}</p>
+                  </td>
+                  <td className="py-2 px-4">
+                    <p>{order.address.street}</p>
+                    <p>{order.address.city}, {order.address.state}</p>
+                    <p>{order.address.country}, {order.address.postalCode}</p>
+                  </td>
+                  <td className="py-2 px-4">
                     <button
-                      onClick={() => cancelOrder(order._id)}
-                      className="ml-2 py-1 px-2 bg-red-500 text-white rounded"
+                      onClick={() => toggleOrderExpand(order._id)}
+                      className="bg-blue-500 text-white rounded px-2 py-1"
                     >
-                      Cancel Order
+                      {expandedOrders[order._id] ? "Show Less" : "Show Products"}
                     </button>
-                  )}
-                </td>
-              </tr>
+                    {expandedOrders[order._id] && (
+                      <div className="mt-2">
+                        {order.products.map((product) => (
+                          <div key={product.productId} className="border rounded-sm p-2 my-2 flex flex-col items-center content-center">
+                            <img
+                              src={`${URI}uploads/${product.image}`}
+                              alt="Product"
+                              className="w-full h-40 rounded-sm"
+                            />
+                            <p className="font-semibold">{product.productName}</p>
+                            <p>Product ID: {product.productId}</p>
+                            <div className="grid grid-cols-2 gap-2">
+                              <p>Quantity: {product.quantity}</p>
+                              <p>Price: {product.price}</p>
+                              <p>Size: {product.attributes.size.join(", ")}</p>
+                              <p>Color: {product.attributes.color.join(", ")}</p>
+                             
+                            </div>
+                            <Link to={`/product/${product.productId}`} className="p-3 m-2 border hover:bg-blue-500 hover:border-none " >View Product Details</Link>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </td>
+                  <td className="py-2 px-4 flex justify-center items-center gap-4 flex-wrap">
+                    <button
+                      onClick={() => handleOnclick(order._id, order.status, order.user._id)}
+                      className={`py-1 px-2 rounded ${
+                        order.status === "delivered"
+                          ? "bg-green-500 text-white"
+                          : order.status === "cancelled"
+                          ? "bg-red-500 text-white"
+                          : "bg-blue-500 text-white"
+                      }`}
+                    >
+                      {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                    </button>
+                    {order.status !== "delivered" && order.status !== "cancelled" && (
+                      <button
+                        onClick={() => cancelOrder(order._id)}
+                        className="ml-2 py-1 px-2 bg-red-500 text-white rounded"
+                      >
+                        Cancel Order
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              </React.Fragment>
             ))}
           </tbody>
         </table>
       </div>
 
-      {/* Pagination Controls */}
       <div className="flex justify-center mt-4">
         <button
           onClick={handlePreviousPage}
@@ -305,7 +305,6 @@ const BookOrder = () => {
         </button>
       </div>
 
-      {/* OTP Modal */}
       <Modal isOpen={otpModalOpen} onRequestClose={() => setOtpModalOpen(false)}>
         <h2>Enter OTP to Verify Order</h2>
         <input

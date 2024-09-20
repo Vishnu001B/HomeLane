@@ -27,6 +27,7 @@ import { About } from "./components/contentManagment/About";
 import AboutGet from "./components/contentManagment/AboutGet";
 import PrivacyPolicy from "./components/contentManagment/PrivacyPolicy";
 import Enquiry from "./components/Enquiry";
+import { ProductDetailsById } from "./Pages/Product/ProductDetailsById";
 
 // Create the router instance
 const router = createBrowserRouter([
@@ -107,6 +108,10 @@ const router = createBrowserRouter([
       {
         path: "/enquiry",
         element: <Enquiry/>,
+      },
+      {
+        path: "/product/:productId",
+        element: <ProductDetailsById />,
       },
     ],
   },
