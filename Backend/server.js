@@ -27,7 +27,7 @@ const aboutRoutes = require("../Backend/contentManagment/routes/about");
 const privacyRoutes = require("../Backend/contentManagment/routes/privacyPolicy")
 
 const UserDetailsRouter = require("../Backend/user/routes/userdetails");
-
+const addressRoutes = require("./user/routes/addressRoutes");
 const path = require("path");
 
 connectDB();
@@ -41,6 +41,7 @@ app.get("/", (req, res) => {
 });
 // Routes
 app.use("/api/admin", navHeaderRoutes);
+app.use("/api/address", addressRoutes);
 
 app.use("/api/user", userRoutes);
 

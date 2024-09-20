@@ -73,7 +73,7 @@ const ProductDetailsModal = ({ product, onClose }) => {
 
   return (
     <div
-      className={`fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center p-4 transition-opacity duration-300 ${
+      className={`fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center p-4 transition-opacity duration-300  ${
         isVisible ? "opacity-100" : "opacity-0"
       }`}
     >
@@ -100,19 +100,20 @@ const ProductDetailsModal = ({ product, onClose }) => {
             <h3 className="text-2xl sm:text-3xl font-semibold text-gray-800 mb-4 sm:mb-8">
               {product.title}
             </h3>
-            <p className="text-gray-500 mb-4">{product.descriptions}</p>
-            <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
+            {/* <p className="text-gray-500 mb-4">{product.descriptions}</p> */}
+            <div className="flex flex-col sm:flex-row  items-center mb-4 gap-4">
+              
+              <p className="text-gray-800 line-through sm:ml-2 ">
+                ₹ {product.price}
+              </p>
               <p className="text-red-600 text-xl font-bold">
                 ₹ {product.discountedPrice}
-              </p>
-              <p className="text-gray-400 line-through sm:ml-2">
-                ₹ {product.price}
               </p>
               <p className="text-green-600 sm:ml-2">
                 ({product.discount}%) OFF
               </p>
             </div>
-            <p className="text-gray-700 mb-4 sm:mb-8 leading-relaxed">
+            <p className="text-gray-900 mb-4 sm:mb-8 leading-relaxed">
               {product.descriptions}
             </p>
 
@@ -144,7 +145,7 @@ const ProductDetailsModal = ({ product, onClose }) => {
 
         {/* Close Button */}
         <button
-          className="text-gray-500 text-2xl absolute top-4 right-4 hover:text-gray-700 transition duration-300"
+          className="text-gray-500 text-5xl absolute top-4 right-5 hover:text-gray-700 transition duration-300  "
           onClick={handleClose}
         >
           &times;

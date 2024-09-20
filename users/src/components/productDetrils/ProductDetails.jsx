@@ -137,23 +137,31 @@ const ProductDetails = () => {
     setCurrentImage(`${URI}uploads/${img}`); // Update current image to reflect selection
   };
 
+  useEffect(() => {
+    if (product?.images && product.images.length > 0) {
+      setCurrentImage(`${URI}uploads/${product.images[0]}`); // Set the first image as the default
+    }
+  }, [product?.images]);
+
   return (
     <div>
       <div className="flex flex-wrap md:flex-nowrap justify-evenly pt-40 gap-5 lg:px-[10%] px-5">
         <div className="w-full md:w-1/2">
-          <Carousel
-            showThumbs={false}
-            showStatus={false}
-            selectedItem={product?.images.indexOf(currentImage.split('/').pop())} // Get index from the filename
-            onChange={(index) => setCurrentImage(`${URI}uploads/${product?.images[index]}`)} // Update current image based on carousel change
-            className="my-4"
-          >
-            {product?.images.map((img, index) => (
-              <div key={index} className="zoom-container" onClick={() => openImageModal(`${URI}uploads/${img}`)}>
-                <img src={`${URI}uploads/${img}`} alt={`${product.title}`} className="zoom-image" />
-              </div>
-            ))}
-          </Carousel>
+        <div className="">
+        <Carousel
+          showThumbs={false}
+          showStatus={false}
+          selectedItem={product?.images.indexOf(currentImage.split('/').pop())} // Use index from the current image
+          onChange={(index) => setCurrentImage(`${URI}uploads/${product?.images[index]}`)} // Update current image based on carousel change
+          className="my-4"
+        >
+          {product?.images.map((img, index) => (
+            <div key={index} className="zoom-container" onClick={() => openImageModal(`${URI}uploads/${img}`)}>
+              <img src={`${URI}uploads/${img}`} alt={`${product.title}`} className="zoom-image" />
+            </div>
+          ))}
+        </Carousel>
+      </div>
 
           <div className="flex justify-center mt-4">
             {product?.images.map((img, index) => (
