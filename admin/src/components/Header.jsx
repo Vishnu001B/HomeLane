@@ -135,7 +135,7 @@ const Header = () => {
                       <Package className="h-5 w-5" /> Create Product
                     </Link>
                     <Link
-                      to="/manage-product"
+                      to="/Mange-product"
                       className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
                     >
                       <Package className="h-5 w-5" /> Product
@@ -185,7 +185,7 @@ const Header = () => {
                       <Edit className="h-5 w-5" /> Enquiry
                     </Link>
                     <Link
-                      to="/manage-banner"
+                      to="/"
                       className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
                     >
                       <Edit className="h-5 w-5" /> Voucher

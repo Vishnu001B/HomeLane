@@ -42,7 +42,7 @@ const Navbar = () => {
   };
 
   return (
-    <div>
+    <div className="w-[300px]">
       <nav className="grid gap-6 text-lg font-medium px-2 pt-10">
         <Link
           to="/dashboard"
@@ -59,7 +59,7 @@ const Navbar = () => {
             className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground focus:outline-none"
           >
             <Package className="h-5 w-5" />
-            Item Management
+            Product Management
           </button>
           {showManageProductOptions && (
             <div className="ml-8 mt-2 space-y-2">
@@ -91,29 +91,29 @@ const Navbar = () => {
                 <Edit className="h-5 w-5" />
                 Category
               </Link>
-              <Link
+              {/* <Link
                 to="/manage-category"
                 className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
               >
                 <Edit className="h-5 w-5" />
                 Subcategory
-              </Link>
+              </Link> */}
 
-              <Link
+              {/* <Link
                 to="/manage-banner"
                 className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
               >
                 <Edit className="h-5 w-5" />
                 Manage Banner
-              </Link>
+              </Link> */}
 
-              <Link
+              {/* <Link
                 to="/testimonials"
                 className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
               >
                 <Users className="h-5 w-5" />
               Testimonials
-              </Link>
+              </Link> */}
             </div>
           )}
         </div>
@@ -130,48 +130,20 @@ const Navbar = () => {
           {showServiceManagmentOptions && (
             <div className="ml-8 mt-2 space-y-2">
               <Link
-                to="/manage-navbar"
+                to="/"
                 className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
               >
                 <Users className="h-5 w-5" />
-                Manage Navbar
+                Technical
               </Link>
               <Link
-                to="/create-product"
+                to="/"
                 className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
               >
                 <Package className="h-5 w-5" />
-                Create Product
+              Worker
               </Link>
-              <Link
-                to="/Mange-product"
-                className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-              >
-                <Package className="h-5 w-5" />
-                Product
-              </Link>
-              <Link
-                to="/manage-category"
-                className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-              >
-                <Edit className="h-5 w-5" />
-                Category
-              </Link>
-              <Link
-                to="/manage-category"
-                className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-              >
-                <Edit className="h-5 w-5" />
-                Subcategory
-              </Link>
-
-              <Link
-                to="/manage-banner"
-                className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-              >
-                <Edit className="h-5 w-5" />
-                Manage Banner
-              </Link>
+             
             </div>
           )}
         </div>
@@ -216,7 +188,7 @@ const Navbar = () => {
               </Link>
 
               <Link
-                to="/manage-banner"
+                to="/"
                 className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
               >
                 <Edit className="h-5 w-5" />
@@ -233,53 +205,26 @@ const Navbar = () => {
             className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground focus:outline-none"
           >
             <Package className="h-5 w-5" />
-            Vendor Managment
+            Stock Managment
           </button>
           {showVendorManagmentOptions && (
             <div className="ml-8 mt-2 space-y-2">
               <Link
-                to="/manage-navbar"
+                to="/"
                 className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
               >
                 <Users className="h-5 w-5" />
-                Manage Navbar
+                Vendor Details
               </Link>
               <Link
-                to="/create-product"
+                to="/"
                 className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
               >
                 <Package className="h-5 w-5" />
-                Create Product
+              Stocks Details
               </Link>
-              <Link
-                to="/Mange-product"
-                className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-              >
-                <Package className="h-5 w-5" />
-                Product
-              </Link>
-              <Link
-                to="/manage-category"
-                className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-              >
-                <Edit className="h-5 w-5" />
-                Category
-              </Link>
-              <Link
-                to="/manage-category"
-                className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-              >
-                <Edit className="h-5 w-5" />
-                Subcategory
-              </Link>
-
-              <Link
-                to="/manage-banner"
-                className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-              >
-                <Edit className="h-5 w-5" />
-                Manage Banner
-              </Link>
+            
+             
             </div>
           )}
         </div>
@@ -316,19 +261,19 @@ const Navbar = () => {
                 Privacy policy
               </Link>
               <Link
-                to="/manage-category"
+                to="/testimonials"
                 className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
               >
-                <Edit className="h-5 w-5" />
-                Category
+                <Users className="h-5 w-5" />
+              Testimonials
               </Link>
-              <Link
+              {/* <Link
                 to="/manage-category"
                 className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
               >
                 <Edit className="h-5 w-5" />
                 Subcategory
-              </Link>
+              </Link> */}
 
               <Link
                 to="/manage-banner"
