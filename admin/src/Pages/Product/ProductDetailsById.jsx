@@ -11,7 +11,7 @@ export const ProductDetailsById = () => {
   const [width, setWidth] = useState('');
   const [height, setHeight] = useState('');
   const [calculatedPrice, setCalculatedPrice] = useState(null);
-  const [quantity, setQuantity] = useState(1);
+  
   const URI = import.meta.env.VITE_API_URL;
   const [product, setProduct] = useState(null);
 
@@ -34,7 +34,7 @@ export const ProductDetailsById = () => {
     fetch();
   }, [productId]);
 
-  console.log(product);
+  
 
   useEffect(() => {
     const widthNum = parseFloat(width);
@@ -61,20 +61,12 @@ export const ProductDetailsById = () => {
     setCurrentImage(img);
   };
 
-  const handleBookNow = () => {
-    navigate('/CheckoutForm', {
-      state: { product },
-    });
-  };
-
+ 
   const handleThumbnailClick = (img) => {
     openImageModal(`${URI}uploads/${img}`);
     setCurrentImage(`${URI}uploads/${img}`);
   };
 
-  const handleQuantityChange = (e) => {
-    setQuantity(e.target.value);
-  };
 
   useEffect(() => {
     if (product?.images && product.images.length > 0) {

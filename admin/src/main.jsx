@@ -24,7 +24,6 @@ import Testimonials from "./Pages/quote/Testimonials";
 import QuotetionForm from "./Pages/QuotetionForm";
 import BannerContent from "./Pages/contentManagment/BannerContent";
 import { About } from "./components/contentManagment/About";
-import AboutGet from "./components/contentManagment/AboutGet";
 import PrivacyPolicy from "./components/contentManagment/PrivacyPolicy";
 import Enquiry from "./components/Enquiry";
 import { ProductDetailsById } from "./Pages/Product/ProductDetailsById";
