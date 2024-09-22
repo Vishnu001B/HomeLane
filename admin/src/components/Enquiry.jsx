@@ -4,15 +4,21 @@ import Swal from "sweetalert2";
 
 const Enquiry = () => {
   const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [usersPerPage] = useState(5); // Change the value for different number of users per page
   const URI = import.meta.env.VITE_API_URL;
-
 
   const API_BASE_URL = `${URI}api/user/`;
 
-  // Fetch all users when component mounts
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  useEffect(() => {
+    handleSearch();
+  }, [searchTerm, users]);
 
   const fetchUsers = async () => {
     try {
@@ -27,6 +33,15 @@ const Enquiry = () => {
         confirmButtonText: "OK",
       });
     }
+  };
+
+  const handleSearch = () => {
+    const search = searchTerm.toLowerCase();
+    const filtered = users.filter((user) =>
+      user.name.toLowerCase().includes(search) ||
+      user.phoneNumber.includes(search)
+    );
+    setFilteredUsers(filtered);
   };
 
   const handleUpdate = async (userId) => {
@@ -88,9 +103,28 @@ const Enquiry = () => {
     }
   };
 
+  // Pagination logic
+  const indexOfLastUser = currentPage * usersPerPage;
+  const indexOfFirstUser = indexOfLastUser - usersPerPage;
+  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">User Enquiries</h1>
+
+      {/* Search Bar */}
+      <input
+        type="text"
+        placeholder="Search by name or phone number"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="mb-4 p-2 border border-gray-300 rounded w-full"
+      />
+
       <table className="min-w-full bg-white border border-gray-300">
         <thead>
           <tr>
@@ -100,8 +134,8 @@ const Enquiry = () => {
           </tr>
         </thead>
         <tbody>
-          {users.length > 0 ? (
-            users.map((user) => (
+          {currentUsers.length > 0 ? (
+            currentUsers.map((user) => (
               <tr key={user._id}>
                 <td className="py-2 px-4 border-b">{user.name}</td>
                 <td className="py-2 px-4 border-b">{user.phoneNumber}</td>
@@ -130,6 +164,21 @@ const Enquiry = () => {
           )}
         </tbody>
       </table>
+
+      {/* Pagination */}
+      <div className="flex justify-center mt-4">
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button
+            key={index + 1}
+            onClick={() => paginate(index + 1)}
+            className={`mx-1 px-3 py-1 rounded ${
+              currentPage === index + 1 ? "bg-blue-500 text-white" : "bg-gray-200"
+            }`}
+          >
+            {index + 1}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };

@@ -4,11 +4,11 @@ import Swal from "sweetalert2";
 import axios from "axios";
 
 const ProductDetailsModal = ({ product, onClose }) => {
-
   const [phoneNumber, setPhoneNumber] = useState(""); // Updated variable name
   const [name, setName] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const navigate = useNavigate();
+
 
   const URI = import.meta.env.VITE_API_URL;
 
@@ -24,18 +24,22 @@ const ProductDetailsModal = ({ product, onClose }) => {
 
         // Prepare the data
         const payload = {
-          name: name, // Directly matching what your backend expects
-          phoneNumber: phoneNumber, // Directly matching what your backend expects
+          useName: name, // Directly matching what your backend expects
+          phoneNumber: phoneNumber,
+          productId:product._id ,
+          productName:product.title,
+          productImage:product.images[0]
+          // Directly matching what your backend expects
         };
 
         // Send POST request to API
-        const response = await axios.post(`${URI}api/user/save`, payload);
+        const response = await axios.post(`${URI}api/user/book-now`, payload);
 
         // Check response and navigate or show success message
         if (response.status === 201) {
           Swal.fire({
             title: "Success",
-            text: "Data submitted successfully!",
+            text: "your product is Booked successfully!",
             icon: "success",
             confirmButtonText: "OK",
           });
@@ -46,12 +50,17 @@ const ProductDetailsModal = ({ product, onClose }) => {
         }
       } catch (error) {
         // Log the error
-        console.error("Error submitting data:", error.response?.data || error.message);
+        console.error(
+          "Error submitting data:",
+          error.response?.data || error.message
+        );
 
         // Handle error
         Swal.fire({
           title: "Submission Failed",
-          text: error.response?.data?.message || "There was an error submitting the data.",
+          text:
+            error.response?.data?.message ||
+            "There was an error submitting the data.",
           icon: "error",
           confirmButtonText: "OK",
         });
@@ -71,13 +80,11 @@ const ProductDetailsModal = ({ product, onClose }) => {
     setTimeout(onClose, 300);
   };
 
-
-
   const [isExpanded, setIsExpanded] = useState(false);
 
   // Split the description into words
-  const words = product.descriptions?.split(' ') || [];
-  
+  const words = product.descriptions?.split(" ") || [];
+
   // Check if the description exceeds 60 words
   const isLongDescription = words.length > 60;
 
@@ -115,7 +122,6 @@ const ProductDetailsModal = ({ product, onClose }) => {
             </h3>
             {/* <p className="text-gray-500 mb-4">{product.descriptions}</p> */}
             <div className="flex flex-col sm:flex-row  items-center mb-4 gap-4">
-              
               <p className="text-gray-800 line-through sm:ml-2 ">
                 ₹ {product.price}
               </p>
@@ -128,21 +134,23 @@ const ProductDetailsModal = ({ product, onClose }) => {
             </div>
             <div className="">
               <div>
-              <p className="  leading-relaxed">
-        {isExpanded ? product.descriptions : words.slice(0, 30).join(' ') + (isLongDescription ? '...' : '')}
-      </p>
-      
-      {isLongDescription && (
-        <button
-          onClick={toggleDescription}
-          className="text-blue-500 hover:underline"
-        >
-          {isExpanded ? 'Show Less' : 'Read More'}
-        </button>
-      )}
+                <p className="  leading-relaxed">
+                  {isExpanded
+                    ? product.descriptions
+                    : words.slice(0, 30).join(" ") +
+                      (isLongDescription ? "..." : "")}
+                </p>
+
+                {isLongDescription && (
+                  <button
+                    onClick={toggleDescription}
+                    className="text-blue-500 hover:underline"
+                  >
+                    {isExpanded ? "Show Less" : "Read More"}
+                  </button>
+                )}
               </div>
-   
-    </div>
+            </div>
 
             {/* Name and Phone Number Form */}
             <div className="mt-6">
@@ -172,7 +180,7 @@ const ProductDetailsModal = ({ product, onClose }) => {
 
         {/* Close Button */}
         <button
-          className="text-gray-500 text-5xl absolute top-4 right-5 hover:text-gray-700 transition duration-300  "
+          className="text-gray-500 text-5xl absolute top-0 right-5 hover:text-gray-700 transition duration-300  "
           onClick={handleClose}
         >
           &times;
