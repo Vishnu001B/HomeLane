@@ -3,8 +3,6 @@ import { Outlet, useLocation } from "react-router-dom";
 import Navbar from './components/Navbar';
 import Header from './components/Header';
 
-
-
 function App() {
   const location = useLocation();
 
@@ -16,17 +14,17 @@ function App() {
   return (
     <>
       {!shouldHideNavbarAndHeader && <Header />}
-      <div className='flex  w-full h-full '>
+      <div className='flex w-full h-full'>
         {!shouldHideNavbarAndHeader && (
-
-          <div className=" hidden w-[300px] flex-col border-r bg-background sm:flex">
+          <div className="fixed top-0 left-0 h-full w-[300px] border-r bg-background z-50 overflow-y-auto">
             <Navbar />
           </div>
         )}
-        <Outlet />
+        {/* Add padding-left to offset the fixed Navbar */}
+        <div className={`flex-1 ${!shouldHideNavbarAndHeader ? 'pl-[300px]' : ''}`}>
+          <Outlet />
+        </div>
       </div>
- 
-   
     </>
   );
 }

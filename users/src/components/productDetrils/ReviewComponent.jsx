@@ -90,7 +90,7 @@ const ReviewComponent = ({ productId }) => {
   };
 
   return (
-    <div className="flex flex-col-reverse gap-5 lg:flex-row-reverse items-center lg:items-start justify-between p-6 space-y-6 lg:space-y-0 lg:space-x-8">
+    <div className=" hidden flex flex-col-reverse gap-5 lg:flex-row-reverse items-center lg:items-start justify-between p-6 space-y-6 lg:space-y-0 lg:space-x-8">
       {/* Left Section - User Review Form */}
       <div className="w-full lg:w-1/2 p-6 rounded-lg border-2 border-gray-200 bg-white shadow-lg">
         <h2 className="text-2xl font-semibold mb-4 text-gray-800">Leave a Review</h2>

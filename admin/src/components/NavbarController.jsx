@@ -146,7 +146,7 @@ const NavbarController = () => {
   };
 
   return (
-    <div className="px-5 w-full">
+    <div className="px-5 w-full bg-[#ffd8be] py-4 rounded-md">
       <div className="mb-4">
         <button
           onClick={() => setIsModalOpen(true)}
@@ -158,7 +158,7 @@ const NavbarController = () => {
 
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="bg-blue-500 p-6 rounded-lg shadow-lg w-full max-w-md">
+          <div className="bg-[#ffefd3] p-6 rounded-lg shadow-lg w-full max-w-md">
             <h2 className="text-2xl font-semibold mb-4">
               {editingCategory ? "Edit Category" : "Add Category"}
             </h2>
@@ -231,7 +231,7 @@ const NavbarController = () => {
         </div>
       )}
 
-      <div className="h-[70%] overflow-x-auto">
+      <div className="h-[70%] overflow-x-auto rounded-sm shadow-xl">
         {loading ? (
           <p>Loading...</p>
         ) : categories.length > 0 ? (
@@ -287,7 +287,7 @@ const NavbarController = () => {
           <p>No categories available.</p>
         )}
       </div>
-
+{/* 
       <div className="mt-4">
         <input
           type="text"
@@ -302,7 +302,7 @@ const NavbarController = () => {
         >
           Add Category
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };

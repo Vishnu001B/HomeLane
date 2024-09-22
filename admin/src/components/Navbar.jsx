@@ -42,7 +42,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="w-[300px]">
+    <div className="w-[300px] bg-[#fffce8] rounded-xl py-4 border-2  ">
       <nav className="grid gap-6 text-lg font-medium px-2 pt-10">
         <Link
           to="/dashboard"
@@ -239,13 +239,13 @@ const Navbar = () => {
           </button>
           {showContentManagmentOptions && (
             <div className="ml-8 mt-2 space-y-2">
-              <Link
+              {/* <Link
                 to="/bannerContent"
                 className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
               >
                 <Users className="h-5 w-5" />
                 Banner Content
-              </Link>
+              </Link> */}
               <Link
                 to="/aboutContent"
                 className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"

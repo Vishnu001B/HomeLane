@@ -175,9 +175,9 @@ export const AddProduct = () => {
   };
 
   return (
-    <div className="  p-6  bg-blue-300 text-black w-full mx-5 rounded-sm">
+    <div className="  p-6  bg-[#feefe5] text-black w-full mx-5 rounded-md shadown-2xl">
       <div className="flex justify-between items-center my-4">
-        <h1 className="text-2xl font-bold mb-6">Add New Product</h1>
+        <h1 className="text-3xl font-bold mb-6">Add New Product</h1>
         <Button onClick={() => navigate(-1)}>Back</Button>
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

@@ -54,7 +54,7 @@ const Navbar2 = () => {
 
   return (
     <div
-      className="z-20 bg-[#EEE0D0] font-serif fixed top-20 shadow-md w-full"
+      className="z-20 bg-[#212529] font-serif fixed top-20 shadow-md  w-full text-white rounded-b-full text-xl "
       style={{ height: "60px" }}
     >
       <div className="flex justify-center items-center content-center">
@@ -62,39 +62,39 @@ const Navbar2 = () => {
           <div className="flex-grow flex justify-center space-x-4">
             <a
               href="/"
-              className="text-black px-2 py-1 rounded hover:text-light-green-700 transition duration-200 font-semibold"
+              className=" px-2 py-1 rounded hover:text-light-green-700 transition duration-200 font-semibold"
             >
               Home
             </a>
             <a
               href="/"
-              className="text-black px-2 py-1 rounded hover:text-light-green-700 transition duration-200"
+              className=" px-2 py-1 rounded hover:text-light-green-700 transition duration-200 text-white"
             >
               Gallery
             </a>
             <a
               href="/verticalGarden/vertical Garden"
-              className="text-black px-2 py-1 rounded hover:text-light-green-700 transition duration-200"
+              className=" px-2 py-1 rounded hover:text-light-green-700 transition duration-200 text-white"
             >
               Vertical Garden
             </a>
           </div>
 
           {/* Services Dropdown */}
-          <div className="relative p-1">
+          <div className="relative p-1 text-white ">
             <button
-              className="flex items-center p-2 text-black rounded hover:text-light-green-700 transition duration-200"
+              className="flex items-center p-2 text-black rounded hover:text-light-green-700 transition duration-200 text-white"
               onClick={() => handleCategoryClick('services')}
             >
               {capitalizeWords(servise.name)}
             </button>
             {activeCategory === 'services' && (
-              <div className="absolute top-full left-0 mt-2 w-48 bg-gray-200 border border-gray-300 rounded shadow-lg z-30">
+              <div className="absolute top-full left-0 mt-2 w-48 bg-gray-200 border border-gray-300 rounded shadow-lg z-30 text-white">
                 <ul>
                   {servise.subcategories.map((subcategory, subIndex) => (
                     <li
                       key={subIndex}
-                      className="p-2 hover:bg-gray-100 cursor-pointer transition duration-200"
+                      className="p-2 hover:bg-gray-100 cursor-pointer transition duration-200 bg-[#212529] hover:text-black"
                     >
                       <Link
                         to={`/subcategory/${encodeURIComponent(subcategory)}`}
@@ -111,17 +111,17 @@ const Navbar2 = () => {
 
           {/* Fetched Categories Dropdown */}
           {categories.map((category) => (
-            <div key={category._id} className="relative p-1">
+            <div key={category._id} className="relative p-1 text-white">
               {category.categories && (
                 <button
-                  className="flex items-center p-2 text-black rounded hover:text-light-green-700 transition duration-200"
+                  className="flex items-center p-2 text-black rounded hover:text-light-green-700 transition duration-200 text-white "
                   onClick={() => handleCategoryClick(category.categories)}
                 >
                   {capitalizeWords(category.categories)}
                 </button>
               )}
               {activeCategory === category.categories && (
-                <div className="absolute top-full left-0 mt-2 w-48 bg-gray-200 border border-gray-300 rounded shadow-lg z-30">
+                <div className="absolute top-full left-0 mt-2 w-48 bg-gray-200 border border-gray-300 rounded shadow-lg z-30 bg-[#212529] hover:text-black">
                   <ul>
                     {category.subcategories &&
                       category.subcategories.map((subcategory, subIndex) => (

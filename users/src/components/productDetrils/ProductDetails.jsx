@@ -144,7 +144,7 @@ const ProductDetails = () => {
   }, [product?.images]);
 
   return (
-    <div>
+    <div className="bg-[#fffcf7]" style={{ fontFamily: 'Poppins, sans-serif' }}>
       <div className="flex flex-wrap md:flex-nowrap justify-evenly pt-40 gap-5 lg:px-[10%] px-5">
         <div className="w-full md:w-1/2">
         <div className="">
@@ -177,27 +177,27 @@ const ProductDetails = () => {
           </div>
         </div>
 
-        <div className="w-full md:w-1/2 mt-5 flex flex-col justify-between h-full">
+        <div className="w-full md:w-1/2 mt-5 flex flex-col justify-between h-full" style={{ fontFamily: 'Poppins, sans-serif' }}>
           <div className="flex flex-col justify-center h-full">
-            <h1 className="text-2xl font-thin mb-4">{product.title}</h1>
-            <p className="text-[#8E95B2] mb-4">SKU: {product.skuCode}</p>
-            <p className="my-4 text-[#D4B080] text-2xl">
+            <h1 className="text-3xl font-bold">{product.title}</h1>
+            <p className="text-[#8E95B2] mb-2 font-bold">SKU: {product.skuCode}</p>
+            <p className=" text-[#D4B080] text-2xl">
               {parseFloat(product?.discount) > 0 ? (
                 <>
                   <span className="text-red-400 text-lg">₹ {discountedPrice}</span>
-                  <span className="text-gray-500 line-through px-2">₹ {originalPrice}</span>
+                  <span className="text-gray-500 line-through px-2 ">₹ {originalPrice}</span>
                   <span className="text-green-500 text-sm">({parseFloat(product?.discount)}% OFF)</span>
                 </>
               ) : (
                 <span className="text-red-400 text-lg">₹ {originalPrice}</span>
               )}
-              <span className="text-black px-4">(Price Inclusive Of All Taxes)</span>
+              <span className="text-black px-4">(Price Includes Of All Taxes)</span>
             </p>
           </div>
 
           {product?.category !== "InteriorDesgin" && (
             <>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 mt-4">
                 <label htmlFor={`quantity-${product.id}`} className="text-lg">Quantity:</label>
                 <input
                   id={`quantity-${product.id}`}
@@ -209,22 +209,22 @@ const ProductDetails = () => {
                 />
               </div>
 
-              <div className="mb-4">
-                <p>Enter Dimensions:</p>
+              <div className="mb-4 pt-2">
+                <p className="mb-2">Enter Dimensions:</p>
                 <div className="flex gap-4 w-full">
                   <input
                     type="number"
                     placeholder="Width (ft)"
                     value={width}
                     onChange={(e) => setWidth(e.target.value)}
-                    className="px-4 w-full py-2 rounded-sm border border-black"
+                    className="px-4 w-full py-2 rounded-md border border-black  bg-white"
                   />
                   <input
                     type="number"
                     placeholder="Height (ft)"
                     value={height}
                     onChange={(e) => setHeight(e.target.value)}
-                    className="px-4 w-full py-2 rounded-sm border border-black"
+                    className="px-4 w-full py-2 rounded-md border border-black bg-white"
                   />
                 </div>
                 {calculatedPrice !== null && (
@@ -239,22 +239,22 @@ const ProductDetails = () => {
           <div className="my-4 flex gap-4">
             <a
               href="tel:6352396301"
-              className="w-full py-4 bg-[#34b7f1] rounded-sm text-white flex justify-center items-center gap-5"
+              className="w-full py-4 bg-[#34b7f1] rounded-sm text-white flex justify-center items-center gap-5 rounded-xl shadow-xl hover:bg-white hover:text-black"
             >
               Call Now
             </a>
             <a
               href={`https://api.whatsapp.com/send?phone=6352396301&text=Hi%2C%20I%20am%20interested%20in%20your%20product%3A%20${product.name}`}
-              className="w-full py-4 bg-[#25D366] rounded-sm text-white flex justify-center items-center gap-5"
+              className="hover:bg-white hover:text-black rounded-xl shadow-xl w-full py-4 bg-[#25D366] rounded-sm text-white flex justify-center items-center gap-5"
             >
               WhatsApp Now
             </a>
           </div>
 
           {product?.category !== "InteriorDesgin" ? (
-            <div className="flex justify-center items-center content-center gap-4">
+            <div className="flex justify-center items-center content-center gap-4 ">
               <Button
-                className="w-full flex justify-center items-center gap-5"
+                className="rounded-xl shadow-xl w-full flex justify-center items-center gap-5 hover:text-black"
                 sx={{ backgroundColor: "#ff9800", color: "#fff", padding: "15px" }}
                 onClick={addIntobag}
               >
@@ -263,7 +263,7 @@ const ProductDetails = () => {
               </Button>
 
               <Button
-                className="w-full flex justify-center items-center gap-5"
+                className="rounded-xl shadow-xl w-full flex justify-center items-center gap-5 hover:text-black"
                 sx={{ backgroundColor: "#1a73e8", color: "#fff", padding: "15px" }}
                 onClick={handleBookNow}
               >
@@ -272,7 +272,7 @@ const ProductDetails = () => {
             </div>
           ) : (
             <Button
-              className="w-full flex justify-center items-center gap-5"
+              className="rounded-xl shadow-xl w-full flex justify-center items-center gap-5"
               sx={{ backgroundColor: "#1a73e8", color: "#fff", padding: "15px" }}
               onClick={handleBookNow}
             >
@@ -294,9 +294,9 @@ const ProductDetails = () => {
         </Alert>
       </Snackbar>
 
-      <div className="mt-10 py-5 bg-[#f4f1e9] ">
-        <h1 className="lg:text-4xl text-2xl text-center font-semibold text-gray-800 mb-6">
-          Recently Viewed
+      <div className="mt-10 py-5 bg-[#f4f1e9] bg-[#001b2e] rounded-full ">
+        <h1 className="lg:text-6xl text-3xl text-center font-bold text-gray-800 mb-6 text-white">
+            More Picks for You 
         </h1>
         <RecentlyProduct Subcategory={product.subcategory}/>
       </div>

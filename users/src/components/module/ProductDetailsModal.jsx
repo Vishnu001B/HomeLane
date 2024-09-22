@@ -71,6 +71,19 @@ const ProductDetailsModal = ({ product, onClose }) => {
     setTimeout(onClose, 300);
   };
 
+
+
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  // Split the description into words
+  const words = product.descriptions?.split(' ') || [];
+  
+  // Check if the description exceeds 60 words
+  const isLongDescription = words.length > 60;
+
+  // Toggle description between truncated and full
+  const toggleDescription = () => setIsExpanded(!isExpanded);
+
   return (
     <div
       className={`fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center p-4 transition-opacity duration-300  ${
@@ -94,10 +107,10 @@ const ProductDetailsModal = ({ product, onClose }) => {
 
           {/* Product Details Section */}
           <div
-            className="w-full md:w-1/2 p-4 sm:p-6 overflow-y-auto"
-            style={{ backgroundColor: "#eaedf0" }}
+            className="w-full md:w-1/2 p-4 sm:p-6 overflow-auto"
+            style={{ backgroundColor: "" }}
           >
-            <h3 className="text-2xl sm:text-3xl font-semibold text-gray-800 mb-4 sm:mb-8">
+            <h3 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-8">
               {product.title}
             </h3>
             {/* <p className="text-gray-500 mb-4">{product.descriptions}</p> */}
@@ -113,28 +126,42 @@ const ProductDetailsModal = ({ product, onClose }) => {
                 ({product.discount}%) OFF
               </p>
             </div>
-            <p className="text-gray-900 mb-4 sm:mb-8 leading-relaxed">
-              {product.descriptions}
-            </p>
+            <div className="">
+              <div>
+              <p className="  leading-relaxed">
+        {isExpanded ? product.descriptions : words.slice(0, 30).join(' ') + (isLongDescription ? '...' : '')}
+      </p>
+      
+      {isLongDescription && (
+        <button
+          onClick={toggleDescription}
+          className="text-blue-500 hover:underline"
+        >
+          {isExpanded ? 'Show Less' : 'Read More'}
+        </button>
+      )}
+              </div>
+   
+    </div>
 
             {/* Name and Phone Number Form */}
-            <div>
+            <div className="mt-6">
               <input
                 type="text"
                 placeholder="Enter your name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="border border-gray-500 p-3 rounded-md w-full mb-4 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                className="border-2 bg-blue-50 border-black p-3 rounded-full  w-full mb-4 focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
               <input
                 type="number"
                 placeholder="Enter your phone number"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
-                className="border border-gray-500 p-3 rounded-md w-full mb-6 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                className="border-2 bg-blue-50 border-black p-3 rounded-full  w-full mb-4 focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
               <button
-                className="bg-blue-600 text-white px-4 py-3 rounded-md w-full hover:bg-blue-700 transition duration-300"
+                className="bg-[#4361ee] hover:bg-[#02c39a]  text-white px-4 py-3 rounded-md w-full shadow shadow-xl  transition duration-300"
                 onClick={handleSubmit}
               >
                 Submit

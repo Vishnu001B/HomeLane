@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import FurnitureRange from "./FurnitureRange";
+import { motion } from "framer-motion";
 
 // Card Component
-const Card = ({ img, title }) => {
+const Card = ({ img, title, index }) => {
   return (
-    <div className="w-full md:w-72 lg:w-72 xl:w-80 rounded-lg overflow-hidden card">
+    <motion.div
+      className="w-full md:w-72 lg:w-72 xl:w-80 rounded-lg overflow-hidden card"
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.1, delay: index * 0.05 }} // Faster entrance
+      whileHover={{ scale: 1.15, rotate: 2, boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.2)" }}
+    >
       <div className="h-60 overflow-hidden">
         <img
           src={img}
@@ -14,10 +20,10 @@ const Card = ({ img, title }) => {
           className="w-full h-full rounded-lg object-cover"
         />
       </div>
-      <h3 className="p-4 text-lg font-semibold text-gray-800 text-center">
+      <h3 className="p-4 text-lg font-semibold text-white text-center"> {/* Changed to text-white */}
         {title}
       </h3>
-    </div>
+    </motion.div>
   );
 };
 
@@ -41,10 +47,11 @@ const CardHome = () => {
   };
 
   return (
-    <div className="lg:py-5 py-4 bg-gray-200 font-sans">
-      <h1 className="lg:text-4xl text-xl text-center lg:pt-20 pt-5 pb-12 font-bold">
-        Shop Decorative Lighting, Home Decor & Designer Fans
+    <div className="bg-[#00171f] lg:py-5 py-4 bg-gray-200 font-sans text-white rounded=md lg:rounded-full my-10">
+      <h1 className="lg:text-3xl xl:text-4xl text-md text-center lg:pt-16 lg:pb-16 font-bold px-4 py-6" style={{ fontFamily: 'Poppins, sans-serif' }}>
+         <span className="text-5xl font-bold text-orange-500">Transform</span>  Your Space <span className="text-[#80ed99] text-4xl">,</span> Explore Our  <span className="text-5xl font-bold text-orange-500">Categories</span> 
       </h1>
+
       <div className="flex flex-wrap items-center justify-center lg:gap-6 xl:px-2 px-5">
         {categoriesData.map((data, index) => (
           <Link
@@ -55,6 +62,7 @@ const CardHome = () => {
             <Card
               img={`${URI}${data.images?.[0] || "placeholder-image.jpg"}`} // Use a placeholder image if none are provided.
               title={data.category}
+              index={index}
             />
           </Link>
         ))}

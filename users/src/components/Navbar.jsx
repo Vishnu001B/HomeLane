@@ -47,7 +47,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="bg-[#EAF0F1] p-4 lg:p-8  w-full flex items-center justify-between gap-5 lg:px-32 fixed z-50 h-20">
+      <nav className="bg-[#faf3dd] p-4 lg:p-8  w-full flex items-center justify-between gap-5 lg:px-32 fixed z-50 h-20">
        
 
         <Link to="/" className="lg:text-2xl md:text-xl text-sm font-bold w-1/5">
@@ -59,7 +59,7 @@ const Navbar = () => {
           <input
             type="search"
             placeholder="Search the product"
-            className="border-gray-600 border-2 rounded-md p-2 pl-10 w-full"
+            className="border-gray-600 border-2 rounded-full p-2 pl-10 w-full bg-white"
           />
         </div>
 

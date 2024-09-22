@@ -37,7 +37,7 @@ const CategoryDetails = () => {
   }, [pathname]);
 
   return (
-    <div className="pt-32">
+    <div className="pt-32 bg-[#ddd8c4]">
       {selectName && (
         <>
           <CategoryBanner title="Our Products" />
