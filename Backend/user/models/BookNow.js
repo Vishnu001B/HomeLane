@@ -7,10 +7,14 @@ const bookNowSchema = mongoose.Schema(
     productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
     productName: { type: String },
     phoneNumber: { type: String },
-    status: { type: String, default: "pending" },
+    status: {
+      type: String,
+      enum: ["pending", "Processing","confirm"], 
+      default: "pending",
+    },
   },
   {
-    timestamps: true, // Correct option for timestamps
+    timestamps: true, 
   }
 );
 
