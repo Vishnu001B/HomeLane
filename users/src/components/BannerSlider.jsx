@@ -7,6 +7,8 @@ import { URL } from "./contants";
 
 const BannerSlider = () => {
   const [banners, setBanners] = useState([]);
+ 
+  
 
 
 
@@ -20,7 +22,8 @@ const BannerSlider = () => {
       const resp = await axios.get(`${URL}api/admin/banners`);
       // Check if response data is an array
       if (Array.isArray(resp.data)) {
-        setBanners(resp.data);
+       console.log(setBanners(resp.data));
+        
       } else {
         console.error("Unexpected response data:", resp.data);
         setBanners([]);

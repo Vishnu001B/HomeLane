@@ -46,7 +46,7 @@ const AddCategoryModal = ({ isOpen, onClose, onSave }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed text-black inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="fixed text-black inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
         <h2 className="text-xl font-semibold mb-4">Add New Category</h2>
         <form onSubmit={handleSubmit}>
@@ -88,14 +88,7 @@ const AddCategoryModal = ({ isOpen, onClose, onSave }) => {
             </Button>
           </div>
 
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Existing Subcategories</label>
-            <ul className="list-disc ml-5">
-              <li>Readymade Curtains</li>
-              <li>Customized Curtains</li>
-              {/* Add more items as needed */}
-            </ul>
-          </div>
+          
 
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Category Images</label>

@@ -42,22 +42,32 @@ exports.updateCategory = async (req, res) => {
   try {
     const { category, subcategories } = req.body;
 
-    // Check if new images were provided
+    // Prepare the updated data object
     let updatedData = { category, subcategories };
+
+    // Check if new images were provided
     if (req.files && req.files.length > 0) {
       const images = req.files.map(file => file.path);
-      updatedData.images = images;
+      updatedData.images = images; // Update the images array
     }
 
+    // Update the category by ID
     const updatedCategory = await Category.findByIdAndUpdate(
       req.params.id,
       updatedData,
       { new: true }
-    );
+    ).populate('category'); // Populate the category name
 
-    if (!updatedCategory) return res.status(404).json({ message: 'Category not found' });
+    // Check if the category was found and updated
+    if (!updatedCategory) {
+      return res.status(404).json({ message: 'Category not found' });
+    }
 
-    res.status(200).json({ message: 'Category updated successfully', category: updatedCategory });
+    // Send the response with updated category details
+    res.status(200).json({
+      message: 'Category updated successfully',
+      category: updatedCategory, // This will include the populated category name
+    });
   } catch (error) {
     res.status(500).json({ message: 'Error updating category', error });
   }

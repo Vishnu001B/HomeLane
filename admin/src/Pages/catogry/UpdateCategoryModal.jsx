@@ -15,33 +15,24 @@ import { FaPlus, FaTrash } from "react-icons/fa";
 const UpdateCategoryModal = ({ isOpen, onClose, onSave, category }) => {
   const URI = import.meta.env.VITE_API_URL;
   const [formData, setFormData] = useState({
-    category: "",
+    category: "", // category name (not ID)
     images: null,
-    subcategory: "", // Single subcategory instead of array
+    subcategories: [],
     previewUrl: null,
   });
 
-  // Initialize form data when category prop changes
   useEffect(() => {
     if (category) {
       setFormData({
-        category: typeof category.category === "string" ? category.category : "",
-        images: category.images || null,
-        subcategory: category.subcategory || "", // Assuming category has a single subcategory field
-        previewUrl: category.images ? `${URI}${category.images}` : null, // Load the current image if present
+        category: category.category || "", // Set category name
+        images: null,
+        subcategories: category.subcategories || [], // Set subcategories array
+        previewUrl: category.images ? `${URI}/${category.images[0]}` : null, // Image preview
       });
     }
   }, [category]);
 
-  // Clean up object URL when images change
-  useEffect(() => {
-    return () => {
-      if (formData.images && formData.images instanceof File) {
-        URL.revokeObjectURL(formData.previewUrl);
-      }
-    };
-  }, [formData.images]);
-
+  // Handle input changes for category and image
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === "images" && files[0]) {
@@ -57,15 +48,54 @@ const UpdateCategoryModal = ({ isOpen, onClose, onSave, category }) => {
     }
   };
 
-  const handleSubmit = () => {
+  // Handle subcategory input changes
+  const handleSubcategoryChange = (index, value) => {
+    const updatedSubcategories = [...formData.subcategories];
+    updatedSubcategories[index] = value;
+    setFormData({ ...formData, subcategories: updatedSubcategories });
+  };
+
+  // Add new subcategory field
+  const handleAddSubcategory = () => {
+    setFormData({ ...formData, subcategories: [...formData.subcategories, ""] });
+  };
+
+  // Remove a subcategory
+  const handleRemoveSubcategory = (index) => {
+    const updatedSubcategories = [...formData.subcategories];
+    updatedSubcategories.splice(index, 1); // Remove subcategory at index
+    setFormData({ ...formData, subcategories: updatedSubcategories });
+  };
+
+  // Submit updated data to API
+  const handleSubmit = async () => {
     const data = new FormData();
-    data.append("category", formData.category);
+    data.append("category", formData.category); // Send the category name
+    
     if (formData.images) {
-      data.append("files", formData.images);
+      data.append("files", formData.images); // Append image file correctly
     }
-    data.append("subcategory", formData.subcategory); // Send single subcategory
-    onSave(data);
-    onClose();
+
+    formData.subcategories.forEach((sub, index) => {
+      data.append(`subcategories[${index}]`, sub); // Append each subcategory
+    });
+
+    try {
+      const response = await fetch(`${URI}api/categories/${category._id}`, {
+        method: "PUT",
+        body: data,
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update category");
+      }
+
+      const result = await response.json();
+      onSave(result); // Call onSave with updated data
+      onClose(); // Close the modal after saving
+    } catch (error) {
+      console.error("Error updating category:", error);
+    }
   };
 
   return (
@@ -78,6 +108,7 @@ const UpdateCategoryModal = ({ isOpen, onClose, onSave, category }) => {
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4">
+          {/* Category Name Input */}
           <div>
             <Label htmlFor="category">Category Name</Label>
             <Input
@@ -89,6 +120,8 @@ const UpdateCategoryModal = ({ isOpen, onClose, onSave, category }) => {
               placeholder="Enter category name"
             />
           </div>
+
+          {/* Image Upload */}
           <div>
             <Label htmlFor="images">Upload Image</Label>
             <Input
@@ -99,6 +132,8 @@ const UpdateCategoryModal = ({ isOpen, onClose, onSave, category }) => {
               accept="image/*"
             />
           </div>
+
+          {/* Image Preview */}
           {formData.previewUrl && (
             <div className="mt-4">
               <img
@@ -108,16 +143,26 @@ const UpdateCategoryModal = ({ isOpen, onClose, onSave, category }) => {
               />
             </div>
           )}
+
+          {/* Subcategories List */}
           <div>
-            <Label htmlFor="subcategory">Subcategory</Label>
-            <Input
-              type="text"
-              name="subcategory"
-              id="subcategory"
-              value={formData.subcategory}
-              onChange={handleChange}
-              placeholder="Enter subcategory"
-            />
+            <Label htmlFor="subcategory">Subcategories</Label>
+            {formData.subcategories.map((sub, index) => (
+              <div key={index} className="flex items-center space-x-2">
+                <Input
+                  type="text"
+                  value={sub}
+                  onChange={(e) => handleSubcategoryChange(index, e.target.value)}
+                  placeholder="Enter subcategory"
+                />
+                <Button variant="destructive" onClick={() => handleRemoveSubcategory(index)}>
+                  <FaTrash />
+                </Button>
+              </div>
+            ))}
+            <Button variant="primary" onClick={handleAddSubcategory}>
+              <FaPlus /> Add Subcategory
+            </Button>
           </div>
         </div>
         <DialogFooter>
