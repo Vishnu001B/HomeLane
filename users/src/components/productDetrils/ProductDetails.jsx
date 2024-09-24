@@ -12,6 +12,7 @@ import axios from "axios";
 import { RecentlyProduct } from "./RecentlyProduct";
 import ReviewComponent from "./ReviewComponent";
 import { fetchItems } from '../../fetchItems';
+import { Helmet } from "react-helmet";
 
 // Set up the app element for accessibility
 Modal.setAppElement("#root");
@@ -179,6 +180,15 @@ const ProductDetails = () => {
 
         <div className="w-full md:w-1/2 mt-5 flex flex-col justify-between h-full" style={{ fontFamily: 'Poppins, sans-serif' }}>
           <div className="flex flex-col justify-center h-full">
+          <Helmet>
+        <title>{product?.title} - Buy Now at the Best Price</title>
+        <meta name="description" content={`Purchase ${product?.title} at ₹${discountedPrice} (${product?.discount}% OFF). Available in various sizes and colors.`} />
+        <meta name="keywords" content={`${product?.title}, ${product?.category}, Buy ${product?.title}, Discount ${product?.discount}, Best Price`} />
+        <meta property="og:title" content={product?.title} />
+        <meta property="og:description" content={`Get the best deal on ${product?.title}. Now available at ₹${discountedPrice}.`} />
+    
+        <meta property="og:url" content={window.location.href} />
+      </Helmet>
             <h1 className="text-3xl font-bold">{product.title}</h1>
             <p className="text-[#8E95B2] mb-2 font-bold">SKU: {product.skuCode}</p>
             <p className=" text-[#D4B080] text-2xl">

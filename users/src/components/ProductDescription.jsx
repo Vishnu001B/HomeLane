@@ -1,9 +1,17 @@
 import React from 'react'
 import home from '../assets/image/lighting.webp'
+import { Helmet } from 'react-helmet'
 
 const ProductDescription = () => {
     return (
         <div className='lg:flex md:flex flex-row-reverse justify-center items-center gap-10 py-5 px-[5%] bg-[#293241] text-white rounded-2xl'>
+           
+           <Helmet>
+                <title>Decorative Lighting | Elevate Your Home Decor</title>
+                <meta name="description" content="Discover our high-end decorative lighting that blends design and creativity. Perfect for complementing any home style." />
+                <meta name="keywords" content="decorative lighting, home lighting, design lighting, modern lighting, home decor" />
+                <meta name="author" content="YourCompanyName" />
+            </Helmet>
             <div className='lg:w-1/2 md:w-1/2'>
                 <img src={home} alt="Decorative Lighting" className='rounded-sm object-cover w-full h-auto' />
             </div>
