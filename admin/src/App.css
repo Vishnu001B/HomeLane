@@ -1,5 +1,11 @@
 /* Add these styles to your global CSS or a module CSS file */
-
+*{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  
+}
 .modal {
     position: relative;
     top: 50%;
@@ -37,3 +43,12 @@
 }
   
   
+/* ............................. */
+
+.hover\:scale-105:hover {
+  transform: scale(1.05);
+}
+
+.hover\:shadow-lg:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}

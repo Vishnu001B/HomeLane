@@ -27,6 +27,7 @@ import { About } from "./components/contentManagment/About";
 import PrivacyPolicy from "./components/contentManagment/PrivacyPolicy";
 import Enquiry from "./components/Enquiry";
 import { ProductDetailsById } from "./Pages/Product/ProductDetailsById";
+import MangeSubCatogry from "./Pages/furniture/MangeSubCatogry";
 
 // Create the router instance
 const router = createBrowserRouter([
@@ -112,6 +113,10 @@ const router = createBrowserRouter([
         path: "/product/:productId",
         element: <ProductDetailsById />,
       },
+      {
+        path: "/furniture",
+        element: <MangeSubCatogry/>,
+      }
     ],
   },
 ]);

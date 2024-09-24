@@ -31,6 +31,8 @@ const addressRoutes = require("./user/routes/addressRoutes");
 const path = require("path");
 const productOrderRoutes = require("./user/routes/productOrderRoutes");
 
+const furnitureSubcatogry = require("./admin/routes/furnitureSubcatogryRoute" )
+
 connectDB();
 const app = express();
 app.use(express.json());
@@ -60,6 +62,8 @@ app.use("/api/categories", categoryRoutes);
 
 app.use("/api/quotes", quoteRoutes);
 app.use('/api', quotetionRoutes);
+
+app.use("/api/furnitureSubcatogry", furnitureSubcatogry)
 
 
 //content Managment

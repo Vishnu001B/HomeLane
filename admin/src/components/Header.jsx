@@ -147,6 +147,12 @@ const Header = () => {
                       <Edit className="h-5 w-5" /> Category
                     </Link>
                     <Link
+                      to="/furniture"
+                      className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                    >
+                      <Edit className="h-5 w-5" /> Furniture
+                    </Link>
+                    <Link
                       to="/manage-banner"
                       className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
                     >
