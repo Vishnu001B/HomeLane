@@ -35,15 +35,15 @@ const router = createBrowserRouter([
         element: <HomePage />,
       },
       {
-        path: "/category/:name",
+        path: "/category/:name/shop-in-bangalore",
         element: <CategoryDetails />,
       },
       {
-        path: "/subcategory/:name",
+        path: "/subcategory/:name/shop-in-bangalore",
         element: <Subcategory />,
       },
       {
-        path: "/productDetails",
+        path: "/productDetails/shop-in-bangalore",
         element: <ProductDetails />,
       },
       {

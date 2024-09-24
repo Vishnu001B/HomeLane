@@ -45,7 +45,7 @@ const ProductDetailsModal = ({ product, onClose }) => {
           });
 
           // Navigate to the product details page
-          navigate("/productDetails", { state: { product } });
+          navigate("/productDetails/shop-in-bangalore", { state: { product } });
           onClose();
         }
       } catch (error) {

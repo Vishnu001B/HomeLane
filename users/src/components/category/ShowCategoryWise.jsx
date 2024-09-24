@@ -82,7 +82,7 @@ const ShowCategoryWise = ({ title, products }) => {
 
 
   const handleOnClickImg = (product) => {
-    navigate("/productDetails", { state: { product } });
+    navigate("/productDetails/shop-in-bangalore", { state: { product } });
   };
 
   return (

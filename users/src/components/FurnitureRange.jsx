@@ -52,7 +52,7 @@ const FurnitureRange = () => {
                 className={`flex flex-col items-center content-center transition-transform duration-300 ease-in-out rounded-full w-20 h-20 ${
                   category.highlight ? "text-orange-600 border-b-2 border-orange-600" : "text-gray-600 cursor-pointer"
                 } hover:scale-105 hover:shadow-lg`}
-               onClick={()=>navigate(`/subcategory/${category.name}`)}/>
+               onClick={()=>navigate(`/subcategory/${category.name}/shop-in-bangalore`)}/>
               <span className="text-md font-medium">{category.name}</span>
             </div>
           ))}

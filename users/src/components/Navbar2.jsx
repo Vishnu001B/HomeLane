@@ -97,7 +97,7 @@ const Navbar2 = () => {
                       className="p-2 hover:bg-gray-100 cursor-pointer transition duration-200 bg-[#212529] hover:text-black"
                     >
                       <Link
-                        to={`/subcategory/${encodeURIComponent(subcategory)}`}
+                        to={`/subcategory/${encodeURIComponent(subcategory)}/shop-in-bangalore`}
                         onClick={handleSubcategoryClick}
                       >
                         {capitalizeWords(subcategory)}
@@ -130,7 +130,7 @@ const Navbar2 = () => {
                           className="p-2 hover:bg-gray-100 cursor-pointer transition duration-200"
                         >
                           <Link
-                            to={`/subcategory/${encodeURIComponent(subcategory)}`}
+                            to={`/subcategory/${encodeURIComponent(subcategory)}/shop-in-bangalore`}
                             onClick={handleSubcategoryClick}
                           >
                             {capitalizeWords(subcategory)}

@@ -55,7 +55,7 @@ const CardHome = () => {
       <div className="flex flex-wrap items-center justify-center lg:gap-6 xl:px-2 px-5">
         {categoriesData.map((data, index) => (
           <Link
-            to={`/category/${data.category}`}
+            to={`/category/${data.category}/shop-in-bangalore`}
             key={index}
             className="flex flex-col items-center mb-6"
           >
