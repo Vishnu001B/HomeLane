@@ -11,7 +11,7 @@ const VerticalDescription = ({name}) => {
             <div className="flex flex-col lg:flex-row justify-center items-center lg:items-start lg:space-x-12">
                 {/* Text Section */}
                 <div className="lg:w-1/2 mb-8 lg:mb-0 text-center lg:text-left  p-6  ">
-                    <p className="text-lg font-thin font-serif leading-relaxed text-gray-700">
+                    <p className="text-lg font-thin  leading-relaxed text-gray-700">
                         Lorem ipsum dolor sit amet consectetur, adipisicing elit. Labore commodi fugiat odit cum, expedita temporibus hic dolorem aliquam repellendus. Porro qui maxime dolorum reprehenderit ab nemo alias aperiam sint quasi? Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus odio animi, ut exercitationem expedita quibusdam dolorem. Voluptas, est perferendis vel molestiae id optio temporibus odio deserunt minus ipsam. Sed, maxime! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Blanditiis obcaecati laboriosam aut autem praesentium voluptatum labore enim, exercitationem ex quis facilis consequatur minima officia iste reiciendis quisquam accusantium modi voluptas magnam recusandae fugiat quasi sunt earum! Pariatur unde ipsa repellat nulla laudantium quibusdam laboriosam et voluptatem distinctio voluptatibus? Culpa, eveniet fuga? Adipisci eius deleniti, ullam illo cumque pariatur delectus, rem nam reiciendis neque doloremque, recusandae ab commodi magnam ea laudantium cum maiores 
                     </p>
                 </div>
@@ -49,21 +49,21 @@ const VerticalDescription = ({name}) => {
                         {/* Address and Comment Fields */}
                         <div className="flex flex-col lg:flex-row lg:space-x-4">
                             <div className="w-full lg:w-1/2">
-                                <label className="block text-sm font-medium mb-1 text-gray-700">Address</label>
+                                <label className="block text-sm font-medium mb-1 text-gray-700 w-full">Address</label>
                                 <textarea
                                     className="w-full  px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     placeholder="Address..."
                                     rows="3"
                                 ></textarea>
                             </div>
-                            <div className="w-full lg:w-1/2 mt-4 lg:mt-0">
+                            {/* <div className="w-full lg:w-1/2 mt-4 lg:mt-0">
                                 <label className="block text-sm font-medium mb-1 text-gray-700">Comment</label>
                                 <textarea
                                     className="w-full  px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     placeholder="Comment..."
                                     rows="3"
                                 ></textarea>
-                            </div>
+                            </div> */}
                         </div>
                         {/* Submit Button */}
                         <button

@@ -304,8 +304,8 @@ const ProductDetails = () => {
         </Alert>
       </Snackbar>
 
-      <div className="mt-10 py-5 bg-[#f4f1e9] bg-[#001b2e] rounded-full ">
-        <h1 className="lg:text-6xl text-3xl text-center font-bold text-gray-800 mb-6 text-white">
+      <div className="mt-10 py-5 bg-[#001b2e] rounded-full ">
+        <h1 className="lg:text-6xl text-3xl text-center font-bold mb-6 text-white">
             More Picks for You 
         </h1>
         <RecentlyProduct Subcategory={product.subcategory}/>

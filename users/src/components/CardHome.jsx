@@ -48,7 +48,7 @@ const CardHome = () => {
   };
 
   return (
-    <div className="bg-[#00171f] lg:py-5 py-4 bg-gray-200 font-sans text-white rounded=md lg:rounded-full my-10">
+    <div className="bg-[#00171f] lg:py-5 py-4 font-sans text-white rounded=md lg:rounded-full my-10">
      
       <h1 className="lg:text-3xl xl:text-4xl text-md text-center lg:pt-16 lg:pb-16 font-bold px-4 py-6" style={{ fontFamily: 'Poppins, sans-serif' }}>
          <span className="text-5xl font-bold text-orange-500">Transform</span>  Your Space <span className="text-[#80ed99] text-4xl">,</span> Explore Our  <span className="text-5xl font-bold text-orange-500">Categories</span> 

@@ -81,9 +81,9 @@ const Navbar2 = () => {
           </div>
 
           {/* Services Dropdown */}
-          <div className="relative p-1 text-white ">
+          <div className="relative p-1 text-white bg-[#212529]">
             <button
-              className="flex items-center p-2 text-black rounded hover:text-light-green-700 transition duration-200 text-white"
+              className="flex items-center p-2 rounded hover:text-light-green-700 transition duration-200 text-white"
               onClick={() => handleCategoryClick('services')}
             >
               {capitalizeWords(servise.name)}
@@ -114,20 +114,20 @@ const Navbar2 = () => {
             <div key={category._id} className="relative p-1 text-white">
               {category.categories && (
                 <button
-                  className="flex items-center p-2 text-black rounded hover:text-light-green-700 transition duration-200 text-white "
+                  className="flex items-center p-2  rounded hover:text-light-green-700 transition duration-200 text-white "
                   onClick={() => handleCategoryClick(category.categories)}
                 >
                   {capitalizeWords(category.categories)}
                 </button>
               )}
               {activeCategory === category.categories && (
-                <div className="absolute top-full left-0 mt-2 w-48 bg-gray-200 border border-gray-300 rounded shadow-lg z-30 bg-[#212529] hover:text-black">
+                <div className="absolute top-full left-0 mt-2 w-48  border border-gray-300 rounded shadow-lg z-30 bg-[#212529] hover:text-white">
                   <ul>
                     {category.subcategories &&
                       category.subcategories.map((subcategory, subIndex) => (
                         <li
                           key={subIndex}
-                          className="p-2 hover:bg-gray-100 cursor-pointer transition duration-200"
+                          className="p-2 hover:bg-gray-100 hover:text-black cursor-pointer transition duration-200"
                         >
                           <Link
                             to={`/subcategory/${encodeURIComponent(subcategory)}/shop-in-bangalore`}
